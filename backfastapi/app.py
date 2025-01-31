@@ -10,19 +10,16 @@ import re
 import os
 from dotenv import load_dotenv
 
+from subliminsubs import download_subs
+from subtitlepreprocess import process
+
+
 load_dotenv()  
  
 
 app = FastAPI()
 genai.configure(api_key = os.getenv('GEMINI_API_KEY'))
 model = genai.GenerativeModel('gemini-pro')
-
-class MovieRequest(BaseModel):
-    title:str
-    year:int
-
-class Summary(BaseModel):
-    summary: str
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,34 +29,43 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# async def fetch_subtitles(title: str, year: int) -> str:
+#     async with aiohttp.ClientSession() as session:
+#         # Search OpenSubtitles (replace with actual API endpoint)
+#         search_url = f"https://www.opensubtitles.org/en/search2/sublanguageid-eng/moviename-{title}/year-{year}"
+#         async with session.get(search_url) as response:
+#             if response.status != 200:
+#                 raise HTTPException(status_code=404, detail="Subtitles not found")
+#             html = await response.text()
 
+#         # Parse and extract subtitle text
+#         soup = BeautifulSoup(html, 'html.parser')
+#         subtitle_text = soup.get_text()
+#         return subtitle_text
 
-
-async def fetch_subtitles(title: str, year: int) -> str:
-    async with aiohttp.ClientSession() as session:
-        # Search OpenSubtitles (replace with actual API endpoint)
-        search_url = f"https://www.opensubtitles.org/en/search2/sublanguageid-eng/moviename-{title}/year-{year}"
-        async with session.get(search_url) as response:
-            if response.status != 200:
-                raise HTTPException(status_code=404, detail="Subtitles not found")
-            html = await response.text()
-
-        # Parse and extract subtitle text
-        soup = BeautifulSoup(html, 'html.parser')
-        subtitle_text = soup.get_text()
-        return subtitle_text
-
-def preprocess_subtitles(text: str) -> List[str]:
-    # Remove timestamps and subtitle numbers
-    clean_text = re.sub(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}', '', text)
-    clean_text = re.sub(r'^\d+$', '', clean_text, flags=re.MULTILINE)
+# def preprocess_subtitles(text: str) -> List[str]:
+#     # Remove timestamps and subtitle numbers
+#     clean_text = re.sub(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}', '', text)
+#     clean_text = re.sub(r'^\d+$', '', clean_text, flags=re.MULTILINE)
     
-    # Split into chunks of ~1000 tokens
-    chunks = [clean_text[i:i+4000] for i in range(0, len(clean_text), 4000)]
+#     # Split into chunks of ~1000 tokens
+#     chunks = [clean_text[i:i+4000] for i in range(0, len(clean_text), 4000)]
+#     return chunks
+
+def split_text_into_chunks(file_path, chunk_size=1000):
+    # Read the text file
+    with open(file_path, 'r', encoding='utf-8') as file:
+        text = file.read()
+
+    # Tokenize the text (split into words)
+    tokens = text.split()
+
+    # Split tokens into chunks of 1000 tokens each
+    chunks = [' '.join(tokens[i:i + chunk_size]) for i in range(0, len(tokens), chunk_size)]
+
     return chunks
 
-
-async def generate_summary(chunks:List[str])->str:
+async def generate_summary(chunks):
     #process each chunk with gemini
     summaries = []
     for chunk in chunks:
@@ -73,18 +79,19 @@ async def generate_summary(chunks:List[str])->str:
     return final_summary.text
 
 
-@app.post('/summarize',response_model=Summary)
-async def summarize_movie(request: MovieRequest):
+@app.post('/summarize')
+async def summarize_movie(moviename):
     try:
-        subtitle_text = await fetch_subtitles(request.title, request.year)
-        print(request.title,request.year)
-        if not subtitle_text:
-            raise HTTPException(status_code=404, detail="No subtitles found for this movie")
-        
-        chunks = preprocess_subtitles(subtitle_text)
-        if not chunks:
-            raise HTTPException(status_code=400, detail="Failed to process subtitles")
-        
+        vidfile = moviename + ".mp4"
+        subfile = moviename+".en.srt"
+        with open (vidfile,"wb") as f:
+            pass
+
+        download_subs(vidfile) #Downloaded and saved as .en.srt
+        process(subfile)
+        final_file = moviename+".en_text.txt"
+        chunks = split_text_into_chunks(final_file)
+
         summary = await generate_summary(chunks)
         if not summary:
             raise HTTPException(status_code=500, detail="Failed to generate summary")

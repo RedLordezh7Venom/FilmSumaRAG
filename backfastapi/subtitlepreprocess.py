@@ -48,7 +48,7 @@ def extract_text_from_srt(file_path):
     
     return dialogue_lines
 
-def main(input_file):
+def process(input_file):
     output_file = input_file.rsplit('.', 1)[0] + '_text.txt'
     
     try:
