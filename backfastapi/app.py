@@ -4,7 +4,6 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from typing import List
 import os
-import asyncio
 from dotenv import load_dotenv
 
 from subliminsubs import download_subs
