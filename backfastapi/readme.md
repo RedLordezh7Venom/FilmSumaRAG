@@ -1,4 +1,4 @@
-# Movie Summary Generator API
+# FilmSumaRAG API
 
 This is a FastAPI RAG based application that generates a summary and narrates a  movie by downloading its subtitles, processing them, and using the Gemini AI model to create a coherent narration.
 
