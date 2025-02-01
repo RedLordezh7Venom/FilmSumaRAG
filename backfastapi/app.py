@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from typing import List
 import os
+import asyncio
 from dotenv import load_dotenv
 
 from subliminsubs import download_subs
@@ -14,6 +15,8 @@ load_dotenv()
 app = FastAPI()
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 model = genai.GenerativeModel('gemini-pro')
+
+#enable some safety settings for full summary of movies
 safety_settings = [
     {
         "category": "HARM_CATEGORY_HARASSMENT",
@@ -21,15 +24,15 @@ safety_settings = [
     },
     {
         "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+        "threshold": "BLOCK_NONE",  
     },
     {
         "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+        "threshold": "BLOCK_NONE",  # Block none, for A ,NC-17, rated
     },
     {
         "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+        "threshold": "BLOCK_NONE",  # moviecontent
     },
 ]
 
@@ -71,6 +74,16 @@ async def generate_summary(chunks):
     final_summary = ' '.join(summaries)
     return final_summary
 
+def delete_files(file_paths):
+    for file_path in file_paths:
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")  # Debugging
+        except Exception as e:
+            print(f"Error deleting file {file_path}: {e}") 
+
+
 @app.post('/summarize')
 async def summarize_movie(movie: MovieName):
     try:
@@ -81,7 +94,7 @@ async def summarize_movie(movie: MovieName):
         subfile = moviename + ".en.srt"
         final_file = moviename + ".en_text.txt"
 
-        # Ensure the video file exists (dummy file creation for testing)
+        #create dummy videofile for subliminal subs
         with open(vidfile, "wb") as f:
             pass
 
@@ -97,7 +110,7 @@ async def summarize_movie(movie: MovieName):
         print("Splitting text into chunks...")  # Debugging
         chunks = split_text_into_chunks(final_file)
 
-        # Generate summary
+        delete_files([vidfile, subfile, final_file])
         print("Generating summary...")  # Debugging
         summary = await generate_summary(chunks)
 
