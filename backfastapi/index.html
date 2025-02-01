@@ -1,88 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Summary Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="max-w-3xl mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-6 text-center">Movie Summary Generator</h1>
-        
-        <div class="bg-white rounded-lg shadow p-6">
-            <form id="summaryForm" class="space-y-4">
-                <div>
-                    <input 
-                        type="text" 
-                        id="title"
-                        placeholder="Movie Title"
-                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                </div>
-                
-                <div>
-                    <input 
-                        type="number" 
-                        id="year"
-                        placeholder="Year"
-                        class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                </div>
-                
-                <button 
-                    type="submit"
-                    class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
-                >
-                    Get Summary
-                </button>
-            </form>
-        </div>
+<body>
+    <h1>Movie Summary Generator</h1>
+    <form id="summaryForm">
+        <label for="moviename">Enter Movie Name:</label>
+        <input type="text" id="moviename" name="moviename" required>
+        <button type="submit">Generate Summary</button>
+    </form>
 
-        <div id="loading" class="hidden mt-4 text-center">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-            <p class="mt-2">Generating summary...</p>
-        </div>
-
-        <div id="summary" class="hidden mt-6 bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold mb-4">Summary</h2>
-            <p id="summaryText" class="whitespace-pre-wrap"></p>
-        </div>
-    </div>
+    <h2>Summary:</h2>
+    <pre id="summaryOutput"></pre>
 
     <script>
         document.getElementById('summaryForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const title = document.getElementById('title').value;
-            const year = document.getElementById('year').value;
-            const loading = document.getElementById('loading');
-            const summary = document.getElementById('summary');
-            const summaryText = document.getElementById('summaryText');
-            
-            loading.classList.remove('hidden');
-            summary.classList.add('hidden');
-            
+            const moviename = document.getElementById('moviename').value;
+
             try {
                 const response = await fetch('http://localhost:8000/summarize', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        title,
-                        year: parseInt(year)
-                    })
+                    body: JSON.stringify({ moviename }),
                 });
-                
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
                 const data = await response.json();
-                summaryText.textContent = data.summary;
-                summary.classList.remove('hidden');
+                document.getElementById('summaryOutput').textContent = data;
             } catch (error) {
-                console.error('Error:', error);
-                alert('Error generating summary. Please try again.');
-            } finally {
-                loading.classList.add('hidden');
+                document.getElementById('summaryOutput').textContent = `Error: ${error.message}`;
             }
         });
     </script>

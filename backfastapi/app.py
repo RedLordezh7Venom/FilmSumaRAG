@@ -1,25 +1,37 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import aiohttp
-import asyncio
-from bs4 import BeautifulSoup
 import google.generativeai as genai
 from typing import List
-import re
 import os
 from dotenv import load_dotenv
 
 from subliminsubs import download_subs
 from subtitlepreprocess import process
 
-
-load_dotenv()  
- 
+load_dotenv()
 
 app = FastAPI()
-genai.configure(api_key = os.getenv('GEMINI_API_KEY'))
+genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 model = genai.GenerativeModel('gemini-pro')
+safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE",  # Allow all content in this category
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_ONLY_HIGH",  # Block only high-probability content
+    },
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,31 +41,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# async def fetch_subtitles(title: str, year: int) -> str:
-#     async with aiohttp.ClientSession() as session:
-#         # Search OpenSubtitles (replace with actual API endpoint)
-#         search_url = f"https://www.opensubtitles.org/en/search2/sublanguageid-eng/moviename-{title}/year-{year}"
-#         async with session.get(search_url) as response:
-#             if response.status != 200:
-#                 raise HTTPException(status_code=404, detail="Subtitles not found")
-#             html = await response.text()
+class MovieName(BaseModel):
+    moviename: str
 
-#         # Parse and extract subtitle text
-#         soup = BeautifulSoup(html, 'html.parser')
-#         subtitle_text = soup.get_text()
-#         return subtitle_text
-
-# def preprocess_subtitles(text: str) -> List[str]:
-#     # Remove timestamps and subtitle numbers
-#     clean_text = re.sub(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}', '', text)
-#     clean_text = re.sub(r'^\d+$', '', clean_text, flags=re.MULTILINE)
-    
-#     # Split into chunks of ~1000 tokens
-#     chunks = [clean_text[i:i+4000] for i in range(0, len(clean_text), 4000)]
-#     return chunks
-
-def split_text_into_chunks(file_path, chunk_size=1000):
-    # Read the text file
+def split_text_into_chunks(file_path, chunk_size=2000):
     with open(file_path, 'r', encoding='utf-8') as file:
         text = file.read()
 
@@ -66,38 +57,56 @@ def split_text_into_chunks(file_path, chunk_size=1000):
     return chunks
 
 async def generate_summary(chunks):
-    #process each chunk with gemini
+    # Process each chunk with Gemini
     summaries = []
     for chunk in chunks:
-        prompt = f"Summarize this part of the movie subtitles and narrate like a storyteller, focusing on key plot points:\n{chunk}"
-        response = model.generate_content(prompt)
+        prompt = f"summarize this part of the joker movie and narrate it \n{chunk}"
+        response = model.generate_content(prompt,safety_settings=safety_settings,)
+        print(response.text)
         summaries.append(response.text)
 
-    #Final summary
-    final_prompt = f"Create a coherent movie narration from these segment summaries:\n{''.join(summaries)}"
-    final_summary = model.generate_content(final_prompt)
-    return final_summary.text
-
+    # Final summary
+    # final_prompt = f"Create a coherent movie narration from these segment summaries:\n{''.join(summaries)}"
+    # final_summary = model.generate_content(final_prompt)
+    final_summary = ' '.join(summaries)
+    return final_summary
 
 @app.post('/summarize')
-async def summarize_movie(moviename):
+async def summarize_movie(movie: MovieName):
     try:
+        moviename = movie.moviename
+        print(f"Processing movie: {moviename}")  # Debugging
+
         vidfile = moviename + ".mp4"
-        subfile = moviename+".en.srt"
-        with open (vidfile,"wb") as f:
+        subfile = moviename + ".en.srt"
+        final_file = moviename + ".en_text.txt"
+
+        # Ensure the video file exists (dummy file creation for testing)
+        with open(vidfile, "wb") as f:
             pass
 
-        download_subs(vidfile) #Downloaded and saved as .en.srt
+        # Download subtitles
+        print("Downloading subtitles...")  # Debugging
+        download_subs(vidfile)  # Downloaded and saved as .en.srt
+
+        # Process subtitles
+        print("Processing subtitles...")  # Debugging
         process(subfile)
-        final_file = moviename+".en_text.txt"
+
+        # Split text into chunks
+        print("Splitting text into chunks...")  # Debugging
         chunks = split_text_into_chunks(final_file)
 
+        # Generate summary
+        print("Generating summary...")  # Debugging
         summary = await generate_summary(chunks)
-        if not summary:
-            raise HTTPException(status_code=500, detail="Failed to generate summary")
-            
-        return Summary(summary=summary)
+
+        return summary
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")  # Debugging
+        raise HTTPException(status_code=404, detail=f"File not found: {e.filename}")
     except Exception as e:
+        print(f"Error: {e}")  # Debugging
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

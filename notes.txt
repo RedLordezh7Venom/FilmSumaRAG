@@ -4,3 +4,7 @@
 - SO i found a trick, had to , in subtitle downloading
 - subliminal gets subtitles based on name of movie, so I just create a .mp4
 - file and then I can process the .srt subtitles
+
+-app.py : 
+- replace fetch subtitles, preprocess, and improve summarize
+-also delete files after use
