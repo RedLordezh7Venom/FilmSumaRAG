@@ -1,8 +1,16 @@
 import re
+import chardet
 
-def extract_text_from_srt(file_path):
+def detect_encoding(file_path):
+    """Detect the encoding of a file."""
+    with open(file_path, 'rb') as f:
+        raw_data = f.read()
+    result = chardet.detect(raw_data)
+    return result['encoding']
+
+def extract_text_from_srt(file_path,encoding):
     """Extract dialogue text from an SRT file."""
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, 'r', encoding=encoding) as file:
         content = file.read()
 
     # Split the content into subtitle blocks
@@ -53,10 +61,12 @@ def process(input_file):
     
     try:
         # Extract the dialogue
-        dialogues = extract_text_from_srt(input_file)
+        encoding = detect_encoding(input_file)
+        dialogues = extract_text_from_srt(input_file,encoding)
+        encoding = detect_encoding(input_file)
         
         # Write to output file
-        with open(output_file, 'w', encoding='utf-8') as file:
+        with open(output_file, 'w', encoding=encoding) as file:
             for dialogue in dialogues:
                 file.write(dialogue + '\n')
         
@@ -75,4 +85,4 @@ def process(input_file):
 
 if __name__ == "__main__":
     input_file = input("Enter the path to your SRT file: ")
-    main(input_file)
+    process(input_file)

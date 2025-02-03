@@ -5,6 +5,7 @@ import google.generativeai as genai
 from typing import List
 import os
 from dotenv import load_dotenv
+import chardet
 
 from subliminsubs import download_subs
 from subtitlepreprocess import process
@@ -46,8 +47,15 @@ app.add_middleware(
 class MovieName(BaseModel):
     moviename: str
 
-def split_text_into_chunks(file_path, chunk_size=2000):
-    with open(file_path, 'r', encoding='utf-8') as file:
+def detect_encoding(file_path):
+    """Detect the encoding of a file."""
+    with open(file_path, 'rb') as f:
+        raw_data = f.read()
+    result = chardet.detect(raw_data)
+    return result['encoding']
+
+def split_text_into_chunks(file_path, encoding,chunk_size=2000):
+    with open(file_path, 'r', encoding=encoding) as file:
         text = file.read()
 
     # Tokenize the text (split into words)
@@ -104,10 +112,11 @@ async def summarize_movie(movie: MovieName):
         # Process subtitles
         print("Processing subtitles...")  # Debugging
         process(subfile)
+        encoding = detect_encoding(final_file)
 
         # Split text into chunks
         print("Splitting text into chunks...")  # Debugging
-        chunks = split_text_into_chunks(final_file)
+        chunks = split_text_into_chunks(final_file,encoding)
 
         delete_files([vidfile, subfile, final_file])
         print("Generating summary...")  # Debugging

@@ -35,7 +35,7 @@ export default async function SummaryPage({ params, searchParams }: SummaryPageP
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-white p-8">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Link href="/" passHref>
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Search

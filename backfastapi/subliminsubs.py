@@ -16,6 +16,6 @@ def download_subs(movie_file):
         print("No subtitles found for the given movie.")
 
 if __name__ == '__main__':
-    download_subs("Thor.mp4")  # Update the filename if needed
+    download_subs("cinderella man.mp4")  # Update the filename if needed
 
 

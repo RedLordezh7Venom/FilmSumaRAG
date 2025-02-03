@@ -16,15 +16,12 @@ interface Movie {
   overview: string
 }
 
-const summaryLengths = [500, 1000, 2000, 5000]
-
 export default function Home() {
   const [search, setSearch] = useState("")
   const [movie, setMovie] = useState<Movie | null>(null)
   const [loading, setLoading] = useState(false)
   const [suggestions, setSuggestions] = useState<Movie[]>([])
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [showSummaryOptions, setShowSummaryOptions] = useState(false)
   const router = useRouter()
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -63,7 +60,6 @@ export default function Home() {
     if (!movieId) return
 
     setLoading(true)
-    setShowSummaryOptions(false)
     setSearch("") // Clear the search input
     setSuggestions([]) // Clear the suggestions
     try {
@@ -83,12 +79,8 @@ export default function Home() {
   }
 
   const handleSummarize = () => {
-    setShowSummaryOptions(true)
-  }
-
-  const handleSummaryLength = (length: number) => {
     if (movie) {
-      router.push(`/summary/${movie.id}?length=${length}`)
+      router.push(`/summary/${movie.id}?length=1000`)
     }
   }
 
@@ -184,27 +176,6 @@ export default function Home() {
                     </div>
                     <p className="text-gray-300 leading-relaxed">{movie.overview}</p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {showSummaryOptions && (
-            <Card className="bg-black/30 backdrop-blur-sm text-white border-none shadow-xl hover:shadow-2xl transition-all duration-300 mt-4">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                  Length of summary
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {summaryLengths.map((length) => (
-                    <Button
-                      key={length}
-                      onClick={() => handleSummaryLength(length)}
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-                    >
-                      {length} words
-                    </Button>
-                  ))}
                 </div>
               </CardContent>
             </Card>
