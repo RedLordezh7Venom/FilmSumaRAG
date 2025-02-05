@@ -168,7 +168,7 @@ export default function Home() {
                       </h2>
                       <Button
                         onClick={handleSummarize}
-                        className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        className="bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:border-blue-400 hover:border-2 border-2 border-transparent"
                       >
                         <Sparkles className="w-4 h-4 mr-2" />
                         Summarize

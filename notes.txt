@@ -8,3 +8,14 @@
 -app.py : 
 - replace fetch subtitles, preprocess, and improve summarize
 -also delete files after use
+
+
+
+
+- how the production issue was fixed : CORS middleware in the api's origins:
+```ORSMiddleware,
+    allow_origins=["*"],  # In production, replace with your actual frontend URL
+    allow_credentials=True,
+    ```
+
+this had to be set to the name of website/summary page 

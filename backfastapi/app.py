@@ -66,18 +66,31 @@ def split_text_into_chunks(file_path, encoding,chunk_size=2000):
 
     return chunks
 
-async def generate_summary(chunks):
-    # Process each chunk with Gemini
-    summaries = []
-    for chunk in chunks:
-        prompt = f"summarize this part of the joker movie and narrate it \n{chunk}"
-        response = model.generate_content(prompt,safety_settings=safety_settings,)
-        print(response.text)
-        summaries.append(response.text)
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
-    # Final summary
-    # final_prompt = f"Create a coherent movie narration from these segment summaries:\n{''.join(summaries)}"
-    # final_summary = model.generate_content(final_prompt)
+async def generate_summary(chunks):
+    loop = asyncio.get_event_loop()
+    
+    # Use ThreadPoolExecutor for concurrent Gemini API calls
+    with ThreadPoolExecutor(max_workers=min(10, len(chunks))) as executor:
+        # Create tasks for processing chunks in parallel
+        tasks = [
+            loop.run_in_executor(
+                executor, 
+                lambda chunk: model.generate_content(
+                    f"summarize this part of the movie and narrate it \n{chunk}",
+                    safety_settings=safety_settings
+                ).text, 
+                chunk
+            ) 
+            for chunk in chunks
+        ]
+        
+        # Wait for all tasks to complete
+        summaries = await asyncio.gather(*tasks)
+    
+    # Combine summaries
     final_summary = ' '.join(summaries)
     return final_summary
 
