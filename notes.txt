@@ -1,4 +1,5 @@
 - Use IMDB API 
+- Need to use IMSDB (scrape it )
 - fuck it, use selenium headless for scraping subtitles (download srt)\
 
 - SO i found a trick, had to , in subtitle downloading
