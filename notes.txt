@@ -19,3 +19,9 @@
     ```
 
 this had to be set to the name of website/summary page 
+
+
+- to fix:
+skipping encoding issues, FIXED WITH PYSUBS IN UPCOMING MERGE
+threading needed for rag or not, anyway boost up rag 
+sub download speed is too slow(20s++)FIXED BTW
