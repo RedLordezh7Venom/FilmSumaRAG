@@ -1,5 +1,6 @@
 import os
 import chardet
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def detect_encoding(file_path):
     """Detect the encoding of a file."""
@@ -8,15 +9,18 @@ def detect_encoding(file_path):
     result = chardet.detect(raw_data)
     return result['encoding']
 
-def split_text_into_chunks(file_path, encoding,chunk_size=500):
+def split_text_into_chunks(file_path, encoding,chunk_size=2000,chunk_overlap = 200):
     with open(file_path, 'r', encoding=encoding,errors = 'ignore') as file:
         text = file.read()
 
-    # Tokenize the text (split into words)
-    tokens = text.split()
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=["\n\n", "\n", ".", " ", ""]
+    )
 
-    # Split tokens into chunks of 1000 tokens each
-    chunks = [' '.join(tokens[i:i + chunk_size]) for i in range(0, len(tokens), chunk_size)]
+    # Split the text into chunks
+    chunks = splitter.split_text(text)
 
     return chunks
 
