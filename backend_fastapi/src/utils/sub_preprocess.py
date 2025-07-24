@@ -1,76 +1,105 @@
 import re
 import pysubs2 
+import os
+import chardet
+
+def detect_file_encoding(file_path):
+    try:
+        with open(file_path, 'rb') as f:
+            raw_data = f.read()
+        result = chardet.detect(raw_data)
+        return result['encoding'], result['confidence']
+    except Exception as e:
+        return None, 0
 
 def extract_text_from_subtitle(file_path):
-    """Extract dialogue text from any supported subtitle file using pysubs2."""
-    try:
-        subs = pysubs2.load(file_path)
-        dialogue_lines = []
-        for line in subs:
-            # pysubs2 automatically strips formatting tags
-            text = line.text.strip()
-            if text:
-                # Remove speaker labels (e.g., "JANE:", "ERIK:")
-                text = re.sub(r'^[A-Z]+:', '', text).strip()
-                # Remove parenthetical sound effects
-                text = re.sub(r'\([^)]*\)', '', text).strip()
-                # Clean up any extra whitespace
-                text = re.sub(r'\s+', ' ', text).strip()
+    if not os.path.exists(file_path):
+        return []
+    
+    detected_encoding, confidence = detect_file_encoding(file_path)
+    encodings_to_try = [detected_encoding, 'utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
+    encodings_to_try = list(dict.fromkeys([enc for enc in encodings_to_try if enc]))
+    
+    dialogue_lines = []
+    
+    for encoding in encodings_to_try:
+        try:
+            if encoding == detected_encoding:
+                subs = pysubs2.load(file_path)
+            else:
+                subs = pysubs2.load(file_path, encoding=encoding)
+            
+            for line in subs:
+                text = line.text.strip()
                 if text:
-                    dialogue_lines.append(text)
-        return dialogue_lines
-    except pysubs2.exceptions.Pysubs2Error as e:
-        print(f"Error loading subtitle file with pysubs2: {e}")
-        return []
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        return []
+                    text = re.sub(r'^[A-Z]+:', '', text).strip()
+                    text = re.sub(r'\([^)]*\)', '', text).strip()
+                    text = re.sub(r'\s+', ' ', text).strip()
+                    if text:
+                        dialogue_lines.append(text)
+            
+            if dialogue_lines:
+                break
+                
+        except:
+            continue
+    
+    if not dialogue_lines:
+        dialogue_lines = extract_text_fallback(file_path)
+    
+    return dialogue_lines
+
+def extract_text_fallback(file_path):
+    dialogue_lines = []
+    encodings_to_try = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
+    
+    for encoding in encodings_to_try:
+        try:
+            with open(file_path, 'r', encoding=encoding, errors='ignore') as file:
+                content = file.read()
+            
+            blocks = content.split('\n\n')
+            
+            for block in blocks:
+                lines = block.strip().split('\n')
+                if len(lines) >= 3:
+                    for line in lines[2:]:
+                        text = line.strip()
+                        if text:
+                            text = re.sub(r'^[A-Z]+:', '', text).strip()
+                            text = re.sub(r'\([^)]*\)', '', text).strip()
+                            text = re.sub(r'<[^>]*>', '', text).strip()
+                            text = re.sub(r'\s+', ' ', text).strip()
+                            if text:
+                                dialogue_lines.append(text)
+            
+            if dialogue_lines:
+                break
+        except:
+            continue
+    
+    return dialogue_lines
 
 def process(input_file):
+    if not input_file or not os.path.exists(input_file):
+        return None
+    
     output_file = input_file.rsplit('.', 1)[0] + '_text.txt'
     
     try:
-        # Extract the dialogue using the new general function
         dialogues = extract_text_from_subtitle(input_file)
         
         if not dialogues:
-            print(f"No dialogue extracted from {input_file}. Check file format or content.")
-            return
-            
-        # Write to output file
-        # Encoding is handled by pysubs2 during load, so we can use utf-8 for writing
+            return None
+        
         with open(output_file, 'w', encoding='utf-8') as file:
             for dialogue in dialogues:
                 file.write(dialogue + '\n')
         
-        print(f"\nExtraction complete! Text has been saved to: {output_file}")
-        print(f"Extracted {len(dialogues)} lines of dialogue.")
-        
-        # Preview first few lines
-        print("\nFirst few lines of extracted text:")
-        for dialogue in dialogues[:5]:
-            print(f"- {dialogue}")
-        return output_file
+        if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
+            return output_file
+        else:
+            return None
             
-    except FileNotFoundError:
-        print("Error: The specified file was not found.")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        
-        # Write to output file
-        with open(output_file, 'w') as file:
-            for dialogue in dialogues:
-                file.write(dialogue + '\n')
-        
-        print(f"\nExtraction complete! Text has been saved to: {output_file}")
-        print(f"Extracted {len(dialogues)} lines of dialogue.")
-        
-        # Preview first few lines
-        print("\nFirst few lines of extracted text:")
-        for dialogue in dialogues[:5]:
-            print(f"- {dialogue}")
-            
-    except FileNotFoundError:
-        print("Error: The specified file was not found.")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+    except:
+        return None

@@ -8,7 +8,7 @@ def detect_encoding(file_path):
     result = chardet.detect(raw_data)
     return result['encoding']
 
-def split_text_into_chunks(file_path, encoding,chunk_size=2000):
+def split_text_into_chunks(file_path, encoding,chunk_size=500):
     with open(file_path, 'r', encoding=encoding,errors = 'ignore') as file:
         text = file.read()
 
