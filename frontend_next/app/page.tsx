@@ -198,7 +198,7 @@ export default function Home() {
               <p className={`text-4xl bg-gradient-to-r from-white via-slate-400 to-slate-900 bg-clip-text text-transparent font-medium absolute w-full transition-all duration-1000 ease-in-out ${
                 !showFourthText ? 'translate-y-16 opacity-0' : 'translate-y-0 opacity-100'
               }`}>
-                We got you covered
+                Then jump right in!
               </p>
             </div>
           </div>
