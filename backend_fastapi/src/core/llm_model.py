@@ -28,7 +28,7 @@ async def generate_summary(chunks):
         maintaining the tone and rhythm of a compelling voiceover or expert commentary.
 
         Focus on clearly summarizing key plot events, character developments, and thematic shifts, 
-        ensuring the user gets a full understanding of the story’s progression. 
+        ensuring the user gets a full understanding of the story progression. 
         Write as if your audience is a film student, critic, or deep researcher seeking a rich, cohesive plot overview 
         — not just a surface-level summary.
 
