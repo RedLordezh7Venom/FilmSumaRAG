@@ -23,7 +23,9 @@ async def generate_summary(chunks):
         input_variables=["chunk"],
         template="""You are tasked with narrating a movie for a website called Film -a Sum,
           narrate this part of the movie, 
-          as if you were an expert narrator, summarizing main plot details, 
+          as if you were an expert narrator, summarizing main plot details,
+          keep in mind that this can be a continuation of a chunk from movie document(your context),
+          so keep the narration natural and seamless 
           only respond with summary text\n{chunk}"""
     )
     chain = prompt | llm
