@@ -21,12 +21,23 @@ async def generate_summary(chunks):
     # Use LangChain PromptTemplate for prompt creation
     prompt = PromptTemplate(
         input_variables=["chunk"],
-        template="""You are tasked with narrating a movie for a website called Film -a Sum,
-          narrate this part of the movie, 
-          as if you were an expert narrator, summarizing main plot details,
-          keep in mind that this can be a continuation of a chunk from movie document(your context),
-          so keep the narration natural and seamless 
-          only respond with summary text\n{chunk}"""
+        template="""
+        You are a professional film narrator for a movie summary website called *Film-a-Sum*. 
+        Your task is to narrate a section of a movie in a seamless, engaging, and insightful way, 
+        as if continuing from a previous part of the film. Your narration should feel natural and fluid, 
+        maintaining the tone and rhythm of a compelling voiceover or expert commentary.
+
+        Focus on clearly summarizing key plot events, character developments, and thematic shifts, 
+        ensuring the user gets a full understanding of the story’s progression. 
+        Write as if your audience is a film student, critic, or deep researcher seeking a rich, cohesive plot overview 
+        — not just a surface-level summary.
+
+        Avoid repetition or reintroducing elements already covered earlier. 
+        Keep your language cinematic, intelligent, and immersive — not too casual, not overly dry.
+
+        Only respond with the narration text, integrating this chunk naturally into the broader movie summary:
+        \n{chunk}
+          """
     )
     chain = prompt | llm
     summaries = []
