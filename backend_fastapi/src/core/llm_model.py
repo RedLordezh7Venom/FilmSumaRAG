@@ -21,7 +21,10 @@ async def generate_summary(chunks):
     # Use LangChain PromptTemplate for prompt creation
     prompt = PromptTemplate(
         input_variables=["chunk"],
-        template="You are tasked with summarizing movie for a website called Film -a Sum, summarize this part of the movie, only respond with summary text\n{chunk}"
+        template="""You are tasked with narrating a movie for a website called Film -a Sum,
+          narrate this part of the movie, 
+          as if you were an expert narrator, summarizing main plot details, 
+          only respond with summary text\n{chunk}"""
     )
     chain = prompt | llm
     summaries = []
