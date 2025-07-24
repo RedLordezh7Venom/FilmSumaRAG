@@ -1,0 +1,8 @@
+uvicorn
+subliminal
+pydantic
+python-dotenv
+google-generativeai
+fastapi
+chardet
+pysubs2
