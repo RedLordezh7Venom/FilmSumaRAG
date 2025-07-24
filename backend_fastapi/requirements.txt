@@ -6,3 +6,5 @@ google-generativeai
 fastapi
 chardet
 pysubs2
+langchain_google_genai
+langchain
