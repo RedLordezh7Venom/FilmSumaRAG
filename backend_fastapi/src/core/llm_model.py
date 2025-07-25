@@ -16,8 +16,21 @@ llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-lite',
                              })
 
 
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-async def generate_summary(chunks):
+def split_text_into_chunks_from_text(text: str, chunk_size=10000, chunk_overlap=1000):
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=["\n\n", "\n", ".", " ", ""]
+    )
+    return splitter.split_text(text)
+
+
+async def generate_summary(text: str):
+    
+    #chunking for text
+    chunks = split_text_into_chunks_from_text(text)
     # Use LangChain PromptTemplate for prompt creation
     prompt = PromptTemplate(
         input_variables=["chunk"],

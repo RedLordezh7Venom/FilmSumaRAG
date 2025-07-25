@@ -13,11 +13,8 @@ async def get_movie_summary(moviename: str):
 
     print("Processing subtitles...")
     full_text = "\n".join(dialogue_lines)
-
-    print("Splitting text into chunks...")
-    chunks = split_text_into_chunks_from_text(full_text)
-
+    
     print("Generating summary...")
-    summary = await generate_summary(chunks)
+    summary = await generate_summary(full_text)
 
     return summary
