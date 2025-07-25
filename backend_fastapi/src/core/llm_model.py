@@ -7,9 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatGroq(model='llama-3.3-70b-versatile',
+llm = ChatGroq(model='deepseek-r1-distill-llama-70b',
                              api_key = os.getenv('GROQ_KEY'),
                              temperature = 0.7,
+                             reasoning_format="hidden"
                             #  safety_settings={
                             #      HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:HarmBlockThreshold.BLOCK_NONE,
                             #      HarmCategory.HARM_CATEGORY_HATE_SPEECH:HarmBlockThreshold.BLOCK_NONE,
@@ -18,17 +19,18 @@ llm = ChatGroq(model='llama-3.3-70b-versatile',
                             #  }
                             )
 
-def split_text_into_chunks_from_text(text: str, chunk_size=10000, chunk_overlap=1000):
+def split_text_into_chunks_from_text(text: str):
+    percentage = 20
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
+        chunk_size=max(1, int(len(text) * percentage / 100)),
+        chunk_overlap=max(0, int(len(text) * percentage * 0.001)),
         separators=["\n\n", "\n", ".", " ", ""]
     )
     return splitter.split_text(text)
 
 
 async def generate_summary(text: str):
-    
+    print(len(text))
     #chunking for text
     chunks = split_text_into_chunks_from_text(text)
     # Use LangChain PromptTemplate for prompt creation
