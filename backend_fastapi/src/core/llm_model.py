@@ -1,20 +1,22 @@
 from langchain_google_genai import ChatGoogleGenerativeAI,HarmBlockThreshold,HarmCategory
 from langchain.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-lite',
-                             api_key = os.getenv('GEMINI_API_KEY'),
+llm = ChatGroq(model='llama-3.3-70b-versatile',
+                             api_key = os.getenv('GROQ_KEY'),
                              temperature = 0.7,
-                             safety_settings={
-                                 HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:HarmBlockThreshold.BLOCK_NONE,
-                                 HarmCategory.HARM_CATEGORY_HATE_SPEECH:HarmBlockThreshold.BLOCK_NONE,
-                                 HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:HarmBlockThreshold.BLOCK_NONE,
-                                 HarmCategory.HARM_CATEGORY_HARASSMENT:HarmBlockThreshold.BLOCK_NONE,
-                             })
+                            #  safety_settings={
+                            #      HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:HarmBlockThreshold.BLOCK_NONE,
+                            #      HarmCategory.HARM_CATEGORY_HATE_SPEECH:HarmBlockThreshold.BLOCK_NONE,
+                            #      HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:HarmBlockThreshold.BLOCK_NONE,
+                            #      HarmCategory.HARM_CATEGORY_HARASSMENT:HarmBlockThreshold.BLOCK_NONE,
+                            #  }
+                            )
 
 def split_text_into_chunks_from_text(text: str, chunk_size=10000, chunk_overlap=1000):
     splitter = RecursiveCharacterTextSplitter(
