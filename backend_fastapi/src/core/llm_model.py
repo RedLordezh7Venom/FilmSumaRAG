@@ -32,7 +32,7 @@ async def generate_summary(text: str):
     # Use LangChain PromptTemplate for prompt creation
     prompt = PromptTemplate(
         input_variables=["chunk"],
-        template="""You are tasked with narrating a movie for a website called Film -a Sum,
+        template="""You are tasked with narrating a movie for a website called Film -a Sum, 
           narrate this part of the movie, 
           as if you were an expert narrator, summarizing main plot details,
           keep in mind that this can be a continuation of a chunk from movie document(your context),
