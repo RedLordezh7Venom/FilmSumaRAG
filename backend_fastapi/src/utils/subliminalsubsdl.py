@@ -6,39 +6,34 @@ from pathlib import Path
 import pysubs2
 import io
 import re
- 
+  
+def clean_text(t: str) -> str:
+    t = re.sub(r'^[A-Z]+:', '', t).strip()
+    t = re.sub(r'\([^)]*\)', '', t).strip()
+    t = re.sub(r'<[^>]*>', '', t).strip()
+    t = re.sub(r'\s+', ' ', t).strip()
+    return t
 
-def clean_subtitle_text(text):
-    text = re.sub(r'^[A-Z]+:', '', text).strip()
-    text = re.sub(r'\([^)]*\)', '', text).strip()
-    text = re.sub(r'<[^>]*>', '', text).strip()
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-
-def extract_text_from_bytes(subtitle_bytes, encoding='utf-8'):
+def extract_text_from_bytes(subtitle_bytes: bytes, encoding='utf-8'):
     try:
-        subs = pysubs2.load_from(io.BytesIO(subtitle_bytes), encoding=encoding)
-        return [clean_subtitle_text(line.text) for line in subs if line.text.strip()]
+        raw_str = subtitle_bytes.decode(encoding, errors='ignore')
     except Exception as e:
-        print(f"Failed to parse subtitle bytes: {e}")
+        print(f"Decode failed: {e}")
         return []
 
-
-def download_subs_bytes(moviename):
-    vidfile = moviename + ".mp4"
-    video = Video.fromname(Path(vidfile).name)
-
-    subs = download_best_subtitles([video], {Language('eng')})
-
-    if not subs or video not in subs:
-        print("No subtitles found.")
+    try:
+        subs = pysubs2.SSAFile.from_string(raw_str)
+    except Exception as e:
+        print("Parsing from string failed:", e)
         return []
 
+    return [clean_text(event.text) for event in subs if event.text.strip()]
+
+def download_subs_lines(moviename):
+    subs = download_best_subtitles(...)
     for subtitle in subs[video]:
         if subtitle.content:
-            dialogue_lines = extract_text_from_bytes(subtitle.content)
-            if dialogue_lines:
-                return dialogue_lines
-
-    print("No valid subtitles parsed.")
+            lines = extract_text_from_bytes(subtitle.content)
+            if lines:
+                return lines
     return []

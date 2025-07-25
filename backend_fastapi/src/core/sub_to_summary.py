@@ -1,11 +1,11 @@
 # sub_to_summary.py
-from src.utils.subliminalsubsdl import download_subs_bytes
+from src.utils.subliminalsubsdl import download_subs_lines
 from src.utils.file_operations import split_text_into_chunks_from_text
 from src.core.llm_model import generate_summary
 
 async def get_movie_summary(moviename: str):
     print("Downloading subtitles...")
-    dialogue_lines = download_subs_bytes(moviename)
+    dialogue_lines = download_subs_lines(moviename)
 
     if not dialogue_lines:
         print("No subtitle data found.")
