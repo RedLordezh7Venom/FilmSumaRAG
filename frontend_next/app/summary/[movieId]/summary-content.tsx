@@ -17,6 +17,10 @@ async function generateSummary(movieId: string, length: number) {
 
   let response;
   let data;
+  const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
+  const titleWithYear = `${movie.title} (${releaseYear})`;
+  console.log('Processing movie:', titleWithYear);
+
 
   try {
     if (primaryApiUrl) {
@@ -27,7 +31,7 @@ async function generateSummary(movieId: string, length: number) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          moviename: movie.title
+          moviename: titleWithYear // Use the new string with the year
         }),
       });
 
@@ -50,7 +54,7 @@ async function generateSummary(movieId: string, length: number) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        moviename: movie.title
+        moviename: titleWithYear
       }),
     });
 
