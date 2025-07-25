@@ -30,7 +30,9 @@ def extract_text_from_bytes(subtitle_bytes: bytes, encoding='utf-8'):
     return [clean_text(event.text) for event in subs if event.text.strip()]
 
 def download_subs_lines(moviename):
-    subs = download_best_subtitles(...)
+    vidfile = moviename + ".mp4"
+    video = Video.fromname(Path(vidfile).name)
+    subs = download_best_subtitles([video], {Language('eng')})
     for subtitle in subs[video]:
         if subtitle.content:
             lines = extract_text_from_bytes(subtitle.content)
