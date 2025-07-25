@@ -1,40 +1,42 @@
+# subliminalsubsdl.py
 import subliminal
-from subliminal import save_subtitles, download_best_subtitles,Video
-from src.utils.file_operations import delete_files
+from subliminal import download_best_subtitles, Video
 from babelfish import Language
 from pathlib import Path
-import os
+import pysubs2
+import io
+import re
 
-# Supported subtitle extensions
-SUB_EXTS = ['srt','ass', 'ssa', 'sub', 'mpl2', 'tmp', 'vtt', 'ttml', 'sami']
+def clean_subtitle_text(text):
+    text = re.sub(r'^[A-Z]+:', '', text).strip()
+    text = re.sub(r'\([^)]*\)', '', text).strip()
+    text = re.sub(r'<[^>]*>', '', text).strip()
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
 
-def find_existing_sub(movie_path):
-    stem = Path(movie_path).stem
-    folder = Path(movie_path).parent
-    for ext in SUB_EXTS:
-        found = list(folder.glob(f"{stem}.en.{ext}"))
-        if found:
-            print(found[0])
-            return found[0].as_posix()
-    return None
+def extract_text_from_bytes(subtitle_bytes, encoding='utf-8'):
+    try:
+        subs = pysubs2.load(io.BytesIO(subtitle_bytes), encoding=encoding)
+        return [clean_subtitle_text(line.text) for line in subs if line.text.strip()]
+    except Exception as e:
+        print(f"Failed to parse subtitle bytes: {e}")
+        return []
 
-def download_subs(moviename):
+def download_subs_bytes(moviename):
     vidfile = moviename + ".mp4"
-
-    #Create video object instead of dummy file
-    video = Video.fromname(Path(vidfile).name) 
-
-    if (sub := find_existing_sub(vidfile)):
-        print(f"Found existing subtitle: {sub}")
-        return sub
+    video = Video.fromname(Path(vidfile).name)
 
     subs = download_best_subtitles([video], {Language('eng')})
-    if subs and video in subs:
-        save_subtitles(video, subs[video])
-        sub_path = find_existing_sub(vidfile)
-        print("Subtitles downloaded and saved to ." + sub_path)
-        print(sub_path)
-        delete_files(vidfile)
-        return sub_path
-    else:
+
+    if not subs or video not in subs:
         print("No subtitles found.")
+        return []
+
+    for subtitle in subs[video]:
+        if subtitle.content:
+            dialogue_lines = extract_text_from_bytes(subtitle.content)
+            if dialogue_lines:
+                return dialogue_lines
+
+    print("No valid subtitles parsed.")
+    return []
