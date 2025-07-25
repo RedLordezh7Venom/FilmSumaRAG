@@ -1,4 +1,3 @@
-# sub_to_summary.py
 from src.utils.subliminalsubsdl import download_subs_lines
 from src.core.llm_model import generate_summary
 
