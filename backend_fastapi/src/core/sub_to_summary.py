@@ -1,6 +1,5 @@
 # sub_to_summary.py
 from src.utils.subliminalsubsdl import download_subs_lines
-from src.utils.file_operations import split_text_into_chunks_from_text
 from src.core.llm_model import generate_summary
 
 async def get_movie_summary(moviename: str):

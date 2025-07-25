@@ -1,5 +1,3 @@
-# subliminalsubsdl.py
-import subliminal
 from subliminal import download_best_subtitles, Video
 from babelfish import Language
 from pathlib import Path

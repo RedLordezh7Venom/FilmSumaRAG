@@ -1,5 +1,6 @@
 from langchain_google_genai import ChatGoogleGenerativeAI,HarmBlockThreshold,HarmCategory
 from langchain.prompts import PromptTemplate
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from dotenv import load_dotenv
 
@@ -14,9 +15,6 @@ llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-lite',
                                  HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:HarmBlockThreshold.BLOCK_NONE,
                                  HarmCategory.HARM_CATEGORY_HARASSMENT:HarmBlockThreshold.BLOCK_NONE,
                              })
-
-
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def split_text_into_chunks_from_text(text: str, chunk_size=10000, chunk_overlap=1000):
     splitter = RecursiveCharacterTextSplitter(
