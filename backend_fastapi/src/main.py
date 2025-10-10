@@ -9,7 +9,8 @@ app = FastAPI()
 origins = [
     "https://film-suma-rag.vercel.app",
     "https://film-suma-rag-frontend-inky.vercel.app",
-    "https://filmsumarag-frontend.onrender.com"
+    "https://filmsumarag-frontend.onrender.com",
+    "https://film-suma-rag.vercel.app/summary"
 ]
 
 app.add_middleware(
