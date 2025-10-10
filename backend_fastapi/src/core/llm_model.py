@@ -7,16 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatGroq(model='deepseek-r1-distill-llama-70b',
+llm = ChatGroq(model='llama-3.1-8b-instant',
                              api_key = os.getenv('GROQ_KEY'),
-                             temperature = 0.7,
-                             reasoning_format="hidden"
-                            #  safety_settings={
-                            #      HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:HarmBlockThreshold.BLOCK_NONE,
-                            #      HarmCategory.HARM_CATEGORY_HATE_SPEECH:HarmBlockThreshold.BLOCK_NONE,
-                            #      HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:HarmBlockThreshold.BLOCK_NONE,
-                            #      HarmCategory.HARM_CATEGORY_HARASSMENT:HarmBlockThreshold.BLOCK_NONE,
-                            #  }
+                             temperature = 0.6,
                             )
 
 def split_text_into_chunks_from_text(text: str):
