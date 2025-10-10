@@ -6,12 +6,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = [
-    "https://film-suma-rag.vercel.app",
-    "https://film-suma-rag-frontend-inky.vercel.app",
-    "https://filmsumarag-frontend.onrender.com"
-    ]
-allow_credentials=True,
+    allow_origins=["https://film-suma-rag.vercel.app","https://film-suma-rag.vercel.app/summarize","https://film-suma-rag-frontend-inky.vercel.app","https://filmsumarag-frontend.onrender.com","https://film-suma-rag-frontend-inky.vercel.app/summary"],
+    allow_credentials=True,
     allow_methods=["*"],  # Restrict to needed methods
     allow_headers=["*"]
 )
