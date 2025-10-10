@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from src.api.endpoints import summary
+
+app = FastAPI()
 
 app = FastAPI()
 
@@ -17,12 +20,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/")
-async def root():
-    return {"message": "Hello from FastAPI"}
+app.include_router(summary.router)
 
-# Example async endpoint
-@app.post("/summarize")
-async def summarize(data: dict):
-    # async I/O calls here
-    return {"summary": "result"}
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
