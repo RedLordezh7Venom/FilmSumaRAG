@@ -2,20 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.endpoints import summary
 
-app = FastAPI()
+import re
 
 app = FastAPI()
 
-origins = [
-    "https://film-suma-rag.vercel.app",
-    "https://film-suma-rag-frontend-inky.vercel.app",
-    "https://filmsumarag-frontend.onrender.com",
-    "https://film-suma-rag.vercel.app/summary"
-]
-
+ 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
