@@ -67,67 +67,22 @@ export default function DeepDivePage({ params }: DeepDivePageProps) {
 
     setMessages((prevMessages) => {
       const newUserMessage: Message = { id: prevMessages.length + 1, text: userMessageText, sender: "user" };
+      console.log("User message added:", newUserMessage);
       return [...prevMessages, newUserMessage];
     });
 
-    try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL;
-      const fallbackApiUrl = "http://127.0.0.1:8000";
-
-      let response;
-      let data;
-
-      try {
-        if (primaryApiUrl) {
-          response = await fetch(`${primaryApiUrl}/deep_dive`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ movie: movieTitle, question: userMessageText }),
-          });
-
-          if (response.ok) {
-            data = await response.json();
-          } else {
-            console.warn(`Primary API URL (${primaryApiUrl}) failed with status: ${response.status}. Attempting fallback.`);
-          }
-        }
-      } catch (error) {
-        console.warn(`Primary API URL (${primaryApiUrl}) failed:`, error, "Attempting fallback.");
-      }
-
-      if (!data) { // If primary failed or wasn't attempted, try fallback
-        response = await fetch(`${fallbackApiUrl}/deep_dive`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ movie: movieTitle, question: userMessageText }),
-        });
-
-        if (response.ok) {
-          data = await response.json();
-        } else {
-          throw new Error(`Fallback API URL (${fallbackApiUrl}) failed with status: ${response.status}`);
-        }
-      }
-
+    // Simulate AI response (placeholder)
+    setTimeout(() => {
       setMessages((prevMessages) => {
         const newAiMessage: Message = {
           id: prevMessages.length + 1,
-          text: data.response || "Embeddings still being prepared, try again in a few seconds.",
+          text: `This is a dummy AI response to your question: "${userMessageText}".`,
           sender: "ai",
         };
+        console.log("Dummy AI message added:", newAiMessage);
         return [...prevMessages, newAiMessage];
       });
-    } catch (error) {
-      console.error("Error fetching deep dive response:", error);
-      setMessages((prevMessages) => {
-        const newAiMessage: Message = {
-          id: prevMessages.length + 1,
-          text: "Error: Could not get a response from the Deep Dive AI.",
-          sender: "ai",
-        };
-        return [...prevMessages, newAiMessage];
-      });
-    }
+    }, 1000);
   };
 
   return (
