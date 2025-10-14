@@ -59,27 +59,27 @@ export default function DeepDivePage({ params }: DeepDivePageProps) {
     }
   }, [messages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
 
-    const newUserMessage: Message = {
-      id: messages.length + 1,
-      text: inputMessage,
-      sender: 'user',
-    };
-    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    const newUserMessage = { id: messages.length + 1, text: inputMessage, sender: "user" };
+    setMessages((prev) => [...prev, newUserMessage]);
     setInputMessage("");
 
-    // Simulate AI response (placeholder)
-    setTimeout(() => {
-      const newAiMessage: Message = {
+    const res = await fetch("http://localhost:8000/deep_dive", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ movie: movieTitle, question: inputMessage }),
+    });
+
+    const data = await res.json();
+    const newAiMessage = {
         id: messages.length + 2,
-        text: `You asked about "${inputMessage}". I'm still learning about "${movieTitle}".`,
-        sender: 'ai',
-      };
-      setMessages((prevMessages) => [...prevMessages, newAiMessage]);
-    }, 1000);
-  };
+        text: data.response || "Embeddings still being prepared, try again in a few seconds.",
+        sender: "ai",
+    };
+    setMessages((prev) => [...prev, newAiMessage]);
+    };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-white p-8">
