@@ -9,3 +9,7 @@ pysubs2
 langchain-google-genai
 langchain-groq
 langchain
+websockets
+sentence-transformers
+scikit-learn
+numpy
