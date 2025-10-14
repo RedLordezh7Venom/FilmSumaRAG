@@ -66,7 +66,10 @@ export default function DeepDivePage({ params }: DeepDivePageProps) {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL;
         const fallbackApiUrl = "http://127.0.0.1:8000";
         
-        let checkUrl = `${primaryApiUrl || fallbackApiUrl}/check_embeddings/${encodeURIComponent(movieTitleWithYear)}`;
+
+        const baseUrl = (fallbackApiUrl).replace(/\/$/, ''); // Remove trailing slash
+
+        let checkUrl = `${baseUrl}/check_embeddings/${encodeURIComponent(movieTitleWithYear)}`;
         
         const checkResponse = await fetch(checkUrl);
         const checkData = await checkResponse.json();
@@ -151,7 +154,7 @@ export default function DeepDivePage({ params }: DeepDivePageProps) {
 
   function connectWebSocket() {
     try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL;
+      const primaryApiUrl = "ws://127.0.0.1:8000";
       const fallbackApiUrl = "ws://127.0.0.1:8000";
       
       // Convert HTTP(S) to WS(S)
