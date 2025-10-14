@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Search, Sparkles } from "lucide-react"
+import { Search, Sparkles, BookOpen } from "lucide-react" // Added BookOpen
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -47,7 +47,7 @@ export default function Home() {
     // If we have a movie ID from the URL, search for it
     if (movieId && movieTitle) {
       setSearch(movieTitle);
-      searchMovie(movieId);
+      searchMovie(Number(movieId)); // Convert movieId to a number
     }
   }, []);
 
@@ -221,13 +221,23 @@ export default function Home() {
                       <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
                         {movie.title} ({new Date(movie.release_date).getFullYear()})
                       </h2>
-                      <Button
-                        onClick={handleSummarize}
-                        className="bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:border-blue-400 hover:border-2 border-2 border-transparent"
-                      >
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Summarize
-                      </Button>
+                      <div className="flex flex-row gap-2"> {/* Changed to flex-row to place buttons side-by-side */}
+                        <Link href={`/deep-dive/${movie.id}`} passHref>
+                          <Button
+                            className="bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:border-blue-400 hover:border-2 border-2 border-transparent"
+                          >
+                            <BookOpen className="w-4 h-4 mr-2" /> {/* Deep Dive Icon */}
+                            Deep Dive
+                          </Button>
+                        </Link>
+                        <Button
+                          onClick={handleSummarize}
+                          className="bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:border-blue-400 hover:border-2 border-2 border-transparent"
+                        >
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Summarize
+                        </Button>
+                      </div>
                     </div>
                     <p className="text-gray-300 leading-relaxed">{movie.overview}</p>
                   </div>
@@ -252,4 +262,3 @@ export default function Home() {
     </main>
   )
 }
-
