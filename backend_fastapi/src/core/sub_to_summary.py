@@ -2,6 +2,7 @@ from src.utils.subliminalsubsdl import download_subs_lines
 from src.core.llm_model import generate_summary
 from src.core.embeddings import build_embeddings
 import asyncio, threading
+import os
 
 async def get_movie_summary(moviename: str):
     print("Downloading subtitles...")
