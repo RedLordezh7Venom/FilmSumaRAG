@@ -1,17 +1,16 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Roboto } from "next/font/google";
+import { Outfit } from "next/font/google";
 
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-roboto',
+  variable: '--font-outfit',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Sum-A-Film | AI Movie Insights',
+  description: 'AI-powered movie summaries and deep dives.',
 }
 
 export default function RootLayout({
@@ -20,10 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${roboto.variable}`}>
-      <body className="font-roboto">
+    <html lang="en" className={`${outfit.variable} dark`}>
+      <body className="font-outfit antialiased">
         {children}
       </body>
     </html>
   );
 }
+
