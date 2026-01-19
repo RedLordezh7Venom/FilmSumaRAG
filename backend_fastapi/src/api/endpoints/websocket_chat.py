@@ -1,19 +1,17 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from src.core.rag_chat import answer_question
+from src.core.rag_chat import answer_question_stream
 import json
 
 router = APIRouter()
 
 @router.websocket("/ws/chat/{movie}")
 async def websocket_chat(websocket: WebSocket, movie: str):
-    """
-    WebSocket endpoint for real-time RAG Q&A chat
-    """
+    # websocket endpoint for streaming rag chat
     await websocket.accept()
     
     try:
         while True:
-            # Receive question from client
+            # receive question from client
             data = await websocket.receive_text()
             message_data = json.loads(data)
             question = message_data.get("question", "")
@@ -26,15 +24,15 @@ async def websocket_chat(websocket: WebSocket, movie: str):
                 continue
             
             try:
-                # Get answer from RAG system
-                answer = await answer_question(movie, question)
+                # stream answer tokens via websocket
+                async for token in answer_question_stream(movie, question):
+                    await websocket.send_json({
+                        "type": "token",
+                        "token": token
+                    })
                 
-                # Send response back to client
-                await websocket.send_json({
-                    "type": "answer",
-                    "question": question,
-                    "answer": answer
-                })
+                # signal completion
+                await websocket.send_json({"type": "done"})
                 
             except FileNotFoundError:
                 await websocket.send_json({
