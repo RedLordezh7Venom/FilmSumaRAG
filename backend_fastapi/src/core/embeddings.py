@@ -1,20 +1,62 @@
-import os, pickle
+import os
+import pickle
 from sentence_transformers import SentenceTransformer
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from typing import TypedDict, List
+import numpy as np
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-def build_embeddings(movie_name: str, text: str):
+class EmbeddingState(TypedDict):
+    """State for embedding workflow"""
+    movie_name: str
+    text: str
+    chunks: List[str]
+    vectors: np.ndarray
+    chunk_count: int
+    filepath: str
+
+def chunk_text(text: str, chunk_size: int = 1000, chunk_overlap: int = 100) -> List[str]:
+    """
+    Split text into overlapping chunks
+    
+    Args:
+        text: Full text to chunk
+        chunk_size: Size of each chunk
+        chunk_overlap: Overlap between chunks
+    
+    Returns:
+        List of text chunks
+    """
+    chunks = []
+    start = 0
+    text_length = len(text)
+    
+    while start < text_length:
+        end = start + chunk_size
+        chunk = text[start:end]
+        chunks.append(chunk)
+        start += chunk_size - chunk_overlap
+    
+    return chunks
+
+def build_embeddings(movie_name: str, text: str) -> int:
     """
     Build embeddings from text and save to disk
     
     Args:
         movie_name: Name of the movie (with year)
         text: Full text to create embeddings from
+    
+    Returns:
+        Number of chunks created
     """
-    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-    chunks = splitter.split_text(text)
+    # Chunk the text
+    chunks = chunk_text(text, chunk_size=1000, chunk_overlap=100)
+    
+    # Create embeddings
     vectors = embedder.encode(chunks, convert_to_tensor=False)
+    
+    # Prepare data
     data = {"chunks": chunks, "vectors": vectors}
 
     # Ensure directory exists
@@ -28,7 +70,7 @@ def build_embeddings(movie_name: str, text: str):
     print(f"✅ Embeddings saved for {movie_name} ({len(chunks)} chunks)")
     return len(chunks)
 
-def load_embeddings(movie_name: str):
+def load_embeddings(movie_name: str) -> dict:
     """
     Load embeddings from disk
     
