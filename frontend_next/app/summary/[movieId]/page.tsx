@@ -7,8 +7,8 @@ import { ArrowLeft } from "lucide-react"
 import SummaryContent from "./summary-content"
 
 interface SummaryPageProps {
-  params: { movieId: string }
-  searchParams: { length: string }
+  params: Promise<{ movieId: string }>
+  searchParams: Promise<{ length: string }>
 }
 
 async function getMovieDetails(movieId: string) {
@@ -23,8 +23,9 @@ async function getMovieDetails(movieId: string) {
 }
 
 export default async function SummaryPage({ params, searchParams }: SummaryPageProps) {
-  const movieId = params.movieId
-  const length = Number.parseInt(searchParams.length) || 500
+  const { movieId } = await params
+  const { length: lengthParam } = await searchParams
+  const length = Number.parseInt(lengthParam) || 500
 
   let movie
   try {

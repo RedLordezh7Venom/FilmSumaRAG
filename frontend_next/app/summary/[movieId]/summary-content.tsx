@@ -1,4 +1,6 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+"use client";
+
+import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -7,78 +9,116 @@ interface SummaryContentProps {
   length: number;
 }
 
-async function generateSummary(movieId: string, length: number) {
-  const movie = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&append_to_response=credits,reviews`
-  ).then((res) => res.json());
+export default function SummaryContent({ movieId, length }: SummaryContentProps) {
+  const [summary, setSummary] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL;
-  const fallbackApiUrl = "http://127.0.0.1:8000";
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
 
-  let response;
-  let data;
-  const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
-  const titleWithYear = `${movie.title} (${releaseYear})`;
-  console.log('Processing movie:', titleWithYear);
+    async function streamSummary() {
+      try {
+        const movieResponse = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&append_to_response=credits,reviews`,
+          { signal: controller.signal }
+        );
+        const movie = await movieResponse.json();
 
+        const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
+        const titleWithYear = `${movie.title} (${releaseYear})`;
+        console.log('Processing movie for summary streaming:', titleWithYear);
 
-  try {
-    if (primaryApiUrl) {
-      response = await fetch(`${primaryApiUrl}/summarize`, {
-        method: "POST",
-        headers: {
-          "accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          moviename: titleWithYear // Use the new string with the year
-        }),
-      });
+        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
 
-      if (response.ok) {
-        data = await response.json();
-        return data;
-      } else {
-        console.warn(`Primary API URL (${primaryApiUrl}) failed with status: ${response.status}. Attempting fallback.`);
+        const response = await fetch(`${primaryApiUrl}/summarize`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            moviename: titleWithYear
+          }),
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`API failed with status: ${response.status}`);
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error("Response body is not readable");
+        }
+
+        const decoder = new TextDecoder();
+        let currentSummary = "";
+        setIsLoading(false);
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const dataStr = line.slice(6).trim();
+              if (dataStr === "[DONE]") {
+                break;
+              }
+              try {
+                const data = JSON.parse(dataStr);
+                if (data.token) {
+                  currentSummary += data.token;
+                  if (isMounted) setSummary(currentSummary);
+                }
+              } catch (e) {
+                console.error("Error parsing SSE data:", e, dataStr);
+              }
+            }
+          }
+        }
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
+        console.error("Error fetching summary stream:", err);
+        if (isMounted) {
+          setError(err.message || "Failed to load summary");
+          setIsLoading(false);
+        }
       }
     }
-  } catch (error) {
-    console.warn(`Primary API URL (${primaryApiUrl}) failed:`, error, "Attempting fallback.");
-  }
 
-  try {
-    response = await fetch(`${fallbackApiUrl}/summarize`, {
-      method: "POST",
-      headers: {
-        "accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        moviename: titleWithYear
-      }),
-    });
+    streamSummary();
 
-    if (response.ok) {
-      data = await response.json();
-      return data;
-    } else {
-      throw new Error(`Fallback API URL (${fallbackApiUrl}) failed with status: ${response.status}`);
-    }
-  } catch (error) {
-    console.error("Error fetching summary from FastAPI (both primary and fallback failed):", error);
-    throw new Error("Backend not working: API is offline.");
-  }
-}
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [movieId]);
 
-export default async function SummaryContent({ movieId, length }: SummaryContentProps) {
-  const summary = await generateSummary(movieId, length);
-
-  if (!summary) {
+  if (isLoading && !summary) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-[90%]" />
         <Skeleton className="h-4 w-[95%]" />
+      </div>
+    );
+  }
+
+  if (error && !summary) {
+    return (
+      <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg text-red-200">
+        <p>Error: {error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 text-sm underline hover:text-white"
+        >
+          Try Again
+        </button>
       </div>
     );
   }
@@ -127,6 +167,14 @@ export default async function SummaryContent({ movieId, length }: SummaryContent
       >
         {summary}
       </ReactMarkdown>
+      {isLoading && (
+        <div className="flex gap-1 mt-2">
+          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
+        </div>
+      )}
     </div>
   );
 }
+
