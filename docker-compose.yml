@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ----------------------------
   # DATA STORAGE SERVICES
@@ -45,19 +43,13 @@ services:
     build: 
       context: ./backend_fastapi
       dockerfile: Dockerfile
+    image: filmsumarag-backend
     restart: always
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend_fastapi:/app
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/filmsumarag
-      - REDIS_URL=redis://redis:6379/0
-      - CHROMA_DB_URL=http://chromadb:8000
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      # Ensure you pass your keys in a local .env file or rely on the container's environment
     env_file:
       - ./backend_fastapi/.env
     depends_on:
@@ -68,18 +60,10 @@ services:
       - app-network
 
   celery_worker:
-    build: 
-      context: ./backend_fastapi
-      dockerfile: Dockerfile
-    command: celery -A src.core.celery_app worker --loglevel=info
+    image: filmsumarag-backend
+    command: celery -A src.core.celery_app:celery_app worker --loglevel=info
     volumes:
       - ./backend_fastapi:/app
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/filmsumarag
-      - REDIS_URL=redis://redis:6379/0
-      - CHROMA_DB_URL=http://chromadb:8000
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
     env_file:
       - ./backend_fastapi/.env
     depends_on:
@@ -97,12 +81,15 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - WATCHPACK_POLLING=true
+      - NEXT_TELEMETRY_DISABLED=1
     volumes:
       - ./frontend_next:/app
       - /app/node_modules
+      - /app/.next
     networks:
       - app-network
 

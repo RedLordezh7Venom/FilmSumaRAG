@@ -11,6 +11,9 @@ langchain-google-genai
 langchain-groq
 langchain
 websockets
+# Optimized for CPU and faster builds
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
 sentence-transformers
 scikit-learn
 numpy
@@ -24,4 +27,5 @@ celery
 passlib[bcrypt]
 python-jose[cryptography]
 python-multipart
+email-validator
 chromadb
