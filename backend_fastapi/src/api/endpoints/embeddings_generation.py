@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from src.utils.subliminalsubsdl import download_subs_lines
 from src.core.embeddings import build_embeddings
+from src.core import vector_db
 import os
 
 router = APIRouter()
@@ -38,8 +39,7 @@ async def generate_embeddings(request: EmbeddingRequest, background_tasks: Backg
     """
     try:
         # Check if embeddings already exist
-        embeddings_path = f"data/embeddings/{request.movie}.pkl"
-        if os.path.exists(embeddings_path):
+        if vector_db.has_movie(request.movie):
             return {
                 "status": "ready",
                 "message": f"Embeddings already exist for {request.movie}"
@@ -61,11 +61,11 @@ async def check_embeddings(movie: str):
     """
     Check if embeddings exist for a movie
     """
-    embeddings_path = f"data/embeddings/{movie}.pkl"
-    exists = os.path.exists(embeddings_path)
+    exists = vector_db.has_movie(movie)
     
     return {
         "exists": exists,
         "movie": movie,
         "status": "ready" if exists else "not_found"
     }
+
