@@ -4,7 +4,6 @@ from src.api.endpoints import summary
 from src.api.endpoints import deep_dive
 from src.api.endpoints import embeddings_generation
 from src.api.endpoints import websocket_chat
-from src.api.endpoints import auth
 import time
 
 app = FastAPI(title="FilmSumaRAG API", version="1.0.0")
@@ -30,7 +29,6 @@ async def log_requests(request: Request, call_next):
         raise
 
 # Include routers
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(summary.router, tags=["Summary"])
 app.include_router(deep_dive.router, tags=["Deep Dive"])
 app.include_router(embeddings_generation.router, tags=["Embeddings"])

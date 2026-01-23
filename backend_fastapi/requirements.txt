@@ -1,7 +1,6 @@
 uvicorn
 subliminal
 pydantic
-pydantic-settings
 python-dotenv
 google-generativeai
 fastapi
@@ -14,14 +13,3 @@ websockets
 sentence-transformers
 scikit-learn
 numpy
-# Production/Database Stack
-asyncpg
-psycopg2-binary
-sqlalchemy
-alembic
-redis
-celery
-passlib[bcrypt]
-python-jose[cryptography]
-python-multipart
-chromadb
