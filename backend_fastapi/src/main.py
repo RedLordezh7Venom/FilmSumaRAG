@@ -38,6 +38,13 @@ app.include_router(websocket_chat.router, tags=["WebSocket Chat"])
 async def root():
     return {"status": "ok", "message": "API is running"}
 
+@app.on_event("startup")
+def startup_event():
+    # Create tables if they don't exist
+    from src.db.database import Base, engine
+    from src.models import sql_models
+    Base.metadata.create_all(bind=engine)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
