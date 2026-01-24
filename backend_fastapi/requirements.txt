@@ -13,3 +13,5 @@ websockets
 sentence-transformers
 scikit-learn
 numpy
+rank-bm25
+nltk

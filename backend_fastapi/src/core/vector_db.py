@@ -61,6 +61,15 @@ def has_movie(movie_name: str) -> bool:
     )
     return len(result['ids']) > 0
 
+def get_movie_documents(movie_name: str) -> List[str]:
+    """
+    Retrieve all document chunks for a specific movie.
+    """
+    results = collection.get(
+        where={"movie_name": {"$eq": movie_name}}
+    )
+    return results['documents']
+
 def delete_movie(movie_name: str) -> None:
     """Deleted a movie from the db"""
     collection.delete(
