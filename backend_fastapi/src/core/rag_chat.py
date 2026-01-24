@@ -40,12 +40,21 @@ def retrieve_context(state: RAGState) -> RAGState:
 
 async def generate_answer(state: RAGState) -> RAGState:
     # generate answer using llm
-    prompt = f"""answer the question using the movie context. be specific and reference dialogue when relevant.
+    prompt = f"""You are the ultimate Cinema Deep Dive expert. You have just finished a master-class analysis of the movie "{state['movie_name']}". 
+Your goal is to provide profound, engaging, and direct answers to questions about this film using the specific dialogue and scenes provided in the context.
 
-context:
+RULES:
+- DO NOT say "Based on the context" or "According to the transcript".
+- Speak with authority and passion, like a film critic or a dedicated fan who knows every detail.
+- Use the provided context to back up your insights, specifically referencing dialogue when it adds flavor.
+- If the answer isn't in the context, use your general knowledge of the film but prioritize the specific details provided.
+- Keep it punchy, insightful, and cinematic.
+
+CONTEXT FROM THE FILM:
 {state["context"]}
 
-question: {state["question"]}"""
+QUESTION: {state["question"]}
+ANSWER:"""
     
     messages = [HumanMessage(content=prompt)]
     response = await llm.ainvoke(messages)
@@ -105,12 +114,21 @@ async def answer_question_stream(movie_name: str, question: str) -> AsyncIterato
     context = "\n\n".join(relevant_chunks)
     
     # stream llm response
-    prompt = f"""answer the question using the movie context. be specific and reference dialogue when relevant.
+    prompt = f"""You are the ultimate Cinema Deep Dive expert. You have just finished a master-class analysis of the movie "{movie_name}". 
+Your goal is to provide profound, engaging, and direct answers to questions about this film using the specific dialogue and scenes provided in the context.
 
-context:
+RULES:
+- DO NOT say "Based on the context" or "According to the transcript".
+- Speak with authority and passion, like a film critic or a dedicated fan who knows every detail.
+- Use the provided context to back up your insights, specifically referencing dialogue when it adds flavor.
+- If the answer isn't in the context, use your general knowledge of the film but prioritize the specific details provided.
+- Keep it punchy, insightful, and cinematic.
+
+CONTEXT FROM THE FILM:
 {context}
 
-question: {question}"""
+QUESTION: {question}
+ANSWER:"""
     
     messages = [HumanMessage(content=prompt)]
     
@@ -118,4 +136,5 @@ question: {question}"""
     async for token in llm.astream(messages):
         if hasattr(token, 'content'):
             yield token.content
+
 

@@ -70,12 +70,12 @@ export default function DeepDivePage() {
         if (checkData.exists) {
           setEmbeddingStatus('ready');
           setMessages([
-            { id: 1, text: `Hello! I'm your Deep Dive AI for "${movieTitle}". Ask me anything about the movie!`, sender: 'ai' }
+            { id: 1, text: `🎬 **Analysis Complete.** I've mapped out the narrative DNA of **${movieTitle}**. What secrets shall we uncover?`, sender: 'ai' }
           ]);
         } else {
           setEmbeddingStatus('generating');
           setMessages([
-            { id: 1, text: `Preparing Deep Dive for "${movieTitle}"... Downloading and processing subtitles to create embeddings. This may take a minute.`, sender: 'ai' }
+            { id: 1, text: `🔍 **Initializing Deep Dive...** I'm currently processing the screenplay for **${movieTitle}**. Hang tight, this is where the magic happens.`, sender: 'ai' }
           ]);
 
           let generateUrl = `${baseUrl}/generate_embeddings`;
@@ -93,7 +93,7 @@ export default function DeepDivePage() {
         console.error("Error checking embeddings:", error);
         setEmbeddingStatus('error');
         setMessages([
-          { id: 1, text: `Sorry, there was an error preparing the Deep Dive. Please try again later.`, sender: 'ai' }
+          { id: 1, text: `⚠️ **System Failure.** My cinematic database is currently offline. Please try again soon.`, sender: 'ai' }
         ]);
       }
     }
@@ -119,13 +119,13 @@ export default function DeepDivePage() {
           clearInterval(interval);
           setEmbeddingStatus('ready');
           setMessages([
-            { id: 1, text: `Deep Dive is ready for "${movieTitle}"! Ask me anything about the movie.`, sender: 'ai' }
+            { id: 1, text: `🚀 **Ready for Takeoff.** The Deep Dive for **${movieTitle}** is online. Ask me anything about the subtext, dialogue, or plot!`, sender: 'ai' }
           ]);
         } else if (attempts >= maxAttempts) {
           clearInterval(interval);
           setEmbeddingStatus('error');
           setMessages([
-            { id: 1, text: `Sorry, embeddings generation took too long. Please try again later.`, sender: 'ai' }
+            { id: 1, text: `⌛ **Processing Timeout.** This movie script is massive! Let's try again in a moment.`, sender: 'ai' }
           ]);
         }
       } catch (error) {
@@ -220,7 +220,7 @@ export default function DeepDivePage() {
       console.error("Error in deep dive chat:", error);
       setMessages((prev) => [
         ...prev.filter(m => m.id !== aiMessageId),
-        { id: prev.length + 1, text: `Error: ${error.message || "Failed to get response"}`, sender: "ai" }
+        { id: prev.length + 1, text: `⚠️ **System Error:** ${error.message || "Failed to reach cinematic servers"}`, sender: "ai" }
       ]);
     } finally {
       setIsSending(false);
@@ -228,62 +228,58 @@ export default function DeepDivePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-white p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen bg-black text-white p-4 md:p-8 relative overflow-hidden">
+      {/* Cinematic background effects */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1),transparent)] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.1),transparent)] pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
         <Link href={`/summary/${movieId}`} passHref>
-          <Button variant="ghost" className="mb-6 hover:bg-white/10">
+          <Button variant="ghost" className="mb-6 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Summary
           </Button>
         </Link>
 
-        <Card className="bg-black/40 backdrop-blur-md border-white/10 shadow-2xl overflow-hidden ring-1 ring-white/5">
-          <CardHeader className="border-b border-white/10 bg-white/5">
-            <CardTitle className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent">
-              Deep Dive: {movieTitle}
-            </CardTitle>
-            {embeddingStatus !== 'ready' && (
-              <div className="flex items-center gap-2 text-sm text-gray-400 mt-2">
-                {embeddingStatus === 'checking' && (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
-                    <span>Checking knowledge base...</span>
-                  </>
-                )}
-                {embeddingStatus === 'generating' && (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin text-indigo-400" />
-                    <span>Processing subtitles... This may take a minute.</span>
-                  </>
-                )}
-                {embeddingStatus === 'error' && (
-                  <span className="text-red-400">Error loading knowledge base</span>
-                )}
+        <Card className="bg-slate-900/40 backdrop-blur-xl border-white/5 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
+          <CardHeader className="border-b border-white/10 bg-white/5 py-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  DEEP DIVE
+                </CardTitle>
+                <p className="text-gray-400 text-sm font-medium mt-1">Analyzing: {movieTitle}</p>
               </div>
-            )}
+              <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${embeddingStatus === 'ready' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                embeddingStatus === 'error' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                  'bg-blue-500/20 text-blue-400 border border-blue-500/30 animate-pulse'
+                }`}>
+                {embeddingStatus === 'ready' ? 'Online' : embeddingStatus === 'error' ? 'Offline' : 'Syncing'}
+              </div>
+            </div>
           </CardHeader>
+
           <CardContent className="p-0">
-            <ScrollArea className="h-[500px] p-6" ref={scrollAreaRef}>
-              <div className="space-y-6">
+            <ScrollArea className="h-[550px]" ref={scrollAreaRef}>
+              <div className="p-6 space-y-8">
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'
-                      }`}
+                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] md:max-w-[75%] p-4 rounded-2xl shadow-lg ${message.sender === 'user'
-                        ? 'bg-blue-600 text-white rounded-tr-none'
-                        : 'bg-white/10 text-gray-100 rounded-tl-none border border-white/5'
+                      className={`max-w-[85%] md:max-w-[80%] p-5 rounded-3xl ${message.sender === 'user'
+                        ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-none shadow-lg shadow-blue-900/20'
+                        : 'bg-white/5 border border-white/10 text-gray-100 rounded-tl-none backdrop-blur-sm'
                         }`}
                     >
-                      <div className="prose prose-invert prose-sm max-w-none">
+                      <div className="prose prose-invert prose-sm max-w-none leading-relaxed">
                         <ReactMarkdown>{message.text}</ReactMarkdown>
                       </div>
                       {message.sender === 'ai' && message.text === "" && (
-                        <div className="flex gap-1 py-1">
-                          <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                          <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                          <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce"></span>
+                        <div className="flex gap-2 py-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
                         </div>
                       )}
                     </div>
@@ -291,41 +287,41 @@ export default function DeepDivePage() {
                 ))}
                 {isSending && messages[messages.length - 1]?.sender === 'user' && (
                   <div className="flex justify-start">
-                    <div className="max-w-[75%] p-4 rounded-2xl rounded-tl-none bg-white/10 text-gray-100 border border-white/5 shadow-lg flex items-center gap-3">
-                      <div className="flex gap-1">
-                        <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                        <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                        <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce"></span>
-                      </div>
-                      <span className="text-sm text-gray-400">Thinking...</span>
+                    <div className="max-w-[80%] p-5 rounded-3xl rounded-tl-none bg-white/5 border border-white/10 text-gray-400 flex items-center gap-3 italic">
+                      <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                      Deconstructing cinema...
                     </div>
                   </div>
                 )}
               </div>
             </ScrollArea>
+
             <div className="p-6 bg-white/5 border-t border-white/10">
-              <div className="flex gap-3">
-                <Input
+              <div className="relative group">
+                <input
                   type="text"
-                  placeholder={embeddingStatus === 'ready' ? "Ask me anything about this movie..." : "Preparing..."}
+                  placeholder={embeddingStatus === 'ready' ? "Ask the expert about this film..." : "System synchronizing..."}
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleSendMessage();
                     }
                   }}
                   disabled={embeddingStatus !== 'ready' || isSending}
-                  className="flex-1 bg-white/5 text-white placeholder:text-gray-500 border-white/10 focus:border-blue-500 focus:ring-blue-500 transition-all rounded-xl h-12"
+                  className="w-full bg-black/40 text-white placeholder:text-gray-500 border border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all rounded-2xl h-14 pl-6 pr-16 outline-none"
                 />
-                <Button
+                <button
                   onClick={handleSendMessage}
                   disabled={embeddingStatus !== 'ready' || isSending || !inputMessage.trim()}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl px-6 h-12 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                  className="absolute right-2 top-2 h-10 w-10 flex items-center justify-center bg-blue-600 hover:bg-blue-500 disabled:bg-gray-800 text-white rounded-xl transition-all shadow-lg shadow-blue-500/20"
                 >
                   {isSending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
-                </Button>
+                </button>
               </div>
+              <p className="text-[10px] text-gray-500 mt-3 text-center uppercase tracking-widest font-bold opacity-50">
+                Driven by FilmSuma RAG Core
+              </p>
             </div>
           </CardContent>
         </Card>
