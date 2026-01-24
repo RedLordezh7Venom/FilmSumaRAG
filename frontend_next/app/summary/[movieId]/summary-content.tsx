@@ -38,7 +38,8 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            moviename: titleWithYear
+            tmdb_id: movieId,
+            movie_title: titleWithYear
           }),
           signal: controller.signal
         });

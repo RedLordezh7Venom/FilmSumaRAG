@@ -18,6 +18,7 @@ except LookupError:
 from nltk.tokenize import word_tokenize
 
 class RAGState(TypedDict):
+    movie_id: str
     movie_name: str
     question: str
     query_vector: np.ndarray
@@ -35,16 +36,16 @@ def embed_query(state: RAGState) -> RAGState:
 
 def retrieve_context(state: RAGState) -> RAGState:
     # Use Hybrid Search (Vector + BM25) with k=10
-    movie_name = state["movie_name"]
+    movie_id = state["movie_id"]
     question = state["question"]
     query_vector = state["query_vector"]
     k = 10
 
     # 1. Vector Search
-    vector_results = vector_db.search_movie(movie_name, query_vector, n_results=k * 2)
+    vector_results = vector_db.search_movie(movie_id, query_vector, n_results=k * 2)
     
     # 2. BM25 Search
-    all_docs = vector_db.get_movie_documents(movie_name)
+    all_docs = vector_db.get_movie_documents(movie_id)
     if not all_docs:
         relevant_chunks = vector_results[:k]
     else:
@@ -116,15 +117,16 @@ def create_rag_graph():
     
     return workflow.compile()
 
-async def answer_question(movie_name: str, question: str) -> str:
+async def answer_question(movie_id: str, movie_name: str, question: str) -> str:
     # check existence first
-    if not vector_db.has_movie(movie_name):
-        raise FileNotFoundError(f"No embeddings found for check {movie_name}")
+    if not vector_db.has_movie(movie_id):
+        raise FileNotFoundError(f"No embeddings found for movie_id {movie_id}")
 
     # batch mode answer generation
     graph = create_rag_graph()
     
     initial_state = {
+        "movie_id": movie_id,
         "movie_name": movie_name,
         "question": question,
         "query_vector": np.array([]),
@@ -136,20 +138,20 @@ async def answer_question(movie_name: str, question: str) -> str:
     result = await graph.ainvoke(initial_state)
     return result["answer"]
 
-async def answer_question_stream(movie_name: str, question: str) -> AsyncIterator[str]:
+async def answer_question_stream(movie_id: str, movie_name: str, question: str) -> AsyncIterator[str]:
     # stream answer tokens as generated
     
     # check existence first
-    if not vector_db.has_movie(movie_name):
-        raise FileNotFoundError(f"No embeddings found for {movie_name}")
+    if not vector_db.has_movie(movie_id):
+        raise FileNotFoundError(f"No embeddings found for movie_id {movie_id}")
     
     # embed query
     query_vec = embedder.encode([question], convert_to_tensor=False)[0]
     
     # --- Hybrid Retrieval (Integrated here for streaming) ---
     k = 10
-    vector_results = vector_db.search_movie(movie_name, query_vec, n_results=k * 2)
-    all_docs = vector_db.get_movie_documents(movie_name)
+    vector_results = vector_db.search_movie(movie_id, query_vec, n_results=k * 2)
+    all_docs = vector_db.get_movie_documents(movie_id)
     
     if not all_docs:
         relevant_chunks = vector_results[:k]

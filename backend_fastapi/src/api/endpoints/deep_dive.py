@@ -7,7 +7,8 @@ import json
 router = APIRouter()
 
 class ChatQuery(BaseModel):
-    movie: str
+    tmdb_id: str
+    movie_title: str
     question: str
 
 @router.post("/deep_dive")
@@ -15,7 +16,7 @@ async def deep_dive_chat(payload: ChatQuery):
     try:
         # stream tokens with sse
         async def event_generator():
-            async for token in answer_question_stream(payload.movie, payload.question):
+            async for token in answer_question_stream(payload.tmdb_id, payload.movie_title, payload.question):
                 yield f"data: {json.dumps({'token': token})}\n\n"
             yield "data: [DONE]\n\n"
         

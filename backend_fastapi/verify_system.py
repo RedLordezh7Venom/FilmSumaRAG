@@ -145,9 +145,9 @@ def test_embeddings_endpoint():
     """Test the embeddings check endpoint"""
     print_header("Testing Embeddings Endpoint")
     try:
-        test_movie = "Test Movie (2024)"
+        test_id = "12345"
         response = requests.get(
-            f"http://localhost:8000/check_embeddings/{test_movie}",
+            f"http://localhost:8000/check_embeddings/{test_id}",
             timeout=5
         )
         if response.status_code == 200:

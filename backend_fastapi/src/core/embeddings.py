@@ -31,12 +31,12 @@ def chunk_text(text: str, chunk_size: int = 1000, chunk_overlap: int = 100) -> L
     
     return chunks
 
-def build_embeddings(movie_name: str, text: str) -> int:
+def build_embeddings(movie_id: str, text: str) -> int:
     """
     Build embeddings from text and save to ChromaDB
     
     Args:
-        movie_name: Name of the movie (with year)
+        movie_id: ID of the movie (TMDB ID)
         text: Full text to create embeddings from
     
     Returns:
@@ -47,12 +47,12 @@ def build_embeddings(movie_name: str, text: str) -> int:
     
     if not chunks:
         return 0
-
+ 
     # Create embeddings
-    print(f"Generating vectors for {len(chunks)} chunks...")
+    print(f"Generating vectors for {len(chunks)} chunks for movie_id: {movie_id}...")
     vectors = embedder.encode(chunks, show_progress_bar=False, convert_to_tensor=False)
     
     # Save to ChromaDB
-    vector_db.add_movie_vectors(movie_name, chunks, vectors)
+    vector_db.add_movie_vectors(movie_id, chunks, vectors)
     
     return len(chunks)

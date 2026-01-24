@@ -10,11 +10,12 @@ router = APIRouter()
 @router.post('/summarize')
 async def summarize_movie_endpoint(movie: MovieName):
     try:
-        moviename = movie.moviename
-        print(f"Processing movie: {moviename}")
+        movie_title = movie.movie_title
+        tmdb_id = movie.tmdb_id
+        print(f"Processing movie: {movie_title} (ID: {tmdb_id})")
         
         # get subtitle text
-        dialogue_lines = download_subs_lines(moviename)
+        dialogue_lines = download_subs_lines(movie_title)
         if not dialogue_lines:
             raise HTTPException(status_code=404, detail="No subtitles found")
         

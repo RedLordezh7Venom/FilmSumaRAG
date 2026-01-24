@@ -62,7 +62,7 @@ export default function DeepDivePage() {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
         const baseUrl = primaryApiUrl.replace(/\/$/, '');
 
-        let checkUrl = `${baseUrl}/check_embeddings/${encodeURIComponent(movieTitleWithYear)}`;
+        let checkUrl = `${baseUrl}/check_embeddings/${movieId}`;
 
         const checkResponse = await fetch(checkUrl);
         const checkData = await checkResponse.json();
@@ -84,7 +84,10 @@ export default function DeepDivePage() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ movie: movieTitleWithYear }),
+            body: JSON.stringify({
+              tmdb_id: movieId,
+              movie_title: movieTitleWithYear
+            }),
           });
 
           pollEmbeddingsStatus();
@@ -110,7 +113,7 @@ export default function DeepDivePage() {
 
       try {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
-        let checkUrl = `${primaryApiUrl}/check_embeddings/${encodeURIComponent(movieTitleWithYear)}`;
+        let checkUrl = `${primaryApiUrl}/check_embeddings/${movieId}`;
 
         const response = await fetch(checkUrl);
         const data = await response.json();
@@ -171,7 +174,8 @@ export default function DeepDivePage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          movie: movieTitleWithYear,
+          tmdb_id: movieId,
+          movie_title: movieTitleWithYear,
           question: userMessageText
         })
       });

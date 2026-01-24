@@ -1,4 +1,5 @@
 from pydantic import BaseModel
 
 class MovieName(BaseModel):
-    moviename: str
+    tmdb_id: str
+    movie_title: str
