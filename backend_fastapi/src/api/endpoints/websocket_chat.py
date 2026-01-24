@@ -4,8 +4,8 @@ import json
 
 router = APIRouter()
 
-@router.websocket("/ws/chat/{tmdb_id}")
-async def websocket_chat(websocket: WebSocket, tmdb_id: str):
+@router.websocket("/ws/chat/{movie}")
+async def websocket_chat(websocket: WebSocket, movie: str):
     # websocket endpoint for streaming rag chat
     await websocket.accept()
     
@@ -15,7 +15,6 @@ async def websocket_chat(websocket: WebSocket, tmdb_id: str):
             data = await websocket.receive_text()
             message_data = json.loads(data)
             question = message_data.get("question", "")
-            movie_title = message_data.get("movie_title", "Movie")
             
             if not question:
                 await websocket.send_json({
@@ -26,7 +25,7 @@ async def websocket_chat(websocket: WebSocket, tmdb_id: str):
             
             try:
                 # stream answer tokens via websocket
-                async for token in answer_question_stream(tmdb_id, movie_title, question):
+                async for token in answer_question_stream(movie, question):
                     await websocket.send_json({
                         "type": "token",
                         "token": token

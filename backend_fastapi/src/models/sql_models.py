@@ -13,7 +13,6 @@ class Movie(Base):
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True, index=True)
-    tmdb_id = Column(String, unique=True, index=True, nullable=True)
     title = Column(String, unique=True, index=True) # "Matrix (1999)"
     status = Column(Enum(JobStatus), default=JobStatus.PENDING)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
