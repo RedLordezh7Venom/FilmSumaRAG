@@ -134,59 +134,51 @@ export default function BrowsePage() {
 
         {/* Movie Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-          <AnimatePresence mode="popLayout">
-            {loading ? (
-              Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="aspect-[2/3] rounded-2xl glass animate-pulse" />
-              ))
-            ) : (
-              movies.map((movie, idx) => (
-                <motion.div
-                  key={movie.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ delay: idx * 0.05 }}
-                  onClick={() => handleMovieClick(movie.id, movie.title)}
-                  className="group relative cursor-pointer"
-                >
-                  <div className="aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] group-hover:border-purple-500/30">
-                    {movie.poster_path ? (
-                      <img
-                        src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                        alt={movie.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-slate-600">
-                        <Film size={48} strokeWidth={1} />
-                        <span className="text-xs font-medium px-4 text-center">{movie.title}</span>
-                      </div>
-                    )}
+          {loading ? (
+            Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="aspect-[2/3] rounded-2xl glass animate-pulse" />
+            ))
+          ) : (
+            movies.map((movie, idx) => (
+              <div
+                key={movie.id}
+                onClick={() => handleMovieClick(movie.id, movie.title)}
+                className="group relative cursor-pointer"
+              >
+                <div className="aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] group-hover:border-purple-500/30">
+                  {movie.poster_path ? (
+                    <img
+                      src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+                      alt={movie.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-slate-600">
+                      <Film size={48} strokeWidth={1} />
+                      <span className="text-xs font-medium px-4 text-center">{movie.title}</span>
+                    </div>
+                  )}
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                      <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-bold border border-amber-500/20">
-                            <Star size={10} fill="currentColor" />
-                            {movie.vote_average.toFixed(1)}
-                          </div>
-                          <span className="text-slate-400 text-xs">{new Date(movie.release_date).getFullYear()}</span>
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                    <div className="transition-transform duration-500">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-bold border border-amber-500/20">
+                          <Star size={10} fill="currentColor" />
+                          {movie.vote_average.toFixed(1)}
                         </div>
-                        <h3 className="text-white font-bold line-clamp-2 leading-tight">{movie.title}</h3>
+                        <span className="text-slate-400 text-xs">{new Date(movie.release_date).getFullYear()}</span>
                       </div>
+                      <h3 className="text-white font-bold line-clamp-2 leading-tight">{movie.title}</h3>
                     </div>
                   </div>
-                </motion.div>
-              ))
-            )}
-          </AnimatePresence>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
   );
 }
- 

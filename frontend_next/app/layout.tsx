@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: 'AI-powered film analysis and community hub',
 }
 
+import PageLayout from "@/components/page-layout";
+
 export default function RootLayout({
   children,
 }: {
@@ -29,7 +31,7 @@ export default function RootLayout({
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 ml-20 transition-all duration-300">
-              {children}
+              <PageLayout>{children}</PageLayout>
             </main>
           </div>
         </body>

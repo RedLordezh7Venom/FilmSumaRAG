@@ -1,83 +1,139 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { MessageSquare, Plus, Search, FileText, ChevronRight, User, Shield, Info } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  User, 
+  Clock,
+  MessageSquare,
+  ChevronRight,
+  Shield,
+  FileText
+} from 'lucide-react';
 import Link from 'next/link';
 
-interface Board {
+interface Thread {
   id: string;
-  name: string;
-  description: string;
-  threads: number;
+  author: string;
+  title: string;
+  content: string;
+  timestamp: string;
+  replies: number;
+  image?: string;
 }
 
-export default function DiscussionsFeedPage() {
-  const [boards, setBoards] = useState<Board[]>([
-    { id: '27205', name: 'inception', description: 'Dreams within dreams within boards.', threads: 142 },
-    { id: '157336', name: 'interstellar', description: 'Tesseract construction and relativity discussions.', threads: 89 },
-    { id: '414906', name: 'the_batman', description: 'Investigation of Gotham\'s finest cinematic detail.', threads: 56 },
-    { id: '155', name: 'the_dark_knight', description: 'Agent of Chaos theory and philosophy.', threads: 210 },
+export default function GlobalForumPage() {
+  const [threads, setThreads] = useState<Thread[]>([
+    {
+      id: '128374',
+      author: 'CineAnon',
+      title: 'The "Top" Debate: Final Resolution',
+      content: 'I\'ve frame-stepped the 4K release. The children are wearing the exact same clothes as the dream sequences. The ring on Cobb\'s hand is the only real totem. When he enters the house at the end, he is NOT wearing the ring. He is in reality. Period.',
+      timestamp: 'Today, 04:20 PM',
+      replies: 156,
+      image: '/inception_top.jpg'
+    },
+    {
+      id: '128392',
+      author: 'Vengeance_66',
+      title: 'Is The Batman (2022) too dark?',
+      content: 'Literally and figuratively. I can barely see the action in the hallway scene on my OLED. Is this the intended aesthetic or just poor mastering?',
+      timestamp: 'Today, 02:45 PM',
+      replies: 89
+    },
+    {
+      id: '128410',
+      author: 'Cooper_9',
+      title: 'Tesseract Physics vs Reality',
+      content: 'Kip Thorne said the math holds up, but the visual representation of 5D space is purely artistic. Does this break the scientific immersion for anyone else?',
+      timestamp: 'Yesterday, 11:15 PM',
+      replies: 342
+    }
   ]);
 
   return (
-    <div className="min-h-screen bg-[#030712] text-[#d1d5db] font-mono p-8 pt-32 pb-20 selection:bg-slate-700 selection:text-white">
-      <div className="max-w-5xl mx-auto space-y-12">
-        
-        {/* Board Header */}
-        <header className="border-b-2 border-slate-900 pb-8 space-y-2">
-          <h1 className="text-4xl font-bold tracking-tighter text-white uppercase italic">
-            /FILM/ - CINEMATIC_BOARDS
-          </h1>
-          <p className="text-xs text-slate-700 font-bold tracking-[0.2em]">Select a board to start deconstructing.</p>
-        </header>
+    <div className="min-h-screen bg-[#1a1c1e] text-[#d1d5db] font-serif p-0 leading-normal">
+      {/* Forum Header Banner */}
+      <header className="bg-[#2d3238] border-b border-[#3e444b] p-6 shadow-md">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-[#e1e4e8] tracking-tight">FilmSuma boards /film/ - Discussion</h1>
+            <div className="flex gap-4 text-[11px] font-sans text-[#a3a9b1]">
+              <span className="hover:underline cursor-pointer">Catalog</span>
+              <span>•</span>
+              <span className="hover:underline cursor-pointer">Rules</span>
+              <span>•</span>
+              <span className="hover:underline cursor-pointer">Wiki</span>
+              <span>•</span>
+              <span className="hover:underline cursor-pointer">Search</span>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <button className="bg-[#3e444b] hover:bg-[#4a5159] text-white px-4 py-2 text-xs font-sans rounded border border-[#525a62] transition-colors">
+              Post New Thread
+            </button>
+          </div>
+        </div>
+      </header>
 
-        {/* Board Catalog Style */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-900 border border-slate-900 shadow-2xl">
-          {boards.map((board) => (
-            <Link key={board.id} href={`/movie/${board.id}/discussions`}>
-              <div className="bg-[#0b0f17] p-8 hover:bg-[#0d1117] transition-all group relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <MessageSquare size={80} strokeWidth={1} />
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* The Forums Table (Web 1.0 Style) */}
+        <div className="bg-[#24292e] border border-[#3e444b] rounded shadow-xl overflow-hidden">
+          <div className="bg-[#2d3238] p-3 text-[11px] font-bold uppercase tracking-widest text-[#8b949e] flex border-b border-[#3e444b]">
+            <div className="flex-1">Thread / Topic</div>
+            <div className="w-32 text-center">Author</div>
+            <div className="w-20 text-center">Replies</div>
+            <div className="w-40 text-right">Last Post</div>
+          </div>
+
+          <div className="divide-y divide-[#3e444b]">
+            {threads.map((thread) => (
+              <div key={thread.id} className="p-4 hover:bg-[#2d3238] transition-colors flex items-start gap-4">
+                <div className="w-10 h-10 bg-[#343942] rounded flex items-center justify-center text-[#586069] flex-shrink-0">
+                  <FileText size={20} />
                 </div>
                 
-                <div className="space-y-4 relative z-10">
-                  <div className="flex items-center justify-between">
-                    <span className="text-emerald-600 font-bold text-xl uppercase tracking-tighter">/{board.name}/</span>
-                    <span className="text-[10px] text-slate-800 font-bold bg-slate-950 px-2 py-1 border border-slate-900 group-hover:border-slate-800 transition-colors">
-                      {board.threads} ACTIVE THREADS
-                    </span>
-                  </div>
-                  
-                  <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
-                    {board.description}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[#58a6ff] font-bold text-lg hover:underline cursor-pointer leading-tight mb-1">
+                    {thread.title}
+                  </h3>
+                  <p className="text-[#8b949e] text-sm line-clamp-2 italic">
+                    "{thread.content}"
                   </p>
-                  
-                  <div className="pt-4 flex items-center gap-2 text-[10px] font-bold text-slate-700 group-hover:text-slate-400 transition-colors">
-                    [ OPEN BOARD ] <ChevronRight size={10} />
-                  </div>
+                </div>
+
+                <div className="w-32 text-center text-sm font-sans text-[#a3a9b1]">
+                  {thread.author}
+                </div>
+
+                <div className="w-20 text-center font-sans">
+                  <span className="px-2 py-1 bg-[#161b22] rounded text-xs text-[#58a6ff] border border-[#30363d]">
+                    {thread.replies}
+                  </span>
+                </div>
+
+                <div className="w-40 text-right font-sans text-xs text-[#6e7681]">
+                  {thread.timestamp}
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Global Stats bar */}
-        <div className="p-4 bg-[#0d1117] border border-slate-900 flex justify-between items-center text-[10px] font-bold text-slate-700">
-          <div className="flex gap-6">
-            <span className="flex items-center gap-2"><Shield size={10} /> SYSTEM: NOMINAL</span>
-            <span className="flex items-center gap-2 text-emerald-600/50"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 1,402 USERS ONLINE</span>
+            ))}
           </div>
-          <span>EST. 2026</span>
         </div>
 
-        {/* Footer Navigation */}
-        <footer className="pt-12 text-center">
-          <Link href="/browse">
-            <button className="text-[10px] text-slate-500 hover:text-white transition-colors uppercase tracking-[0.3em] font-bold">
-              [ Back to Main Catalog ]
-            </button>
-          </Link>
+        {/* Board Statistics Footer */}
+        <footer className="mt-12 p-8 border-t border-[#30363d] space-y-4">
+          <div className="flex items-center gap-2 text-xs text-[#8b949e] font-sans">
+            <Shield size={14} />
+            <span className="font-bold">Board Statistics:</span> 
+            <span>Threads: 14,021</span>
+            <span>•</span>
+            <span>Posts: 298,401</span>
+            <span>•</span>
+            <span className="text-emerald-500">Online: 1,402</span>
+          </div>
+          <p className="text-[10px] text-[#484f58] font-sans italic">
+            "Cinema is a mirror that can flatter or deform, a window that allows us to see ourselves."
+          </p>
         </footer>
       </div>
     </div>
