@@ -2,46 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #0b0f17;
+  --foreground: #94a3b8;
+  --primary: #ffffff;
+  --accent: #1e293b;
+  --border: rgba(255, 255, 255, 0.05);
+}
+
 @layer base {
   body {
-    background-color: #030712;
-    color: #e2e8f0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-[#0b0f17] text-[#94a3b8] antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-white tracking-tight;
   }
 }
 
-@layer components {
-  .glass {
-    background-color: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+@layer utilities {
+  .font-serif {
+    font-family: var(--font-playfair), serif;
   }
   
-  .glass-card {
-    background-color: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1rem;
-    transition: all 0.3s ease;
+  .font-sans {
+    font-family: var(--font-inter), sans-serif;
   }
 
-  .text-gradient {
-    background: linear-gradient(to right, #6366f1, #a855f7, #f43f5e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .cinematic-canvas {
+    @apply min-h-screen w-full bg-[#0b0f17] relative overflow-hidden;
   }
-}
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  .glass-surface {
+    @apply bg-white/[0.02] backdrop-blur-3xl border border-white/5;
+  }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  .text-criterion {
+    @apply text-white uppercase tracking-[0.4em] font-sans text-[10px] font-bold;
+  }
+
+  .film-grain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -53,6 +72,10 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
