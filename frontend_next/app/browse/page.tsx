@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Filter, Film, Star } from 'lucide-react';
 
 interface Movie {
   id: number;
   title: string;
   poster_path: string;
   genre_ids: number[];
+  vote_average: number;
+  release_date: string;
 }
 
 interface Genre {
@@ -25,11 +28,7 @@ export default function BrowsePage() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | 'all'>('all');
   const [loading, setLoading] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY })
-  }
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchGenres();
@@ -37,7 +36,7 @@ export default function BrowsePage() {
 
   useEffect(() => {
     fetchMovies();
-  }, [selectedGenre]);
+  }, [selectedGenre, searchQuery]);
 
   const fetchGenres = async () => {
     try {
@@ -54,15 +53,19 @@ export default function BrowsePage() {
   const fetchMovies = async () => {
     setLoading(true);
     try {
-      let url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
-      
-      if (selectedGenre !== 'all') {
-        url += `&with_genres=${selectedGenre}`;
+      let url = '';
+      if (searchQuery) {
+        url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}&language=en-US&page=1&include_adult=false`;
+      } else {
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`;
+        if (selectedGenre !== 'all') {
+          url += `&with_genres=${selectedGenre}`;
+        }
       }
 
       const response = await fetch(url);
       const data = await response.json();
-      setMovies(data.results.slice(0, 10)); // Get only first 10 movies
+      setMovies(data.results || []);
     } catch (error) {
       console.error('Error fetching movies:', error);
     } finally {
@@ -71,47 +74,57 @@ export default function BrowsePage() {
   };
 
   const handleMovieClick = (movieId: number, movieTitle: string) => {
-    // Navigate to home page with the movie title as search parameter
-    router.push(`/?movie=${movieId}&title=${encodeURIComponent(movieTitle)}`);
+    router.push(`/movie/${movieId}`);
   };
 
   return (
-    <main
-      className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 animate-gradient-slow overflow-hidden"
-      onMouseMove={handleMouseMove}
-    >
-      <div
-        className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_60%)] pointer-events-none"
-        style={{
-          backgroundPosition: `${mousePosition.x}px ${mousePosition.y}px`,
-          transition: "background-position 0.3s ease-out",
-        }}
-      />
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 mb-12 text-center">
-          Browse Movies
-        </h1>
-        
+    <div className="min-h-screen pb-20 p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header Section */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="space-y-4">
+            <h1 className="text-5xl font-bold tracking-tight text-white">
+              Browse <span className="text-gradient">Catalog</span>
+            </h1>
+            <p className="text-slate-400 max-w-md">
+              Discover the latest films and trigger deep dives into their hidden meanings.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-purple-400 transition-colors" size={18} />
+              <input 
+                type="text"
+                placeholder="Search movies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full sm:w-64 bg-slate-900/50 border border-white/5 rounded-2xl py-3 pl-12 pr-4 text-slate-200 outline-none focus:border-purple-500/50 transition-all"
+              />
+            </div>
+          </div>
+        </header>
+
         {/* Genre Filter */}
-        <div className="flex gap-4 mb-12 overflow-x-auto pb-4 justify-center flex-wrap">
+        <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
           <button
             onClick={() => setSelectedGenre('all')}
-            className={`px-6 py-3 rounded-full text-xl transition-all ${
+            className={`px-6 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
               selectedGenre === 'all' 
-                ? 'bg-gradient-to-br from-slate-800 to-slate-900 text-white border-2 border-blue-400' 
-                : 'bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white border-2 border-transparent hover:border-blue-400'
+                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' 
+                : 'glass text-slate-400 hover:text-slate-200 hover:border-white/20'
             }`}
           >
-            All
+            All Movies
           </button>
           {genres.map((genre) => (
             <button
               key={genre.id}
               onClick={() => setSelectedGenre(genre.id)}
-              className={`px-6 py-3 rounded-full text-xl transition-all ${
+              className={`px-6 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
                 selectedGenre === genre.id 
-                  ? 'bg-gradient-to-br from-slate-800 to-slate-900 text-white border-2 border-blue-400' 
-                  : 'bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white border-2 border-transparent hover:border-blue-400'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' 
+                  : 'glass text-slate-400 hover:text-slate-200 hover:border-white/20'
               }`}
             >
               {genre.name}
@@ -119,37 +132,61 @@ export default function BrowsePage() {
           ))}
         </div>
 
-        {/* Movie Grid - updated with onClick handler instead of Link */}
-        {loading ? (
-          <div className="text-center text-2xl text-gray-400">Loading...</div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {movies.map((movie) => (
-              <div 
-                key={movie.id}
-                onClick={() => handleMovieClick(movie.id, movie.title)}
-                className="group relative rounded-xl overflow-hidden transform transition-all hover:scale-105 cursor-pointer"
-              >
-                <div className="aspect-[2/3] bg-gray-800">
-                  {movie.poster_path && (
-                    <img
-                      src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-0 p-4">
-                    <h3 className="text-lg font-bold text-white line-clamp-2">{movie.title}</h3>
+        {/* Movie Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <AnimatePresence mode="popLayout">
+            {loading ? (
+              Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="aspect-[2/3] rounded-2xl glass animate-pulse" />
+              ))
+            ) : (
+              movies.map((movie, idx) => (
+                <motion.div
+                  key={movie.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => handleMovieClick(movie.id, movie.title)}
+                  className="group relative cursor-pointer"
+                >
+                  <div className="aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] group-hover:border-purple-500/30">
+                    {movie.poster_path ? (
+                      <img
+                        src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+                        alt={movie.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-slate-600">
+                        <Film size={48} strokeWidth={1} />
+                        <span className="text-xs font-medium px-4 text-center">{movie.title}</span>
+                      </div>
+                    )}
+
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                      <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-bold border border-amber-500/20">
+                            <Star size={10} fill="currentColor" />
+                            {movie.vote_average.toFixed(1)}
+                          </div>
+                          <span className="text-slate-400 text-xs">{new Date(movie.release_date).getFullYear()}</span>
+                        </div>
+                        <h3 className="text-white font-bold line-clamp-2 leading-tight">{movie.title}</h3>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                </motion.div>
+              ))
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </main>
+    </div>
   );
-} 
+}
+ 

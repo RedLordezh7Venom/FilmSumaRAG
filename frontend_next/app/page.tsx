@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Search, Sparkles, BookOpen } from "lucide-react" // Added BookOpen
+import { Search, Sparkles, BookOpen, Info } from "lucide-react" // Added BookOpen and Info
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -221,12 +221,21 @@ export default function Home() {
                       <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
                         {movie.title} ({new Date(movie.release_date).getFullYear()})
                       </h2>
-                      <div className="flex flex-row gap-2"> {/* Changed to flex-row to place buttons side-by-side */}
+                      <div className="flex flex-row gap-2">
+                        <Link href={`/movie/${movie.id}`} passHref>
+                          <Button 
+                            variant="outline"
+                            className="bg-white/5 hover:bg-white/10 text-white border-white/10 rounded-full py-2 px-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                          >
+                            <Info className="w-4 h-4 mr-2" />
+                            Details
+                          </Button>
+                        </Link>
                         <Link href={`/deep-dive/${movie.id}`} passHref>
                           <Button
                             className="bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:border-blue-400 hover:border-2 border-2 border-transparent"
                           >
-                            <BookOpen className="w-4 h-4 mr-2" /> {/* Deep Dive Icon */}
+                            <BookOpen className="w-4 h-4 mr-2" />
                             Deep Dive
                           </Button>
                         </Link>

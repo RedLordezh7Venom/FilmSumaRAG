@@ -10,7 +10,7 @@ import {
   LogIn
 } from "lucide-react";
 import Link from "next/link";
-import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
 
 const RecentDeepDive = ({ title, date }: { title: string; date: string }) => (
   <Link href="#" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group">
@@ -26,6 +26,7 @@ const RecentDeepDive = ({ title, date }: { title: string; date: string }) => (
 
 export const Sidebar = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const { isSignedIn, isLoaded } = useUser();
 
   return (
     <div 
@@ -102,10 +103,9 @@ export const Sidebar = () => {
 
         {/* Footer/User Profile */}
         <div className="p-4 mt-auto border-t border-white/5">
-          <SignedIn>
+          {isLoaded && isSignedIn ? (
             <div className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/5 transition-all group cursor-pointer overflow-hidden">
               <UserButton 
-                afterSignOutUrl="/" 
                 appearance={{
                   elements: {
                     userButtonAvatarBox: "w-8 h-8 rounded-full border border-white/10"
@@ -126,9 +126,7 @@ export const Sidebar = () => {
                 )}
               </AnimatePresence>
             </div>
-          </SignedIn>
-          
-          <SignedOut>
+          ) : isLoaded && (
             <SignInButton mode="modal">
               <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all group cursor-pointer text-slate-400 hover:text-slate-100">
                 <LogIn size={20} className="group-hover:text-purple-400 transition-colors" />
@@ -146,7 +144,7 @@ export const Sidebar = () => {
                 </AnimatePresence>
               </div>
             </SignInButton>
-          </SignedOut>
+          )}
         </div>
       </motion.div>
     </div>
