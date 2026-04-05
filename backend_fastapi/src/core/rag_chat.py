@@ -21,13 +21,15 @@ except LookupError:
 from nltk.tokenize import word_tokenize
 
 import json
+from typing import List, Dict, Optional, AsyncIterator, Union
+
 # Define RAG State with Messages history
 class RAGState(MessagesState):
-    movie_name: str
+    movie_names: List[str] # Now supports multiple movies
     question: str
     query_vector: np.ndarray
     relevant_chunks: List[str]
-    relevant_ids: List[str] # IDs of chunks retrieved
+    relevant_ids: List[str] 
     context: str
     answer: str
     persona: str = "critic"
@@ -47,37 +49,39 @@ def embed_query(state: RAGState) -> dict:
     }
 
 def retrieve_context(state: RAGState) -> dict:
-    # Use Hybrid Search (Vector + BM25) with k=10
-    movie_name = state["movie_name"]
+    # Use Hybrid Search (Vector + BM25) for multiple movies if needed
+    movie_names = state["movie_names"]
     question = state["question"]
     query_vector = state["query_vector"]
-    k = 10
-
-    # 1. Vector Search (now returns {'id', 'text'})
-    vector_results = vector_db.search_movie(movie_name, query_vector, n_results=k * 2)
+    k_per_movie = 10 if len(movie_names) == 1 else 6 # Reduce per-movie if comparing to save tokens
     
-    # 2. BM25 Search
-    all_docs_data = vector_db.get_movie_data(movie_name)
-    if not all_docs_data:
-        relevant_chunks = [v["text"] for v in vector_results[:k]]
-        relevant_ids = [v["id"] for v in vector_results[:k]]
-    else:
-        # Simple tokenization for BM25
-        tokenized_corpus = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
-        bm25 = BM25Okapi(tokenized_corpus)
-        tokenized_query = word_tokenize(question.lower())
-        bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k * 2)
-        bm25_results = [all_docs_data[i] for i in bm25_indices]
-        
-        # 3. Active Learning: Get discredited chunks from feedback
-        # This part requires a DB session (imported inside for safety in multiple contexts)
-        from src.db.database import SessionLocal
-        from src.models.sql_models import Feedback, ChatHistory
-        
-        discredited_ids = {} # map chunk_id -> penalty
-        db = SessionLocal()
-        try:
-            # Find feedback with poor ratings for this movie
+    all_relevant_chunks = []
+    all_relevant_ids = []
+    
+    from src.db.database import SessionLocal
+    from src.models.sql_models import Feedback, ChatHistory, SummaryCache, SummaryType, Movie
+    db = SessionLocal()
+    
+    try:
+        for movie_name in movie_names:
+            # 1. Vector Search
+            vector_results = vector_db.search_movie(movie_name, query_vector, n_results=k_per_movie * 2)
+            
+            # 2. BM25 Search
+            all_docs_data = vector_db.get_movie_data(movie_name)
+            if not all_docs_data:
+                all_relevant_chunks.extend([v["text"] for v in vector_results[:k_per_movie]])
+                all_relevant_ids.extend([v["id"] for v in vector_results[:k_per_movie]])
+                continue
+
+            tokenized_corpus = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
+            bm25 = BM25Okapi(tokenized_corpus)
+            tokenized_query = word_tokenize(question.lower())
+            bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k_per_movie * 2)
+            bm25_results = [all_docs_data[i] for i in bm25_indices]
+            
+            # 3. Active Learning Penalties
+            discredited_ids = {}
             bad_feedback = db.query(Feedback).filter(Feedback.rating <= 2).all()
             for fb in bad_feedback:
                 if fb.chat_id:
@@ -86,37 +90,44 @@ def retrieve_context(state: RAGState) -> dict:
                         citations = json.loads(chat.citations)
                         for cid in citations:
                             discredited_ids[cid] = discredited_ids.get(cid, 0) + 1
-        finally:
-            db.close()
 
-        # 4. Combine with Reciprocal Rank Fusion (RRF)
-        # We store score by ID and remember the text
-        ranks = {} # chunk_id -> score
-        id_to_text = {}
-        
-        for i, res in enumerate(vector_results):
-            cid, text = res["id"], res["text"]
-            id_to_text[cid] = text
-            penalty = discredited_ids.get(cid, 0) * 0.1 # subtract 0.1 for every bad feedback
-            ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
+            # 4. Hybrid Ranking (RRF)
+            ranks = {}
+            id_to_text = {}
+            for i, res in enumerate(vector_results):
+                cid, text = res["id"], res["text"]
+                id_to_text[cid] = f"[{movie_name}] {text}" # Label with movie name for comparison context
+                penalty = discredited_ids.get(cid, 0) * 0.1
+                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
+            for i, res in enumerate(bm25_results):
+                cid, text = res["id"], res["text"]
+                id_to_text[cid] = f"[{movie_name}] {text}"
+                penalty = discredited_ids.get(cid, 0) * 0.1
+                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
+                
+            sorted_items = sorted(ranks.items(), key=lambda x: x[1], reverse=True)
+            top_items = sorted_items[:k_per_movie]
             
-        for i, res in enumerate(bm25_results):
-            cid, text = res["id"], res["text"]
-            id_to_text[cid] = text
-            penalty = discredited_ids.get(cid, 0) * 0.1
-            ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
-            
-        sorted_items = sorted(ranks.items(), key=lambda x: x[1], reverse=True)
-        top_items = sorted_items[:k]
-        
-        relevant_chunks = [id_to_text[cid] for cid, score in top_items]
-        relevant_ids = [cid for cid, score in top_items]
+            all_relevant_chunks.extend([id_to_text[cid] for cid, score in top_items])
+            all_relevant_ids.extend([cid for cid, score in top_items])
 
-    context = "\n\n".join(relevant_chunks)
-    
+            # 5. External Research
+            movie_record = db.query(Movie).filter(Movie.title == movie_name).first()
+            if movie_record:
+                research_summary = db.query(SummaryCache).filter(
+                    SummaryCache.movie_id == movie_record.id,
+                    SummaryCache.summary_type == SummaryType.VIDEO_ESSAY
+                ).first()
+                if research_summary:
+                    all_relevant_chunks.append(f"\n--- EXTERNAL RESEARCH: {movie_name} ---\n{research_summary.content}")
+
+    finally:
+        db.close()
+
+    context = "\n\n".join(all_relevant_chunks)
     return {
-        "relevant_chunks": relevant_chunks,
-        "relevant_ids": relevant_ids,
+        "relevant_chunks": all_relevant_chunks,
+        "relevant_ids": all_relevant_ids,
         "context": context
     }
 
@@ -124,7 +135,8 @@ async def generate_answer(state: RAGState) -> dict:
     from src.agents.persona_agents import PersonaManager
     
     persona = state.get("persona", "critic")
-    prompt_content = PersonaManager.get_persona_prompt(persona, state['movie_name'], state["context"])
+    display_title = " vs ".join(state['movie_names'])
+    prompt_content = PersonaManager.get_persona_prompt(persona, display_title, state["context"])
     
     messages = [
         PersonaManager.get_system_message(persona),
@@ -132,7 +144,6 @@ async def generate_answer(state: RAGState) -> dict:
     ]
     
     response = await llm.ainvoke(messages)
-    
     return {
         "messages": [AIMessage(content=response.content)],
         "answer": response.content
@@ -143,117 +154,90 @@ def verify_citations(state: RAGState) -> dict:
     answer = state.get("answer", "")
     context = state.get("context", "")
     
-    if "🎞️ SCENE EVIDENCE" not in answer:
-        return {}
-
-    # extract snippets using regex
-    # Format: > "[Snippet Text]"
+    if "🎞️ SCENE EVIDENCE" not in answer: return {}
     snippets = re.findall(r'> "(.*?)"', answer)
-    if not snippets:
-        return {}
+    if not snippets: return {}
     
     verified_snippets = []
-    hallucinated_snippets = []
-    
-    # Simple fuzzy check (check if snippet substring exists in context)
-    # We clean the text for a more robust match
     clean_context = context.lower().replace("\n", " ")
     
     for snippet in snippets:
-        clean_snippet = snippet.lower().strip()
-        if clean_snippet in clean_context:
+        if snippet.lower().strip() in clean_context:
             verified_snippets.append(snippet)
-        else:
-            hallucinated_snippets.append(snippet)
             
-    if not hallucinated_snippets:
-        return {}
-        
-    # Reconstruct the "SCENE EVIDENCE" section with only verified snippets
-    # If no snippets are left, remove the section or add a warning
     evidence_text = "\n\n🎞️ SCENE EVIDENCE\n"
     if verified_snippets:
-        for s in verified_snippets:
-            evidence_text += f'> "{s}"\n'
+        for s in verified_snippets: evidence_text += f'> "{s}"\n'
     else:
-        evidence_text += "*No verifiable snippets found in transcript for this point.*\n"
+        evidence_text += "*No verifiable snippets found in transcripts for comparison.*\n"
 
-    # replace old evidence section with verified one
     new_answer = re.split(r'🎞️ SCENE EVIDENCE', answer)[0] + evidence_text.strip()
-    
     return {
         "answer": new_answer,
-        "messages": [AIMessage(content=new_answer)] # update history too
+        "messages": [AIMessage(content=new_answer)] 
     }
 
 def create_rag_graph():
-    # build rag workflow
     workflow = StateGraph(RAGState)
-    
     workflow.add_node("embed_query", embed_query)
     workflow.add_node("retrieve_context", retrieve_context)
     workflow.add_node("generate_answer", generate_answer)
     workflow.add_node("verify_citations", verify_citations)
-    
     workflow.set_entry_point("embed_query")
     workflow.add_edge("embed_query", "retrieve_context")
     workflow.add_edge("retrieve_context", "generate_answer")
     workflow.add_edge("generate_answer", "verify_citations")
     workflow.add_edge("verify_citations", END)
-    
     return workflow.compile(checkpointer=memory)
 
-async def answer_question(movie_name: str, question: str, thread_id: str = "default") -> dict:
-    # check existence first
-    if not vector_db.has_movie(movie_name):
-        raise FileNotFoundError(f"No embeddings found for {movie_name}")
+async def answer_question(movie_name: Union[str, List[str]], question: str, thread_id: str = "default") -> dict:
+    # Ensure movie_name is list
+    movie_names = [movie_name] if isinstance(movie_name, str) else movie_name
+    
+    # check existence
+    for m in movie_names:
+        if not vector_db.has_movie(m):
+            raise FileNotFoundError(f"No embeddings found for {m}")
 
     graph = create_rag_graph()
-    
     config = {"configurable": {"thread_id": thread_id}}
-    
     initial_state = {
-        "movie_name": movie_name,
+        "movie_names": movie_names,
         "question": question,
         "messages": [HumanMessage(content=question)]
     }
-    
     result = await graph.ainvoke(initial_state, config=config)
     return {
         "answer": result["answer"],
         "citations": result.get("relevant_ids", [])
     }
 
-async def answer_question_stream(movie_name: str, question: str, persona: str = "critic", thread_id: str = "default") -> AsyncIterator[dict]:
-    # stream answer tokens as generated while maintaining history
+async def answer_question_stream(movie_name: Union[str, List[str]], question: str, persona: str = "critic", thread_id: str = "default") -> AsyncIterator[dict]:
     from src.agents.persona_agents import PersonaManager
+    movie_names = [movie_name] if isinstance(movie_name, str) else movie_name
     
-    if not vector_db.has_movie(movie_name):
-        raise FileNotFoundError(f"No embeddings found for {movie_name}")
+    for m in movie_names:
+        if not vector_db.has_movie(m):
+            raise FileNotFoundError(f"No embeddings found for {m}")
     
     graph = create_rag_graph()
     config = {"configurable": {"thread_id": thread_id}}
-    
-    # Get current state from checkpoint to maintain history
     current_state = await graph.aget_state(config)
     history = current_state.values.get("messages", []) if current_state.values else []
     
-    # --- Perform Retrieval (Manual for stream convenience) ---
-    # Wrap in same logic as retrieve_context for consistency
-    state = {
-        "movie_name": movie_name,
+    retrieval_state = {
+        "movie_names": movie_names,
         "question": question,
         "query_vector": embedder.encode([question], convert_to_tensor=False)[0]
     }
-    retrieval_data = retrieve_context(state)
+    retrieval_data = retrieve_context(retrieval_state)
     context = retrieval_data["context"]
     relevant_ids = retrieval_data["relevant_ids"]
     
-    # yield citations first to the UI
     yield {"type": "citations", "ids": relevant_ids}
 
-    # Preparation for streaming with persona
-    prompt_content = PersonaManager.get_persona_prompt(persona, movie_name, context)
+    display_title = " vs ".join(movie_names)
+    prompt_content = PersonaManager.get_persona_prompt(persona, display_title, context)
     
     messages = history + [
         PersonaManager.get_system_message(persona),
@@ -266,9 +250,8 @@ async def answer_question_stream(movie_name: str, question: str, persona: str = 
             full_response += token.content
             yield {"type": "token", "token": token.content}
             
-    # Update the checkpoint manually since we bypassed the graph for streaming
     new_messages = [HumanMessage(content=question), AIMessage(content=full_response)]
-    await graph.aupdate_state(config, {"messages": new_messages, "movie_name": movie_name, "persona": persona, "relevant_ids": relevant_ids})
+    await graph.aupdate_state(config, {"messages": new_messages, "movie_names": movie_names, "persona": persona, "relevant_ids": relevant_ids})
 
 
 

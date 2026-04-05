@@ -30,3 +30,11 @@ def get_movie_data(movie_name: str) -> List[Dict]:
 def delete_movie(movie_name: str) -> None:
     """Proxy to store.delete_movie"""
     store.delete_movie(movie_name)
+
+def add_movie_summary_vector(movie_name: str, summary_text: str, vector: np.ndarray) -> None:
+    """Proxy to store.add_movie_summary_vector"""
+    store.add_movie_summary_vector(movie_name, summary_text, vector)
+
+def get_similar_movies(movie_name: str, n_results: int = 5) -> List[Dict]:
+    """Proxy to store.get_similar_movies"""
+    return store.get_similar_movies(movie_name, n_results=n_results)

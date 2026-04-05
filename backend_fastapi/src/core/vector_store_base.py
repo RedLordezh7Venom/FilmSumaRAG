@@ -27,3 +27,13 @@ class BaseVectorStore(ABC):
     def delete_movie(self, movie_name: str) -> None:
         """Delete a movie and its vectors from the store."""
         pass
+
+    @abstractmethod
+    def add_movie_summary_vector(self, movie_name: str, summary_text: str, vector: np.ndarray) -> None:
+        """Stores the full-movie summary for similarity recommendations."""
+        pass
+
+    @abstractmethod
+    def get_similar_movies(self, movie_name: str, n_results: int = 5) -> List[Dict]:
+        """Finds semantically similar movies in the collection."""
+        pass

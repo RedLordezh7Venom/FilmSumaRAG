@@ -20,3 +20,5 @@ langgraph
 langchain-text-splitters
 sqlalchemy
 psycopg2-binary
+duckduckgo-search
+beautifulsoup4
