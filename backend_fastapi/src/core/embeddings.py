@@ -7,29 +7,19 @@ from src.core import vector_db
 # Keep the global embedder instance
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-def chunk_text(text: str, chunk_size: int = 1000, chunk_overlap: int = 100) -> List[str]:
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+def chunk_text(text: str, chunk_size: int = 1000, chunk_overlap: int = 150) -> List[str]:
     """
-    Split text into overlapping chunks
-    
-    Args:
-        text: Full text to chunk
-        chunk_size: Size of each chunk
-        chunk_overlap: Overlap between chunks
-    
-    Returns:
-        List of text chunks
+    Split text into overlapping chunks using LangChain's RecursiveCharacterTextSplitter.
+    This is more effective for RAG as it respects document structure.
     """
-    chunks = []
-    start = 0
-    text_length = len(text)
-    
-    while start < text_length:
-        end = start + chunk_size
-        chunk = text[start:end]
-        chunks.append(chunk)
-        start += chunk_size - chunk_overlap
-    
-    return chunks
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=["\n\n", "\n", " ", ""]
+    )
+    return splitter.split_text(text)
 
 def build_embeddings(movie_name: str, text: str) -> int:
     """

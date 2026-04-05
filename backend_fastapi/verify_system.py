@@ -97,7 +97,9 @@ def check_dependencies():
         "numpy",
         "langchain",
         "subliminal",
-        "pysubs2"
+        "pysubs2",
+        "chromadb",
+        "langgraph"
     ]
     
     all_installed = True

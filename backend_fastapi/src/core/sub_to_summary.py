@@ -13,16 +13,17 @@ async def get_movie_summary(moviename: str):
 
     print("Processing subtitles...")
     full_text = "\n".join(dialogue_lines)
-    print("Generating summary...")
-    summary = await generate_summary(full_text)
+    print("Generating advanced summary...")
+    from src.agents.summarizer import MovieSummarizer
+    summary = await MovieSummarizer.summarize_transcript(full_text, moviename)
 
     # Save summary
     os.makedirs("data/summaries", exist_ok=True)
     with open(f"data/summaries/{moviename}.txt", "w", encoding="utf-8") as f:
         f.write(summary)
 
-    # Background embedding generation
-    threading.Thread(target=build_embeddings, args=(moviename, summary)).start()
+    # Background embedding generation for the full transcript
+    threading.Thread(target=build_embeddings, args=(moviename, full_text)).start()
     print(f"🔄 Started background embedding creation for {moviename}")
 
     return summary

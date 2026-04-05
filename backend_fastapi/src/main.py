@@ -4,6 +4,7 @@ from src.api.endpoints import summary
 from src.api.endpoints import deep_dive
 from src.api.endpoints import embeddings_generation
 from src.api.endpoints import websocket_chat
+from src.api.endpoints import feedback
 import time
 
 app = FastAPI(title="FilmSumaRAG API", version="1.0.0")
@@ -33,6 +34,10 @@ app.include_router(summary.router, tags=["Summary"])
 app.include_router(deep_dive.router, tags=["Deep Dive"])
 app.include_router(embeddings_generation.router, tags=["Embeddings"])
 app.include_router(websocket_chat.router, tags=["WebSocket Chat"])
+app.include_router(feedback.router, tags=["Feedback"])
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(history.router, prefix="/history", tags=["History"])
+app.include_router(movies.router, prefix="/movies", tags=["Movies"])
 
 @app.get("/", tags=["Health"])
 async def root():

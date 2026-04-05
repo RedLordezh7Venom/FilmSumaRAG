@@ -12,6 +12,9 @@ dependencies = [
     "langchain-google-genai>=4.2.0",
     "langchain-groq>=1.1.1",
     "nltk>=3.9.2",
+    "chromadb>=0.4.0",
+    "langgraph>=0.2.1",
+    "langchain-text-splitters",
     "numpy>=2.2.6",
     "pydantic>=2.12.5",
     "pysubs2>=1.8.0",
@@ -22,4 +25,6 @@ dependencies = [
     "subliminal>=2.5.0",
     "uvicorn>=0.40.0",
     "websockets>=15.0.1",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.0",
 ]

@@ -1,77 +1,32 @@
-import chromadb
+from src.core.chroma_store import ChromaVectorStore
 import numpy as np
-from typing import List, Optional
-import os
+from typing import List, Dict, Optional
 
-# Initialize persistent client
-# This creates a directory 'chroma_db' in the project root
-CHROMA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "chroma_db")
-client = chromadb.PersistentClient(path=CHROMA_PATH)
-
-# Create or get collection
-collection = client.get_or_create_collection(name="movie_dialogues")
+# Factory for the vector store implementation
+# For now, default to ChromaDB (8GB RAM optimization)
+# Scalable: In production, swap this with PineconeStore or SupabaseStore
+store = ChromaVectorStore()
 
 def add_movie_vectors(movie_name: str, chunks: List[str], vectors: np.ndarray) -> None:
-    """
-    Add movie vectors to ChromaDB.
-    We associate each chunk with the movie_name via metadata.
-    """
-    count = len(chunks)
-    
-    # Generate unique IDs for each chunk
-    ids = [f"{movie_name}_{i}" for i in range(count)]
-    
-    # Prepare metadata
-    metadatas = [{"movie_name": movie_name, "chunk_index": i} for i in range(count)]
-    
-    # Convert numpy vectors to list of lists (required by Chroma)
-    embeddings = vectors.tolist()
-    
-    collection.upsert(
-        ids=ids,
-        embeddings=embeddings,
-        documents=chunks,
-        metadatas=metadatas
-    )
-    print(f"✅ Upserted {count} chunks for {movie_name} to ChromaDB")
+    """Proxy to store.add_vectors"""
+    store.add_vectors(movie_name, chunks, vectors)
 
-def search_movie(movie_name: str, query_vector: np.ndarray, n_results: int = 3) -> List[str]:
-    """
-    Search for similar chunks within a specific movie.
-    """
-    results = collection.query(
-        query_embeddings=[query_vector.tolist()],
-        n_results=n_results,
-        where={"movie_name": {"$eq": movie_name}}  # Filter by movie
-    )
-    
-    # results['documents'] is a list of list of strings (since we can query multiple vectors)
-    if results['documents'] and len(results['documents']) > 0:
-        return results['documents'][0]
-    return []
+def search_movie(movie_name: str, query_vector: np.ndarray, n_results: int = 3) -> List[Dict]:
+    """Proxy to store.search"""
+    return store.search(movie_name, query_vector, n_results=n_results)
 
 def has_movie(movie_name: str) -> bool:
-    """
-    Check if a movie exists in the database.
-    We do a lightweight query for 1 item with this metadata.
-    """
-    result = collection.get(
-        where={"movie_name": {"$eq": movie_name}},
-        limit=1
-    )
-    return len(result['ids']) > 0
+    """Proxy to store.has_movie"""
+    return store.has_movie(movie_name)
 
 def get_movie_documents(movie_name: str) -> List[str]:
-    """
-    Retrieve all document chunks for a specific movie.
-    """
-    results = collection.get(
-        where={"movie_name": {"$eq": movie_name}}
-    )
-    return results['documents']
+    """Proxy to store.get_movie_documents for backwards compatibility"""
+    return store.get_movie_documents(movie_name)
+
+def get_movie_data(movie_name: str) -> List[Dict]:
+    """Proxy to store.get_movie_data"""
+    return store.get_movie_data(movie_name)
 
 def delete_movie(movie_name: str) -> None:
-    """Deleted a movie from the db"""
-    collection.delete(
-        where={"movie_name": {"$eq": movie_name}}
-    )
+    """Proxy to store.delete_movie"""
+    store.delete_movie(movie_name)
