@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Film, 
   MessageSquare, 
-  User, 
   History,
-  LayoutGrid
+  LayoutGrid,
+  LogIn
 } from "lucide-react";
 import Link from "next/link";
+import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 const RecentDeepDive = ({ title, date }: { title: string; date: string }) => (
   <Link href="#" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group">
@@ -101,24 +102,51 @@ export const Sidebar = () => {
 
         {/* Footer/User Profile */}
         <div className="p-4 mt-auto border-t border-white/5">
-          <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all group cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 border border-white/5 group-hover:border-purple-500/50 transition-colors">
-              <User size={16} />
+          <SignedIn>
+            <div className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/5 transition-all group cursor-pointer overflow-hidden">
+              <UserButton 
+                afterSignOutUrl="/" 
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-8 h-8 rounded-full border border-white/10"
+                  }
+                }}
+              />
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="flex-1 min-w-0"
+                  >
+                    <p className="text-sm font-medium text-slate-400 group-hover:text-slate-200 truncate">Account</p>
+                    <p className="text-xs text-slate-600 truncate transition-colors">Manage Profile</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="flex-1 min-w-0"
-                >
-                  <p className="text-sm font-medium text-slate-400 group-hover:text-slate-200 truncate">Demo User</p>
-                  <p className="text-xs text-slate-600 truncate transition-colors">Free Plan</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          </SignedIn>
+          
+          <SignedOut>
+            <SignInButton mode="modal">
+              <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all group cursor-pointer text-slate-400 hover:text-slate-100">
+                <LogIn size={20} className="group-hover:text-purple-400 transition-colors" />
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="text-sm font-medium whitespace-nowrap"
+                    >
+                      Sign In
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </div>
+            </SignInButton>
+          </SignedOut>
         </div>
       </motion.div>
     </div>

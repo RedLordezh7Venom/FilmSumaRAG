@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Inter, Outfit } from "next/font/google";
 import { Sidebar } from "@/components/sidebar";
-import { AuthProvider } from "@/components/auth/auth-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
@@ -18,17 +19,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-inter custom-scrollbar">
-        <AuthProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
+        <body className="font-inter custom-scrollbar">
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 ml-20 transition-all duration-300">
               {children}
             </main>
           </div>
-        </AuthProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
