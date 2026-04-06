@@ -5,7 +5,7 @@ import asyncio, threading
 import os
 
 async def get_movie_summary(moviename: str):
-    print(f"🎬 Starting ingestion for: {moviename}")
+    print(f"[MOVIE] Starting ingestion for: {moviename}")
     print("Downloading subtitles...")
     dialogue_lines = download_subs_lines(moviename)
     if not dialogue_lines:
@@ -41,7 +41,7 @@ async def get_movie_summary(moviename: str):
         from src.db.database import SessionLocal
         from src.models.sql_models import SummaryCache, SummaryType, Movie
         
-        print(f"📡 ResearchAgent: Finding external analysis for {movie}...")
+        print(f"[RESEARCH] ResearchAgent: Finding external analysis for {movie}...")
         findings = ResearchAgent.search_video_essays(movie)
         research_summary = ResearchAgent.generate_research_summary(movie, findings)
         
@@ -66,11 +66,11 @@ async def get_movie_summary(moviename: str):
                     )
                     db.add(new_cache)
                 db.commit()
-                print(f"✅ ResearchAgent: Saved external findings for {movie}")
+                print(f"[RESEARCH] ResearchAgent: Saved external findings for {movie}")
         finally:
             db.close()
 
     threading.Thread(target=background_research_and_embed, args=(moviename, full_text)).start()
-    print(f"🔄 Started background research & embedding for {moviename}")
+    print(f"[ASYNC] Started background research & embedding for {moviename}")
 
     return summary

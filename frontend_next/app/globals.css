@@ -54,6 +54,32 @@
     z-index: 50;
   }
 
+  /* Cinematic Archive Poster Filter */
+  .archive-poster {
+    @apply grayscale opacity-30 blur-[2px] transition-all duration-1000 ease-in-out hover:grayscale-0 hover:opacity-100 hover:blur-0 scale-100 hover:scale-[1.02];
+  }
+
+  /* Script / Ticker Tape Reveal */
+  .script-reveal {
+    display: inline-block;
+    overflow: hidden;
+    white-space: pre-wrap;
+    animation: script-reveal-fade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes script-reveal-fade {
+    from {
+      opacity: 0;
+      transform: translateY(8px) skewY(1deg);
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) skewY(0deg);
+      filter: blur(0);
+    }
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }

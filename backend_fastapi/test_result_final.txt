@@ -1,0 +1,139 @@
+﻿STARTING FULL BACKEND INTEGRATION TEST
+
+Ingesting The Matrix...
+[MOVIE] Starting ingestion for: The Matrix
+Downloading subtitles...
+Generating advanced summary...
+Generating vectors for 45 chunks...
+.venv\Scripts\python.exe : 
+Traceback (most recent 
+call last):
+At line:1 char:44
++ ... .db -Force; 
+.venv\Scripts\python.exe 
+test_backend_full.py *>&1 
+| Out- ...
++                 ~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (Tra  
+  ceback (most recent ca   
+ ll last)::String) [],     
+RemoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\te
+st_backend_full.py", line 
+84, in <module>
+    asyncio.run(run_full_te
+st())
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\asyncio\runners.py"
+, line 44, in run
+    return loop.run_until_c
+omplete(main)
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\asyncio\base_events
+.py", line 649, in 
+run_until_complete
+    return future.result()
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\te
+st_backend_full.py", line 
+56, in run_full_test
+    await 
+get_movie_summary("The 
+Matrix")
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\sr
+c\core\sub_to_summary.py", 
+line 74, in 
+get_movie_summary
+    print(f"\U0001f504 
+Started background 
+research & embedding for 
+{moviename}")
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\encodings\cp1252.py
+", line 19, in encode
+    return codecs.charmap_e
+ncode(input,self.errors,enc
+oding_table)[0]
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode character 
+'\U0001f504' in position 
+0: character maps to 
+<undefined>
+Exception in thread 
+Thread-2 (background_resear
+ch_and_embed):
+Traceback (most recent 
+call last):
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\threading.py", 
+line 1016, in 
+_bootstrap_inner
+    self.run()
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\threading.py", 
+line 953, in run
+    
+self._target(*self._args, 
+**self._kwargs)
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\sr
+c\core\sub_to_summary.py", 
+line 30, in background_rese
+arch_and_embed
+    
+build_embeddings(movie, 
+transcript)
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\sr
+c\core\embeddings.py", 
+line 46, in 
+build_embeddings
+    vector_db.add_movie_vec
+tors(movie_name, chunks, 
+vectors)
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\sr
+c\core\vector_db.py", line 
+12, in add_movie_vectors
+    store.add_vectors(movie
+_name, chunks, vectors)
+  File "E:\Repositories\Fil
+mSumaRAG\backend_fastapi\sr
+c\core\chroma_store.py", 
+line 28, in add_vectors
+    print(f"\u2705 
+ChromaStore: Upserted 
+{count} chunks for 
+{movie_name}")
+  File "C:\Users\prabh\AppD
+ata\Roaming\uv\python\cpyth
+on-3.10.19-windows-x86_64-n
+one\lib\encodings\cp1252.py
+", line 19, in encode
+    return codecs.charmap_e
+ncode(input,self.errors,enc
+oding_table)[0]
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode character '\u2705' 
+in position 0: character 
+maps to <undefined>

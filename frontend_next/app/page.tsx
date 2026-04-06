@@ -188,7 +188,7 @@ export default function Home() {
                   >
                     <img 
                       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                      className="w-64 aspect-[2/3] object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+                      className="w-64 aspect-[2/3] object-cover rounded-2xl shadow-2xl archive-poster"
                       alt={movie.title}
                     />
                     <div className="flex flex-col justify-between py-2">
@@ -199,7 +199,7 @@ export default function Home() {
                               {movie.title}
                             </h2>
                          </div>
-                         <p className="text-xl text-slate-400 font-serif italic leading-relaxed max-w-md">
+                         <p className="text-xl text-slate-400 font-serif italic leading-relaxed max-w-md script-reveal">
                            "{movie.overview}"
                          </p>
                        </div>

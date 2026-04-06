@@ -25,7 +25,7 @@ class ChromaVectorStore(BaseVectorStore):
             documents=chunks,
             metadatas=metadatas
         )
-        print(f"✅ ChromaStore: Upserted {count} chunks for {movie_name}")
+        print(f"[STORE] ChromaStore: Upserted {count} chunks for {movie_name}")
         
     def add_movie_summary_vector(self, movie_name: str, summary_text: str, vector: np.ndarray) -> None:
         """Stores the full-movie summary for similarity cross-referencing."""
@@ -35,7 +35,7 @@ class ChromaVectorStore(BaseVectorStore):
             documents=[summary_text],
             metadatas=[{"movie_name": movie_name}]
         )
-        print(f"✅ ChromaStore: Saved summary vector for {movie_name}")
+        print(f"[STORE] ChromaStore: Saved summary vector for {movie_name}")
 
     def get_similar_movies(self, movie_name: str, n_results: int = 5) -> List[Dict]:
         """Finds movies similar to the given one using semantic summary distance."""

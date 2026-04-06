@@ -5,6 +5,9 @@ from src.api.endpoints import deep_dive
 from src.api.endpoints import embeddings_generation
 from src.api.endpoints import websocket_chat
 from src.api.endpoints import feedback
+from src.api.endpoints import auth
+from src.api.endpoints import history
+from src.api.endpoints import movies
 import time
 
 app = FastAPI(title="FilmSumaRAG API", version="1.0.0")

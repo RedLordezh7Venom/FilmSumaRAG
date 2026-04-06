@@ -1,0 +1,119 @@
+﻿STARTING FULL BACKEND INTEGRATION TEST
+
+Ingesting The Matrix...
+[MOVIE] Starting ingestion for: The Matrix
+Downloading subtitles...
+Generating advanced summary...
+Generating vectors for 45 chunks...
+[ASYNC] Started background research & embedding for The Matrix
+
+Ingesting Inception...
+[MOVIE] Starting ingestion for: Inception
+Downloading subtitles...
+[STORE] ChromaStore: Upserted 45 chunks for The Matrix
+[STORE] ChromaStore: Saved summary vector for The Matrix
+[RESEARCH] ResearchAgent: Finding external analysis for The Matrix...
+Generating advanced summary...
+Generating vectors for 71 chunks...
+[ASYNC] Started background research & embedding for Inception
+Waiting for background tasks to finish (embeddings & research)...
+[STORE] ChromaStore: Upserted 71 chunks for Inception
+[STORE] ChromaStore: Saved summary vector for Inception
+[RESEARCH] ResearchAgent: Finding external analysis for Inception...
+
+Testing Deep Dive: The Matrix
+.venv\Scripts\python.exe
+ : Traceback (most 
+recent call last):
+At line:1 char:72
++ ... .db -Force; .venv\
+Scripts\python.exe 
+test_backend_full.py 
+*>&1 | Out- ...
++                 ~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo      
+        : NotSpecified  
+  : (Traceback (most    
+ recent call last)::    
+String) [], RemoteE    
+xception
+    + FullyQualifiedErr 
+   orId : NativeComman  
+  dError
+ 
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\test_backend_full.py
+", line 84, in <module>
+    asyncio.run(run_full
+_test())
+  File "C:\Users\prabh\A
+ppData\Roaming\uv\python
+\cpython-3.10.19-windows
+-x86_64-none\lib\asyncio
+\runners.py", line 44, 
+in run
+    return loop.run_unti
+l_complete(main)
+  File "C:\Users\prabh\A
+ppData\Roaming\uv\python
+\cpython-3.10.19-windows
+-x86_64-none\lib\asyncio
+\base_events.py", line 
+649, in 
+run_until_complete
+    return 
+future.result()
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\test_backend_full.py
+", line 67, in 
+run_full_test
+    async for item in an
+swer_question_stream("Th
+e Matrix", "What did 
+Morpheus say about the 
+Matrix?", 
+persona="philosopher"):
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\src\core\rag_chat.py
+", line 223, in 
+answer_question_stream
+    graph = 
+create_rag_graph()
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\src\core\rag_chat.py
+", line 191, in 
+create_rag_graph
+    return workflow.comp
+ile(checkpointer=memory)
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\.venv\lib\site-packa
+ges\langgraph\graph\stat
+e.py", line 857, in 
+compile
+    checkpointer = ensur
+e_valid_checkpointer(che
+ckpointer)
+  File "E:\Repositories\
+FilmSumaRAG\backend_fast
+api\.venv\lib\site-packa
+ges\langgraph\types.py",
+ line 82, in ensure_vali
+d_checkpointer
+    raise TypeError(
+TypeError: Invalid 
+checkpointer provided. 
+Expected an instance of 
+`BaseCheckpointSaver`, 
+`True`, `False`, or 
+`None`. Received _Genera
+torContextManager. Pass 
+a proper saver (e.g., 
+InMemorySaver, 
+AsyncPostgresSaver).
