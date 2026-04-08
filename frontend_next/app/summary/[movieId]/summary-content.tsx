@@ -34,7 +34,10 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
         const response = await fetch(`${primaryApiUrl}/summarize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ moviename: titleWithYear }),
+          body: JSON.stringify({ 
+              moviename: titleWithYear,
+              tmdb_id: parseInt(movieId)
+          }),
           signal: controller.signal
         });
 
