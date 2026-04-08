@@ -1,9 +1,7 @@
-import { Suspense } from "react"
+import { Suspense, use } from "react"
 import { notFound } from "next/navigation"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, FileText, Info } from "lucide-react"
 import SummaryContent from "./summary-content"
 
 interface SummaryPageProps {
@@ -12,8 +10,9 @@ interface SummaryPageProps {
 }
 
 async function getMovieDetails(movieId: string) {
+  const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
   const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`,
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
     { next: { revalidate: 3600 } },
   )
   if (!res.ok) {
@@ -35,25 +34,56 @@ export default async function SummaryPage({ params, searchParams }: SummaryPageP
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <Link href="/" passHref>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Search
-          </Button>
-        </Link>
-        <Card className="bg-black/30 backdrop-blur-sm border-none shadow-xl">
-          <CardContent className="p-6">
-            <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              {movie.title} ({new Date(movie.release_date).getFullYear()}) - Summary
-            </h1>
-            <Suspense fallback={<div>Generating summary...</div>}>
-              <SummaryContent movieId={movieId} length={length} />
-            </Suspense>
-          </CardContent>
-        </Card>
+    <div className="cinematic-canvas font-sans selection:bg-white selection:text-black">
+      <div className="film-grain" />
+      
+      {/* Background Layer: Subtle Blur */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[#0b0f17]/95" />
+        <img 
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} 
+          className="w-full h-full object-cover opacity-10 blur-3xl"
+          alt=""
+        />
       </div>
-    </main>
-  )
-}
 
+      <div className="relative z-10 max-w-5xl mx-auto px-12 pt-32 pb-20">
+         <div className="space-y-20">
+            
+            <header className="space-y-8 flex items-end justify-between border-b border-white/5 pb-16">
+               <div className="space-y-6">
+                  <Link href={`/movie/${movieId}`} className="text-criterion opacity-30 hover:opacity-100 transition-opacity flex items-center gap-3">
+                     <ArrowLeft size={14} /> [ RETURN_TO_DASHBOARD ]
+                  </Link>
+                  <h1 className="text-8xl font-black italic tracking-tighter text-white leading-none">
+                    ARCHIVAL_BREAKDOWN
+                  </h1>
+                  <div className="flex gap-8 text-[9px] text-criterion opacity-20">
+                     <div>MOVIE: {movie.title.toUpperCase()}</div>
+                     <div>RELEASE_DYNAMO: {new Date(movie.release_date).getFullYear()}</div>
+                  </div>
+               </div>
+               <div className="text-right space-y-2">
+                  <div className="text-criterion opacity-30">Length_Scale</div>
+                  <div className="text-white font-mono text-xl">{length} / WORD_TARGET</div>
+               </div>
+            </header>
+
+            <Suspense fallback={
+               <div className="py-20 flex flex-col items-center justify-center gap-8">
+                  <div className="w-1 h-20 bg-white/10" />
+                  <div className="text-criterion opacity-20 animate-pulse uppercase tracking-[0.5em] text-[10px]">
+                     GENERATING_SYNOPSIS_STREAM...
+                  </div>
+               </div>
+            }>
+               <div className="max-w-4xl mx-auto">
+                 <SummaryContent movieId={movieId} length={length} />
+               </div>
+            </Suspense>
+
+         </div>
+      </div>
+    </div>
+  );
+}

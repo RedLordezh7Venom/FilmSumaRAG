@@ -8,6 +8,7 @@ from src.api.endpoints import feedback
 from src.api.endpoints import auth
 from src.api.endpoints import history
 from src.api.endpoints import movies
+from src.api.endpoints import discussions
 import time
 
 app = FastAPI(title="FilmSumaRAG API", version="1.0.0")
@@ -41,6 +42,7 @@ app.include_router(feedback.router, tags=["Feedback"])
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(history.router, prefix="/history", tags=["History"])
 app.include_router(movies.router, prefix="/movies", tags=["Movies"])
+app.include_router(discussions.router, prefix="/discussions", tags=["Discussions"])
 
 @app.get("/", tags=["Health"])
 async def root():

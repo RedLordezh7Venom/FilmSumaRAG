@@ -48,6 +48,7 @@ class FeedbackBase(BaseModel):
     movie_title: str
     chat_id: Optional[int] = None
     rating: int # 1 for good, 0 for bad, or 1-5
+    downvote: bool = False # Explicit context disqualification
     comment: Optional[str] = None
     persona: Optional[str] = "critic"
 
@@ -68,5 +69,34 @@ class MovieResponse(MovieBase):
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+    class Config:
+        from_attributes = True
+
+class ForumPostCreate(BaseModel):
+    clerk_id: Optional[str] = None
+    title: str
+    content: str
+
+class ForumReplyCreate(BaseModel):
+    clerk_id: Optional[str] = None
+    content: str
+
+class ForumReplyResponse(BaseModel):
+    id: int
+    reply_number: str
+    post_id: int
+    content: str
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
+class ForumPostResponse(BaseModel):
+    id: int
+    post_number: str
+    movie_id: int
+    title: str
+    content: str
+    created_at: datetime
+    replies: List[ForumReplyResponse] = []
     class Config:
         from_attributes = True

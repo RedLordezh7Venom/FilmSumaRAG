@@ -74,28 +74,26 @@ def retrieve_context(state: RAGState) -> dict:
             bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k_per_movie * 2)
             bm25_results = [all_docs_data[i] for i in bm25_indices]
             
-            discredited_ids = {}
-            bad_feedback = db.query(Feedback).filter(Feedback.rating <= 2).all()
-            for fb in bad_feedback:
-                if fb.chat_id:
-                    chat = db.query(ChatHistory).filter(ChatHistory.id == fb.chat_id).first()
-                    if chat and chat.citations:
-                        citations = json.loads(chat.citations)
-                        for cid in citations:
-                            discredited_ids[cid] = discredited_ids.get(cid, 0) + 1
+            # 3. Active Learning: Apply penalties based on historic feedback
+            from src.core.active_learning import get_discredited_chunks, apply_penalties
+            movie_record = db.query(Movie).filter(Movie.title == movie_name).first()
+            penalties = get_discredited_chunks(db, movie_record.id) if movie_record else {}
 
+            # 4. Hybrid Ranking (RRF)
             ranks = {}
             id_to_text = {}
             for i, res in enumerate(vector_results):
                 cid, text = res["id"], res["text"]
                 id_to_text[cid] = f"[{movie_name}] {text}"
-                penalty = discredited_ids.get(cid, 0) * 0.1
-                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
+                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60))
+                
             for i, res in enumerate(bm25_results):
                 cid, text = res["id"], res["text"]
                 id_to_text[cid] = f"[{movie_name}] {text}"
-                penalty = discredited_ids.get(cid, 0) * 0.1
-                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60)) - penalty
+                ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60))
+
+            # Apply the Active Learning penalties to the RRF scores
+            ranks = apply_penalties(ranks, penalties)
                 
             sorted_items = sorted(ranks.items(), key=lambda x: x[1], reverse=True)
             top_items = sorted_items[:k_per_movie]
@@ -140,7 +138,7 @@ async def generate_answer(state: RAGState) -> dict:
 def verify_citations(state: RAGState) -> dict:
     answer = state.get("answer", "")
     context = state.get("context", "")
-    if "[SCENE EVIDENCE]" not in answer and "🎞️" not in answer: return {}
+    if "[SCENE_EVIDENCE_HASH]" not in answer and "[SCENE EVIDENCE]" not in answer and "🎞️" not in answer: return {}
     snippets = re.findall(r'> "(.*?)"', answer)
     if not snippets: return {}
     
@@ -150,15 +148,17 @@ def verify_citations(state: RAGState) -> dict:
         if snippet.lower().strip() in clean_context:
             verified_snippets.append(snippet)
             
-    evidence_text = "\n\n[SCENE EVIDENCE]\n"
+    evidence_text = "\n\n[SCENE_EVIDENCE_HASH]\n"
     if verified_snippets:
         for s in verified_snippets: evidence_text += f'> "{s}"\n'
     else:
-        evidence_text += "*No verifiable snippets found in transcripts for comparison.*\n"
+        evidence_text += "*DATA_UNVERIFIED: No matching artifacts found in primary transcript source.*\n"
 
-    # Split by either marker
-    marker = "🎞️ SCENE EVIDENCE" if "🎞️" in answer else "[SCENE EVIDENCE]"
-    new_answer = re.split(marker, answer)[0] + evidence_text.strip()
+    # Split by any of the possible markers
+    patterns = [r"\[SCENE_EVIDENCE_HASH\]", r"\[SCENE EVIDENCE\]", r"🎞️ SCENE EVIDENCE"]
+    pattern = "|".join(patterns)
+    parts = re.split(pattern, answer)
+    new_answer = parts[0] + evidence_text.strip()
     return {
         "answer": new_answer,
         "messages": [AIMessage(content=new_answer)] 

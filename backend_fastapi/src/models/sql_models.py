@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Text, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from src.db.database import Base
@@ -21,6 +21,8 @@ class User(Base):
 
     # Relationships
     chats = relationship("ChatHistory", back_populates="user")
+    posts = relationship("ForumPost", back_populates="user")
+    replies = relationship("ForumReply", back_populates="user")
 
 class Movie(Base):
     __tablename__ = "movies"
@@ -38,6 +40,7 @@ class Movie(Base):
     # Relationships
     summaries = relationship("SummaryCache", back_populates="movie")
     chats = relationship("ChatHistory", back_populates="movie")
+    posts = relationship("ForumPost", back_populates="movie")
 
     def __repr__(self):
         return f"<Movie(title='{self.title}', status='{self.status}')>"
@@ -64,7 +67,7 @@ class ChatHistory(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     thread_id = Column(String, index=True) # LangGraph/LangChain thread UUID
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     movie_id = Column(Integer, ForeignKey("movies.id"))
     role = Column(String) # "user" or "assistant"
     message = Column(Text)
@@ -79,10 +82,11 @@ class Feedback(Base):
     __tablename__ = "feedback"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     movie_id = Column(Integer, ForeignKey("movies.id"))
     chat_id = Column(Integer, ForeignKey("chat_history.id"), nullable=True) # Point to a specific chat message if available
     rating = Column(Integer) # e.g., 1 to 5, or 1 for positive, 0 for negative
+    downvote = Column(Boolean, default=False) # New field for explicit context disqualification
     comment = Column(Text, nullable=True) # User's detailed feedback
     persona = Column(String, nullable=True) # Which persona was this feedback for?
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -90,3 +94,31 @@ class Feedback(Base):
     user = relationship("User")
     movie = relationship("Movie")
     chat = relationship("ChatHistory")
+
+class ForumPost(Base):
+    __tablename__ = "forum_posts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_number = Column(String, unique=True, index=True) # e.g. "No.12345678"
+    movie_id = Column(Integer, ForeignKey("movies.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True) # Null if anonymous
+    title = Column(String, index=True)
+    content = Column(Text)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    movie = relationship("Movie", back_populates="posts")
+    user = relationship("User", back_populates="posts")
+    replies = relationship("ForumReply", back_populates="post")
+
+class ForumReply(Base):
+    __tablename__ = "forum_replies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    reply_number = Column(String, unique=True, index=True)
+    post_id = Column(Integer, ForeignKey("forum_posts.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True) # Null if anonymous
+    content = Column(Text)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    post = relationship("ForumPost", back_populates="replies")
+    user = relationship("User", back_populates="replies")

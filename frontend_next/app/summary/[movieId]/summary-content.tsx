@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
-import { Skeleton } from "@/components/ui/skeleton";
+import { Typewriter } from "@/components/effects/typewriter";
 
 interface SummaryContentProps {
   movieId: string;
@@ -20,15 +20,15 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
 
     async function streamSummary() {
       try {
+        const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
         const movieResponse = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&append_to_response=credits,reviews`,
+          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
           { signal: controller.signal }
         );
         const movie = await movieResponse.json();
 
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
         const titleWithYear = `${movie.title} (${releaseYear})`;
-        console.log('Processing movie for summary streaming:', titleWithYear);
 
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
 
@@ -101,80 +101,42 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
 
   if (isLoading && !summary) {
     return (
-      <div className="space-y-4">
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-[90%]" />
-        <Skeleton className="h-4 w-[95%]" />
+      <div className="py-20 flex flex-col items-center justify-center gap-8">
+         <div className="w-1 h-20 bg-white/10" />
+         <div className="text-criterion opacity-20 animate-pulse uppercase tracking-[0.5em] text-[10px]">
+            SYNCHRONIZING_NARRATIVE_SUMMARY...
+         </div>
       </div>
     );
   }
 
   if (error && !summary) {
     return (
-      <div className="p-4 bg-red-900/20 border border-red-500 rounded-lg text-red-200">
-        <p>Error: {error}</p>
+      <div className="p-12 border border-red-500/20 bg-red-500/5 rounded-[2rem] text-center space-y-6">
+        <div className="text-criterion text-red-500 uppercase">Archive_Access_Error</div>
+        <p className="text-slate-400 font-serif italic text-lg leading-relaxed">{error}</p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-2 text-sm underline hover:text-white"
+          className="text-criterion border-b border-white pb-1 hover:opacity-50 transition-opacity"
         >
-          Try Again
+          [ RE_INITIATE_FETCH ]
         </button>
       </div>
     );
   }
 
   return (
-    <div className="prose prose-invert max-w-none">
-      <ReactMarkdown
-        components={{
-          h1: ({ children }) => (
-            <h1 className="text-2xl font-bold mb-4 text-white">{children}</h1>
-          ),
-          h2: ({ children }) => (
-            <h2 className="text-xl font-semibold mb-3 text-gray-200">{children}</h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className="text-lg font-medium mb-2 text-gray-300">{children}</h3>
-          ),
-          p: ({ children }) => (
-            <p className="mb-4 text-gray-300 leading-relaxed">{children}</p>
-          ),
-          ul: ({ children }) => (
-            <ul className="list-disc pl-6 mb-4 text-gray-300">{children}</ul>
-          ),
-          ol: ({ children }) => (
-            <ol className="list-decimal pl-6 mb-4 text-gray-300">{children}</ol>
-          ),
-          li: ({ children }) => (
-            <li className="mb-1">{children}</li>
-          ),
-          blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-gray-600 pl-4 italic mb-4 text-gray-400">
-              {children}
-            </blockquote>
-          ),
-          code: ({ children }) => (
-            <code className="bg-gray-800 rounded px-1 py-0.5 text-sm text-gray-300">
-              {children}
-            </code>
-          ),
-          pre: ({ children }) => (
-            <pre className="bg-gray-800 rounded p-4 overflow-x-auto mb-4">
-              {children}
-            </pre>
-          ),
-        }}
-      >
-        {summary}
-      </ReactMarkdown>
+    <div className="space-y-12">
+      <div className="text-criterion opacity-20 text-[9px] mb-4">ARCHIVAL_BREAKDOWN_OUTPUT:</div>
+      <div className="text-3xl font-serif italic text-slate-300 leading-loose">
+        <Typewriter text={summary} speed={5} />
+      </div>
+      
       {isLoading && (
-        <div className="flex gap-1 mt-2">
-          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
+        <div className="flex gap-3 pt-8 pb-20">
+           <div className="text-criterion opacity-10 animate-pulse">STREAMING_NARRATIVE_DATA...</div>
         </div>
       )}
     </div>
   );
 }
-

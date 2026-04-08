@@ -23,6 +23,7 @@ async def submit_feedback(payload: schemas.FeedbackBase, db: Session = Depends(g
         movie_id=movie.id,
         chat_id=payload.chat_id,
         rating=payload.rating,
+        downvote=payload.downvote,
         comment=payload.comment,
         persona=payload.persona
     )
