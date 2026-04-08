@@ -30,6 +30,7 @@ class RAGState(MessagesState):
     question: str
     persona: str = "critic"
     relevant_ids: List[str]
+    relevant_sources: List[Dict[str, str]] # List of {"id": cid, "text": text}
     context: str
 
 # Persistent Checkpointer Path
@@ -109,6 +110,15 @@ async def retrieve_context_node(state: RAGState) -> dict:
             
             all_relevant_chunks.extend([id_to_text[cid] for cid, score in top_items])
             all_relevant_ids.extend([cid for cid, score in top_items])
+            
+            # Store structured sources for the frontend
+            if "relevant_sources" not in state:
+                state["relevant_sources"] = []
+            for cid, score in top_items:
+                state["relevant_sources"].append({
+                    "id": cid,
+                    "text": id_to_text[cid]
+                })
 
             if movie_record:
                 research_summary = db.query(SummaryCache).filter(
@@ -123,7 +133,8 @@ async def retrieve_context_node(state: RAGState) -> dict:
     print(f"[RAG] Total retrieval node execution: {time.time() - start_time:.3f}s")
     return {
         "context": "\n\n".join(all_relevant_chunks),
-        "relevant_ids": all_relevant_ids
+        "relevant_ids": all_relevant_ids,
+        "relevant_sources": state.get("relevant_sources", [])
     }
 
 async def generate_answer_node(state: RAGState) -> dict:
@@ -186,8 +197,8 @@ async def answer_question_stream(tmdb_id: Union[int, List[int]], question: str, 
             
             if kind == "on_chain_end" and event.get("name") == "retrieve":
                 output = event["data"].get("output")
-                if output and "relevant_ids" in output:
-                    yield {"type": "citations", "ids": output["relevant_ids"]}
+                if output and "relevant_sources" in output:
+                    yield {"type": "citations", "sources": output["relevant_sources"]}
             
             if kind == "on_chat_model_stream":
                 token = event["data"]["chunk"].content

@@ -67,7 +67,7 @@ async def websocket_chat(websocket: WebSocket, tmdb_id: int, thread_id: str, cle
                 citations = []
                 async for item in answer_question_stream(ids_list, question, persona=persona, thread_id=thread_id):
                     if item["type"] == "citations":
-                        citations.extend(item["ids"])
+                        citations.extend(item["sources"])
                         await websocket.send_json(item)
                         continue
                     

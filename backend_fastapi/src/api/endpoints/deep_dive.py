@@ -73,7 +73,7 @@ async def deep_dive_chat(payload: ChatQuery, db: Session = Depends(get_db)):
                 thread_id=payload.thread_id
             ):
                 if item["type"] == "citations":
-                    citations = item["ids"]
+                    citations = item["sources"]
                     yield f"data: {json.dumps(item)}\n\n"
                     continue
 

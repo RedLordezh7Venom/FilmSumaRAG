@@ -2,16 +2,21 @@
 
 import { useState, useEffect, useRef, use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ThumbsUp, ThumbsDown, Zap } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink } from 'lucide-react';
 import { Typewriter } from "@/components/effects/typewriter";
 import Link from 'next/link';
+
+interface Source {
+  id: string;
+  text: string;
+}
 
 interface Message {
   id: number;
   text: string;
   sender: 'user' | 'ai';
   feedback?: 'up' | 'down';
-  citations?: string[];
+  citations?: Source[];
 }
 
 interface MovieIdentity {
@@ -25,7 +30,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const searchParams = useSearchParams();
   const movieIdStr = searchParams.get('movie');
   const movieId = movieIdStr ? parseInt(movieIdStr) : null;
-
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -36,7 +41,6 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
-  const wsRef = useRef<WebSocket | null>(null);
 
   // Fetch movie title from TMDB on load
   useEffect(() => {
@@ -48,7 +52,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         const data = await res.json();
         if (data.title) {
           const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
-          setMovieList([{ id: movieId, title: `${data.title}${year}` }]);
+          setMovieList([{id: movieId, title: `${data.title}${year}`}]);
         }
       } catch (err) {
         console.error("Failed to fetch movie title:", err);
@@ -123,41 +127,9 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     loadHistory();
   }, [threadId]);
 
-  // SSE-based send (fallback from WebSocket approach)
   useEffect(() => {
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isSending]);
-
-  const handleFeedbackClick = (msgId: number, type: 'up' | 'down') => {
-    if (type === 'down') {
-      setFeedbackDraft({ msgId, type: 'down', comment: '' });
-    } else {
-      submitFeedback(msgId, 'up', '');
-    }
-  };
-
-  const submitFeedback = async (msgId: number, type: 'up' | 'down', comment: string = '') => {
-    setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
-    if (type === 'down') setFeedbackDraft(null);
-    try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
-      await fetch(`${primaryApiUrl}/feedback`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          clerk_id: "anonymous",
-          movie_title: movieList.map(m => m.title).join(" vs "),
-          chat_id: msgId,
-          rating: type === 'up' ? 1 : 0,
-          downvote: type === 'down',
-          persona: persona,
-          comment: comment
-        })
-      });
-    } catch (err) {
-      console.warn("Feedback endpoint unavailable:", err);
-    }
-  };
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "" || isSending) return;
@@ -192,9 +164,8 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         throw new Error(errData.detail || `Server error: ${response.status}`);
       }
 
-      if (!response.body) throw new Error("No response body");
-
-      const reader = response.body.getReader();
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response body");
       const decoder = new TextDecoder();
       let fullText = "";
 
@@ -213,7 +184,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               const data = JSON.parse(dataStr);
               if (data.type === "citations") {
                 setMessages(prev => prev.map(msg =>
-                  msg.id === aiMsgId ? { ...msg, citations: data.ids } : msg
+                  msg.id === aiMsgId ? { ...msg, citations: data.sources } : msg
                 ));
               } else if (data.token) {
                 fullText += data.token;
@@ -232,6 +203,34 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
       ));
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleFeedbackClick = (msgId: number, type: 'up' | 'down') => {
+    if (type === 'down') {
+      setFeedbackDraft({ msgId, type: 'down', comment: '' });
+    } else {
+      submitFeedback(msgId, 'up', '');
+    }
+  };
+
+  const submitFeedback = async (msgId: number, type: 'up' | 'down', comment: string = '') => {
+    setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
+    if (type === 'down') setFeedbackDraft(null);
+    try {
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      await fetch(`${primaryApiUrl}/feedback/rate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: msgId,
+          rating: type === 'up' ? 5 : 1,
+          comment: comment,
+          persona: persona
+        })
+      });
+    } catch (err) {
+      console.warn("Feedback endpoint unavailable:", err);
     }
   };
 
@@ -270,7 +269,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                     placeholder="Search TMDB for comparison..."
                     value={compareSearch}
                     onChange={e => setCompareSearch(e.target.value)}
-                    className="w-full bg-transparent border-b border-white/10 py-2 text-white font-serif outline-none focus:border-white transition-all text-sm mb-4"
+                    className="w-full bg-transparent border-b border-white/10 py-2 text-white font-serif italic outline-none focus:border-white transition-all text-sm mb-4"
                   />
                   <div className="space-y-1">
                     {compareResults.map(m => (
@@ -291,7 +290,6 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
             </div>
           </div>
 
-          {/* Persona + Thread Info */}
           <div className="text-right flex flex-col items-end gap-3">
             <div className="flex items-center gap-3 border border-white/5 rounded-full px-4 py-2 bg-white/[0.02]">
               <span className="text-criterion opacity-50 text-[9px]">PERSONA</span>
@@ -326,22 +324,33 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                         ? <Typewriter text={m.text} speed={8} key={`${m.id}-${m.text.length}`} delay={0} />
                         : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>
                       }
-                      {m.citations && m.citations.length > 0 && m.text && (
-                        <sup className="ml-3 group/cit relative inline-block cursor-help">
-                          <span className="text-[9px] font-sans font-bold not-italic tracking-widest uppercase text-criterion border border-white/20 rounded px-2 py-0.5 group-hover/cit:bg-white group-hover/cit:text-black transition-colors">
-                            [{m.citations.length} SOURCES]
-                          </span>
-                          <div className="absolute hidden group-hover/cit:block bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-4 bg-[#0b0f17] border border-white/10 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] text-slate-300 font-sans text-xs not-italic z-50">
-                            <div className="text-white font-bold mb-2 uppercase opacity-50 tracking-widest text-[9px]">Archival Chunks</div>
-                            <div className="space-y-1 max-h-32 overflow-y-auto no-scrollbar">
-                              {m.citations.map(c => (
-                                <div key={c} className="truncate select-all font-mono opacity-80">{c}</div>
-                              ))}
-                            </div>
-                          </div>
-                        </sup>
-                      )}
                     </div>
+
+                    {/* Rich Citations */}
+                    {m.citations && m.citations.length > 0 && m.text && (
+                       <div className="flex flex-wrap gap-3 pt-2">
+                          <div className="text-criterion opacity-20 text-[9px] w-full mb-1 uppercase tracking-widest">Supporting Archive Fragments:</div>
+                          {m.citations.map((cite, idx) => (
+                             <div key={idx} className="group/cite relative">
+                                <div className="px-3 py-1.5 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 transition-all cursor-crosshair flex items-center gap-2">
+                                   <ExternalLink size={10} className="text-criterion opacity-40" />
+                                   <span className="text-[10px] font-bold text-criterion tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
+                                </div>
+                                {/* Hover Preview */}
+                                <div className="absolute bottom-full left-0 mb-4 w-80 p-6 glass-surface border border-white/10 rounded-2xl shadow-2xl opacity-0 group-hover/cite:opacity-100 pointer-events-none transition-opacity z-50">
+                                   <div className="text-[9px] text-criterion opacity-30 mb-3 tracking-widest uppercase font-sans">Fragment Context [ID: {cite.id.split('_').pop()}]</div>
+                                   <div className="text-white font-serif italic text-sm leading-relaxed max-h-48 overflow-y-auto no-scrollbar">
+                                      "{cite.text.split('] ').pop()}"
+                                   </div>
+                                   <div className="mt-4 pt-4 border-t border-white/5 text-[8px] text-criterion opacity-20 flex justify-between font-sans">
+                                      <span>SEMANTIC_WEIGHT: HIGH</span>
+                                      <span>VERIFIED_TRANSCRIPT</span>
+                                   </div>
+                                </div>
+                             </div>
+                          ))}
+                       </div>
+                    )}
 
                     {m.text && (
                       <div className="flex flex-col gap-4">
