@@ -11,6 +11,7 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   feedback?: 'up' | 'down';
+  citations?: string[];
 }
 
 export default function DeepDiveChatPage({ params }: { params: Promise<{ threadId: string }> }) {
@@ -85,6 +86,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               id: h.id || i,
               text: h.message,
               sender: h.role === 'user' ? 'user' as const : 'ai' as const,
+              citations: h.citations ? JSON.parse(h.citations) : undefined
             }));
             setMessages(restored);
 
@@ -197,7 +199,11 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
             if (dataStr === "[DONE]") continue;
             try {
               const data = JSON.parse(dataStr);
-              if (data.token) {
+              if (data.type === "citations") {
+                setMessages(prev => prev.map(msg => 
+                  msg.id === aiMsgId ? { ...msg, citations: data.ids } : msg
+                ));
+              } else if (data.token) {
                 fullText += data.token;
                 setMessages(prev => prev.map(msg => 
                   msg.id === aiMsgId ? { ...msg, text: fullText } : msg
@@ -294,6 +300,21 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                      <div className="text-criterion opacity-20 text-[9px]">CRITIC_RESPONSE</div>
                      <div className="text-white font-serif italic text-2xl leading-relaxed">
                         {m.text ? <Typewriter text={m.text} speed={8} key={`${m.id}-${m.text.length}`} delay={0} /> : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>}
+                        {m.citations && m.citations.length > 0 && m.text && (
+                           <sup className="ml-3 group/cit relative inline-block cursor-help">
+                              <span className="text-[9px] font-sans font-bold not-italic tracking-widest uppercase text-criterion border border-white/20 rounded px-2 py-0.5 group-hover/cit:bg-white group-hover/cit:text-black transition-colors">
+                                [{m.citations.length} SOURCES]
+                              </span>
+                              <div className="absolute hidden group-hover/cit:block bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-4 bg-[#0b0f17] border border-white/10 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] text-slate-300 font-sans text-xs not-italic z-50">
+                                 <div className="text-white font-bold mb-2 uppercase opacity-50 tracking-widest text-[9px]">Archival Chunks</div>
+                                 <div className="space-y-1 block max-h-32 overflow-y-auto no-scrollbar">
+                                   {m.citations.map(c => (
+                                      <div key={c} className="truncate select-all font-mono opacity-80">{c}</div>
+                                   ))}
+                                 </div>
+                              </div>
+                           </sup>
+                        )}
                      </div>
                      
                      {m.text && (
