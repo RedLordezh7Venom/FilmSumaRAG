@@ -60,6 +60,7 @@ class FeedbackResponse(BaseModel):
 
 class MovieBase(BaseModel):
     title: str
+    tmdb_id: Optional[int] = None
     thumbnail_url: Optional[str] = None
     description: Optional[str] = None
     release_year: Optional[int] = None

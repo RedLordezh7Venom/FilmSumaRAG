@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse, JSONResponse
 from sqlalchemy.orm import Session
 import json
@@ -8,23 +8,58 @@ from src.core.llm_model import generate_summary_stream
 from src.utils.subliminalsubsdl import download_subs_lines
 from src.db.database import get_db
 from src.models import sql_models
+from src.api.endpoints.embeddings_generation import generate_embeddings_task
 
 router = APIRouter()
 
 @router.post('/summarize')
-async def summarize_movie_endpoint(movie: MovieName, db: Session = Depends(get_db)):
+async def summarize_movie_endpoint(
+    movie: MovieName, 
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
     try:
         moviename = movie.moviename
-        print(f"Processing movie: {moviename}")
+        tmdb_id = movie.tmdb_id
+        print(f"[SUMMARIZE] Received request for: {moviename} (TMDB ID: {tmdb_id})")
         
-        # Check if movie exists in DB
-        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.title == moviename).first()
+        # Check if movie exists in DB (Atomic get-or-create pattern)
+        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.tmdb_id == tmdb_id).first()
         if not db_movie:
-            db_movie = sql_models.Movie(title=moviename, status=sql_models.JobStatus.PROCESSING)
-            db.add(db_movie)
-            db.commit()
-            db.refresh(db_movie)
+            try:
+                db_movie = sql_models.Movie(
+                    tmdb_id=tmdb_id, 
+                    title=moviename, 
+                    status=sql_models.JobStatus.PROCESSING
+                )
+                db.add(db_movie)
+                db.commit()
+                db.refresh(db_movie)
+            except Exception:
+                db.rollback()
+                db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.tmdb_id == tmdb_id).first()
+                if not db_movie:
+                    raise HTTPException(status_code=500, detail="Failed to initialize movie record")
         
+        # Check if embeddings exist — only trigger background generation if BOTH are missing
+        from src.core import vector_db
+        already_indexed = (
+            db_movie.status == sql_models.JobStatus.COMPLETED
+            and vector_db.has_movie(tmdb_id)
+        )
+        if already_indexed:
+            print(f"[SUMMARIZE] Cache/Vector HIT for {moviename} — skipping re-indexing.")
+        else:
+            print(f"[SUMMARIZE] No index found for {moviename} — scheduling background embeddings.")
+            def task_wrapper(m_name, t_id):
+                from src.db.database import SessionLocal
+                db_task = SessionLocal()
+                try:
+                    generate_embeddings_task(m_name, t_id, db_task)
+                finally:
+                    db_task.close()
+            background_tasks.add_task(task_wrapper, moviename, tmdb_id)
+
         # Check if summary exists in DB
         existing_summary = db.query(sql_models.SummaryCache).filter(
             sql_models.SummaryCache.movie_id == db_movie.id,
@@ -34,7 +69,7 @@ async def summarize_movie_endpoint(movie: MovieName, db: Session = Depends(get_d
         if existing_summary:
             print(f"Cache hit for {moviename}")
             return JSONResponse(content={"token": existing_summary.content, "cached": True})
-        
+
         # get subtitle text
         dialogue_lines = download_subs_lines(moviename)
         if not dialogue_lines:
@@ -57,7 +92,9 @@ async def summarize_movie_endpoint(movie: MovieName, db: Session = Depends(get_d
                 content=complete_summary
             )
             db.add(new_summary)
-            db_movie.status = sql_models.JobStatus.COMPLETED
+            # Update status to COMPLETED after embeddings are likely ready or being worked on
+            # We rely on the embeddings background task to finalize the status if needed, 
+            # but summarization also counts as a step.
             db.commit()
             
             yield "data: [DONE]\n\n"
@@ -72,9 +109,10 @@ async def summarize_movie_endpoint(movie: MovieName, db: Session = Depends(get_d
         )
     except FileNotFoundError as e:
         print(f"File not found: {e}")
-        db_movie.error_message = f"File not found: {e.filename}"
-        db_movie.status = sql_models.JobStatus.FAILED
-        db.commit()
+        if 'db_movie' in locals():
+            db_movie.error_message = f"File not found: {e.filename}"
+            db_movie.status = sql_models.JobStatus.FAILED
+            db.commit()
         raise HTTPException(status_code=404, detail=f"File not found: {e.filename}")
     except Exception as e:
         print(f"Error: {e}")

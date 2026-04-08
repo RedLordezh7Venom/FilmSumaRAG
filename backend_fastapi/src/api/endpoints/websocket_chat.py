@@ -7,8 +7,8 @@ import json
 
 router = APIRouter()
 
-@router.websocket("/ws/chat/{movie}/{thread_id}")
-async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk_id: str = None):
+@router.websocket("/ws/chat/{tmdb_id}/{thread_id}")
+async def websocket_chat(websocket: WebSocket, tmdb_id: int, thread_id: str, clerk_id: str = None):
     # websocket endpoint for streaming rag chat
     await websocket.accept()
     
@@ -22,15 +22,16 @@ async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk
             db_user = db.query(sql_models.User).filter(sql_models.User.clerk_id == clerk_id).first()
         
         # Ensure movie exists
-        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.title == movie).first()
+        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.tmdb_id == tmdb_id).first()
         if not db_movie:
-            db_movie = sql_models.Movie(title=movie, status=sql_models.JobStatus.PENDING)
+            # Fallback title if we don't have it (summarizer usually builds this first)
+            db_movie = sql_models.Movie(tmdb_id=tmdb_id, title=f"Archival_ID_{tmdb_id}", status=sql_models.JobStatus.PENDING)
             db.add(db_movie)
             db.commit()
             db.refresh(db_movie)
 
         while True:
-            # receive question from client
+            # receive message from client
             data = await websocket.receive_text()
             message_data = json.loads(data)
             question = message_data.get("question", "")
@@ -43,6 +44,10 @@ async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk
                 continue
             
             persona = message_data.get("persona", "critic")
+            
+            # Use current segment or list of ids for comparative
+            raw_movies = message_data.get("movies", [tmdb_id])
+            ids_list = [int(m) for m in raw_movies]
             
             # Save user message to history
             user_msg = sql_models.ChatHistory(
@@ -57,24 +62,25 @@ async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk
             db.commit()
             
             try:
-                # Get persona from message or default to critic
-                persona = message_data.get("persona", "critic")
-                
                 # stream answer tokens via websocket
                 full_answer = []
                 citations = []
-                async for item in answer_question_stream(movie, question, persona=persona, thread_id=thread_id):
+                async for item in answer_question_stream(ids_list, question, persona=persona, thread_id=thread_id):
                     if item["type"] == "citations":
                         citations.extend(item["ids"])
                         await websocket.send_json(item)
                         continue
                     
-                    token = item["token"]
-                    full_answer.append(token)
-                    await websocket.send_json({
-                        "type": "token",
-                        "token": token
-                    })
+                    if item["type"] == "token":
+                        token = item["token"]
+                        full_answer.append(token)
+                        await websocket.send_json({
+                            "type": "token",
+                            "token": token
+                        })
+                    
+                    if item["type"] == "done":
+                        break
                 
                 # signal completion
                 await websocket.send_json({"type": "done"})
@@ -92,10 +98,10 @@ async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk
                 db.add(assistant_msg)
                 db.commit()
                 
-            except FileNotFoundError:
+            except FileNotFoundError as e:
                 await websocket.send_json({
                     "type": "error",
-                    "message": "Embeddings not ready yet. Please wait or try again."
+                    "message": str(e)
                 })
             except Exception as e:
                 await websocket.send_json({
@@ -104,7 +110,7 @@ async def websocket_chat(websocket: WebSocket, movie: str, thread_id: str, clerk
                 })
                 
     except WebSocketDisconnect:
-        print(f"Client disconnected from chat for movie: {movie}, thread: {thread_id}")
+        print(f"Client disconnected from chat for movie ID: {tmdb_id}, thread: {thread_id}")
     except Exception as e:
         print(f"WebSocket error: {str(e)}")
         await websocket.close()

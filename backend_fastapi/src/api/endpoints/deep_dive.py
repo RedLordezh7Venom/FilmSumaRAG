@@ -20,29 +20,40 @@ class ChatQuery(BaseModel):
 @router.post("/deep_dive")
 async def deep_dive_chat(payload: ChatQuery, db: Session = Depends(get_db)):
     try:
-        # 1. Resolve movies (ensure they exist in postgres)
+        # 1. Resolve movies by title → get their tmdb_ids
         movie_titles = [payload.movie] if isinstance(payload.movie, str) else payload.movie
-        movie_ids = []
+        tmdb_ids = []
+        first_movie_db_id = None
+
         for title in movie_titles:
             db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.title == title).first()
             if not db_movie:
-                # auto-create as pending if not found (though usually research agent handles this)
+                # auto-create as pending if not found
                 db_movie = sql_models.Movie(title=title, status=sql_models.JobStatus.PENDING)
                 db.add(db_movie)
                 db.commit()
                 db.refresh(db_movie)
-            movie_ids.append(db_movie.id)
-        
+
+            if db_movie.tmdb_id is None:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Movie '{title}' has no TMDB ID. Please generate a summary first to complete registration."
+                )
+
+            tmdb_ids.append(db_movie.tmdb_id)
+            if first_movie_db_id is None:
+                first_movie_db_id = db_movie.id
+
         # 2. Resolve User
         db_user = None
         if payload.clerk_id:
             db_user = db.query(sql_models.User).filter(sql_models.User.clerk_id == payload.clerk_id).first()
-        
+
         # 3. Save User Message
         user_msg = sql_models.ChatHistory(
             thread_id=payload.thread_id,
             user_id=db_user.id if db_user else None,
-            movie_id=movie_ids[0], # For simplicity, link to the first movie in the list
+            movie_id=first_movie_db_id,
             role="user",
             message=payload.question,
             persona=payload.persona
@@ -54,27 +65,31 @@ async def deep_dive_chat(payload: ChatQuery, db: Session = Depends(get_db)):
         async def event_generator():
             full_answer = ""
             citations = []
-            
+
             async for item in answer_question_stream(
-                movie_name=payload.movie, 
-                question=payload.question, 
-                persona=payload.persona, 
+                tmdb_id=tmdb_ids,
+                question=payload.question,
+                persona=payload.persona,
                 thread_id=payload.thread_id
             ):
                 if item["type"] == "citations":
                     citations = item["ids"]
                     yield f"data: {json.dumps(item)}\n\n"
                     continue
-                
-                token = item["token"]
-                full_answer += token
-                yield f"data: {json.dumps({'token': token})}\n\n"
-            
+
+                if item["type"] == "token":
+                    token = item["token"]
+                    full_answer += token
+                    yield f"data: {json.dumps({'token': token})}\n\n"
+
+                if item["type"] == "done":
+                    break
+
             # Finalize: Save to DB
             assistant_msg = sql_models.ChatHistory(
                 thread_id=payload.thread_id,
                 user_id=db_user.id if db_user else None,
-                movie_id=movie_ids[0],
+                movie_id=first_movie_db_id,
                 role="assistant",
                 message=full_answer,
                 citations=json.dumps(citations),
@@ -95,5 +110,7 @@ async def deep_dive_chat(payload: ChatQuery, db: Session = Depends(get_db)):
 
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Comparative Deep Dive Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Deep Dive Error: {str(e)}")

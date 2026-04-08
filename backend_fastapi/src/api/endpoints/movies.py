@@ -43,7 +43,11 @@ def get_collection(db: Session = Depends(get_db)):
         })
     return result
 
-@router.get("/{movie_id}", response_model=schemas.MovieResponse)
-def get_movie(movie_id: int, db: Session = Depends(get_db)):
+@router.get("/id/{movie_id}", response_model=schemas.MovieResponse)
+def get_movie_by_internal_id(movie_id: int, db: Session = Depends(get_db)):
     return db.query(sql_models.Movie).get(movie_id)
+
+@router.get("/tmdb/{tmdb_id}", response_model=schemas.MovieResponse)
+def get_movie_by_tmdb_id(tmdb_id: int, db: Session = Depends(get_db)):
+    return db.query(sql_models.Movie).filter(sql_models.Movie.tmdb_id == tmdb_id).first()
 

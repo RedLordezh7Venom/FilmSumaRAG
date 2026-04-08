@@ -1,8 +1,7 @@
 import numpy as np
 import os
-import sqlite3
-import aiosqlite
-from typing import TypedDict, List, AsyncIterator, Annotated, Sequence, Dict, Optional, Union
+import time
+from typing import TypedDict, List, AsyncIterator, Annotated, Sequence, Dict, Optional, Union, Any
 from langgraph.graph import StateGraph, END, MessagesState
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
@@ -22,34 +21,27 @@ except LookupError:
 
 from nltk.tokenize import word_tokenize
 
-# Define RAG State with Messages history
+# Global cache for pre-tokenized corpora (Keyed by tmdb_id)
+BM25_CACHE = {}
+
+# Define RAG State
 class RAGState(MessagesState):
-    movie_names: List[str] 
+    tmdb_ids: List[int]
     question: str
-    query_vector: np.ndarray
-    relevant_chunks: List[str]
-    relevant_ids: List[str] 
-    context: str
-    answer: str
     persona: str = "critic"
+    relevant_ids: List[str]
+    context: str
 
 # Persistent Checkpointer Path
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "checkpoints.db")
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
-def embed_query(state: RAGState) -> dict:
+async def retrieve_context_node(state: RAGState) -> dict:
+    tmdb_ids = state["tmdb_ids"]
     question = state.get("question") or state["messages"][-1].content
-    query_vec = embedder.encode([question], convert_to_tensor=False)[0]
-    return {
-        "query_vector": query_vec,
-        "question": question
-    }
-
-def retrieve_context(state: RAGState) -> dict:
-    movie_names = state["movie_names"]
-    question = state["question"]
-    query_vector = state["query_vector"]
-    k_per_movie = 10 if len(movie_names) == 1 else 6 
+    
+    query_vector = embedder.encode([question], convert_to_tensor=False)[0]
+    k_per_movie = 10 if len(tmdb_ids) == 1 else 6 
     
     all_relevant_chunks = []
     all_relevant_ids = []
@@ -58,28 +50,46 @@ def retrieve_context(state: RAGState) -> dict:
     from src.models.sql_models import Feedback, ChatHistory, SummaryCache, SummaryType, Movie
     db = SessionLocal()
     
+    start_time = time.time()
+    
     try:
-        for movie_name in movie_names:
-            vector_results = vector_db.search_movie(movie_name, query_vector, n_results=k_per_movie * 2)
-            all_docs_data = vector_db.get_movie_data(movie_name)
+        for tid in tmdb_ids:
+            # 1. Fetch movie details for titles and active learning
+            movie_record = db.query(Movie).filter(Movie.tmdb_id == tid).first()
+            movie_name = movie_record.title if movie_record else f"ID:{tid}"
+            
+            print(f"[RAG] Retrieving context for {movie_name}...")
+            
+            # 2. Vector Search
+            v_start = time.time()
+            vector_results = vector_db.search_movie(tid, query_vector, n_results=k_per_movie * 2)
+            print(f"[RAG] Vector search took {time.time() - v_start:.3f}s")
+            
+            # 3. Hybrid / BM25
+            bm_start = time.time()
+            all_docs_data = vector_db.get_movie_data(tid)
             
             if not all_docs_data:
                 all_relevant_chunks.extend([v["text"] for v in vector_results[:k_per_movie]])
                 all_relevant_ids.extend([v["id"] for v in vector_results[:k_per_movie]])
                 continue
 
-            tokenized_corpus = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
+            # Check cache for tokenized corpus (Keyed by tmdb_id)
+            tid_key = str(tid)
+            if tid_key not in BM25_CACHE:
+                print(f"[RAG] Tokenizing corpus for {movie_name} (first time)...")
+                BM25_CACHE[tid_key] = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
+            
+            tokenized_corpus = BM25_CACHE[tid_key]
             bm25 = BM25Okapi(tokenized_corpus)
             tokenized_query = word_tokenize(question.lower())
             bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k_per_movie * 2)
             bm25_results = [all_docs_data[i] for i in bm25_indices]
+            print(f"[RAG] BM25 calculation took {time.time() - bm_start:.3f}s")
             
-            # 3. Active Learning: Apply penalties based on historic feedback
             from src.core.active_learning import get_discredited_chunks, apply_penalties
-            movie_record = db.query(Movie).filter(Movie.title == movie_name).first()
             penalties = get_discredited_chunks(db, movie_record.id) if movie_record else {}
 
-            # 4. Hybrid Ranking (RRF)
             ranks = {}
             id_to_text = {}
             for i, res in enumerate(vector_results):
@@ -92,7 +102,6 @@ def retrieve_context(state: RAGState) -> dict:
                 id_to_text[cid] = f"[{movie_name}] {text}"
                 ranks[cid] = ranks.get(cid, 0) + (1 / (i + 60))
 
-            # Apply the Active Learning penalties to the RRF scores
             ranks = apply_penalties(ranks, penalties)
                 
             sorted_items = sorted(ranks.items(), key=lambda x: x[1], reverse=True)
@@ -101,7 +110,6 @@ def retrieve_context(state: RAGState) -> dict:
             all_relevant_chunks.extend([id_to_text[cid] for cid, score in top_items])
             all_relevant_ids.extend([cid for cid, score in top_items])
 
-            movie_record = db.query(Movie).filter(Movie.title == movie_name).first()
             if movie_record:
                 research_summary = db.query(SummaryCache).filter(
                     SummaryCache.movie_id == movie_record.id,
@@ -109,134 +117,81 @@ def retrieve_context(state: RAGState) -> dict:
                 ).first()
                 if research_summary:
                     all_relevant_chunks.append(f"\n--- EXTERNAL RESEARCH: {movie_name} ---\n{research_summary.content}")
-
     finally:
         db.close()
 
-    context = "\n\n".join(all_relevant_chunks)
+    print(f"[RAG] Total retrieval node execution: {time.time() - start_time:.3f}s")
     return {
-        "relevant_chunks": all_relevant_chunks,
-        "relevant_ids": all_relevant_ids,
-        "context": context
+        "context": "\n\n".join(all_relevant_chunks),
+        "relevant_ids": all_relevant_ids
     }
 
-async def generate_answer(state: RAGState) -> dict:
-    from src.agents.persona_agents import PersonaManager
+async def generate_answer_node(state: RAGState) -> dict:
     persona = state.get("persona", "critic")
-    display_title = " vs ".join(state['movie_names'])
-    prompt_content = PersonaManager.get_persona_prompt(persona, display_title, state["context"])
+    tmdb_ids = state["tmdb_ids"]
+    context = state["context"]
+    question = state.get("question") or state["messages"][-1].content
+    
+    from src.db.database import SessionLocal
+    from src.models.sql_models import Movie
+    db = SessionLocal()
+    titles = []
+    for tid in tmdb_ids:
+        m = db.query(Movie).filter(Movie.tmdb_id == tid).first()
+        titles.append(m.title if m else str(tid))
+    db.close()
+    
+    display_title = " vs ".join(titles)
+    from src.agents.persona_agents import PersonaManager
+    prompt_content = PersonaManager.get_persona_prompt(persona, display_title, context)
+    
     messages = [
         PersonaManager.get_system_message(persona),
-        HumanMessage(content=f"{prompt_content}\n\nQUESTION: {state['question']}\nANSWER:")
+        HumanMessage(content=f"{prompt_content}\n\nQUESTION: {question}\nANSWER:")
     ]
-    response = await llm.ainvoke(messages)
-    return {
-        "messages": [AIMessage(content=response.content)],
-        "answer": response.content
-    }
-
-def verify_citations(state: RAGState) -> dict:
-    answer = state.get("answer", "")
-    context = state.get("context", "")
-    if "[SCENE_EVIDENCE_HASH]" not in answer and "[SCENE EVIDENCE]" not in answer and "🎞️" not in answer: return {}
-    snippets = re.findall(r'> "(.*?)"', answer)
-    if not snippets: return {}
     
-    verified_snippets = []
-    clean_context = context.lower().replace("\n", " ")
-    for snippet in snippets:
-        if snippet.lower().strip() in clean_context:
-            verified_snippets.append(snippet)
-            
-    evidence_text = "\n\n[SCENE_EVIDENCE_HASH]\n"
-    if verified_snippets:
-        for s in verified_snippets: evidence_text += f'> "{s}"\n'
-    else:
-        evidence_text += "*DATA_UNVERIFIED: No matching artifacts found in primary transcript source.*\n"
-
-    # Split by any of the possible markers
-    patterns = [r"\[SCENE_EVIDENCE_HASH\]", r"\[SCENE EVIDENCE\]", r"🎞️ SCENE EVIDENCE"]
-    pattern = "|".join(patterns)
-    parts = re.split(pattern, answer)
-    new_answer = parts[0] + evidence_text.strip()
-    return {
-        "answer": new_answer,
-        "messages": [AIMessage(content=new_answer)] 
-    }
+    print(f"[RAG] Starting LLM generation for persona: {persona}")
+    response = await llm.ainvoke(messages)
+    return {"messages": [response]}
 
 def create_rag_graph(checkpointer=None):
     workflow = StateGraph(RAGState)
-    workflow.add_node("embed_query", embed_query)
-    workflow.add_node("retrieve_context", retrieve_context)
-    workflow.add_node("generate_answer", generate_answer)
-    workflow.add_node("verify_citations", verify_citations)
-    workflow.set_entry_point("embed_query")
-    workflow.add_edge("embed_query", "retrieve_context")
-    workflow.add_edge("retrieve_context", "generate_answer")
-    workflow.add_edge("generate_answer", "verify_citations")
-    workflow.add_edge("verify_citations", END)
+    workflow.add_node("retrieve", retrieve_context_node)
+    workflow.add_node("generate", generate_answer_node)
+    workflow.set_entry_point("retrieve")
+    workflow.add_edge("retrieve", "generate")
+    workflow.add_edge("generate", END)
     return workflow.compile(checkpointer=checkpointer)
 
-async def answer_question(movie_name: Union[str, List[str]], question: str, thread_id: str = "default") -> dict:
-    movie_names = [movie_name] if isinstance(movie_name, str) else movie_name
-    for m in movie_names:
-        if not vector_db.has_movie(m):
-            raise FileNotFoundError(f"No embeddings found for {m}")
-
-    async with AsyncSqliteSaver.from_conn_string(DB_PATH) as memory:
-        graph = create_rag_graph(memory)
-        config = {"configurable": {"thread_id": thread_id}}
-        initial_state = {
-            "movie_names": movie_names,
-            "question": question,
-            "messages": [HumanMessage(content=question)]
-        }
-        result = await graph.ainvoke(initial_state, config=config)
-        return {
-            "answer": result["answer"],
-            "citations": result.get("relevant_ids", [])
-        }
-
-async def answer_question_stream(movie_name: Union[str, List[str]], question: str, persona: str = "critic", thread_id: str = "default") -> AsyncIterator[dict]:
-    from src.agents.persona_agents import PersonaManager
-    movie_names = [movie_name] if isinstance(movie_name, str) else movie_name
-    for m in movie_names:
-        if not vector_db.has_movie(m):
-            raise FileNotFoundError(f"No embeddings found for {m}")
+async def answer_question_stream(tmdb_id: Union[int, List[int]], question: str, persona: str = "critic", thread_id: str = "default") -> AsyncIterator[dict]:
+    tmdb_ids = [tmdb_id] if isinstance(tmdb_id, int) else tmdb_id
+    for tid in tmdb_ids:
+        if not vector_db.has_movie(tid):
+            raise FileNotFoundError(f"Embeddings not ready for Movie (ID: {tid}). Please navigate to its page and generate a summary first.")
     
     async with AsyncSqliteSaver.from_conn_string(DB_PATH) as memory:
+        await memory.setup()
         graph = create_rag_graph(memory)
         config = {"configurable": {"thread_id": thread_id}}
-        current_state = await graph.aget_state(config)
-        history = current_state.values.get("messages", []) if current_state.values else []
         
-        retrieval_state = {
-            "movie_names": movie_names,
+        initial_input = {
+            "tmdb_ids": tmdb_ids,
             "question": question,
-            "query_vector": embedder.encode([question], convert_to_tensor=False)[0]
+            "persona": persona,
+            "messages": [HumanMessage(content=question)]
         }
-        retrieval_data = retrieve_context(retrieval_state)
-        context = retrieval_data["context"]
-        relevant_ids = retrieval_data["relevant_ids"]
-        
-        yield {"type": "citations", "ids": relevant_ids}
 
-        display_title = " vs ".join(movie_names)
-        prompt_content = PersonaManager.get_persona_prompt(persona, display_title, context)
-        
-        messages = history + [
-            PersonaManager.get_system_message(persona),
-            HumanMessage(content=f"{prompt_content}\n\nQUESTION: {question}\nANSWER:")
-        ]
-        
-        full_response = ""
-        async for token in llm.astream(messages):
-            if hasattr(token, 'content'):
-                full_response += token.content
-                yield {"type": "token", "token": token.content}
-                
-        new_messages = [HumanMessage(content=question), AIMessage(content=full_response)]
-        await graph.aupdate_state(config, {"messages": new_messages, "movie_names": movie_names, "persona": persona, "relevant_ids": relevant_ids}, as_node="generate_answer")
-
-
-
+        async for event in graph.astream_events(initial_input, config=config, version="v2"):
+            kind = event["event"]
+            
+            if kind == "on_chain_end" and event.get("name") == "retrieve":
+                output = event["data"].get("output")
+                if output and "relevant_ids" in output:
+                    yield {"type": "citations", "ids": output["relevant_ids"]}
+            
+            if kind == "on_chat_model_stream":
+                token = event["data"]["chunk"].content
+                if token:
+                    yield {"type": "token", "token": token}
+                    
+    yield {"type": "done"}

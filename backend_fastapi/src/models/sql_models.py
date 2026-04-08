@@ -28,6 +28,7 @@ class Movie(Base):
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True, index=True)
+    tmdb_id = Column(Integer, unique=True, index=True, nullable=True) # Unique ID from TMDB
     title = Column(String, unique=True, index=True) # "Matrix (1999)"
     thumbnail_url = Column(String, nullable=True)
     description = Column(Text, nullable=True)
