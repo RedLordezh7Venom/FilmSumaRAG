@@ -59,6 +59,19 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               sender: h.role === 'user' ? 'user' as const : 'ai' as const,
             }));
             setMessages(restored);
+
+            // If we didn't have a movieId from URL, grab it from history to fetch title
+            if (!movieId && history[0].movie_id) {
+              const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+              fetch(`https://api.themoviedb.org/3/movie/${history[0].movie_id}?api_key=${TMDB_API_KEY}`)
+                .then(r => r.json())
+                .then(data => {
+                  if (data.title) {
+                    const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
+                    setMovieTitle(`${data.title}${year}`);
+                  }
+                }).catch(() => {});
+            }
             return;
           }
         }

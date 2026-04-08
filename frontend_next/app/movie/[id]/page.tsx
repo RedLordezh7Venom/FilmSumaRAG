@@ -139,25 +139,25 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
 
              {/* Action Index */}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-12 border-t border-white/5">
-                <div 
-                  onClick={() => router.push(`/summary/${movie.id}`)}
-                  className="group p-10 glass-surface rounded-[2rem] border border-white/5 cursor-pointer hover:border-white/20 transition-all bg-gradient-to-br from-white/[0.02] to-transparent"
+                <Link 
+                  href={`/summary/${movie.id}`}
+                  className="block group p-10 glass-surface rounded-[2rem] border border-white/5 cursor-pointer hover:border-white/20 transition-all bg-gradient-to-br from-white/[0.02] to-transparent text-left"
                 >
                    <div className="text-criterion opacity-50 mb-6 flex items-center justify-between">
                       INITIATE_SUMMARY <FileText size={16} />
                    </div>
                    <h3 className="text-4xl font-black italic tracking-tighter text-white uppercase leading-none">Archival Breakdown</h3>
-                </div>
+                </Link>
 
-                <div 
+                <button 
                   onClick={handleDeepDive}
-                  className="group p-10 glass-surface rounded-[2rem] border border-white/5 cursor-pointer hover:border-white/20 transition-all bg-gradient-to-br from-white/[0.02] to-transparent"
+                  className="block w-full text-left group p-10 glass-surface rounded-[2rem] border border-white/5 cursor-pointer hover:border-white/20 transition-all bg-gradient-to-br from-white/[0.02] to-transparent"
                 >
                    <div className="text-criterion opacity-50 mb-6 flex items-center justify-between">
                       START_RESEARCH <MonitorPlay size={16} />
                    </div>
                    <h3 className="text-4xl font-black italic tracking-tighter text-white uppercase leading-none">Interactive Deep Dive</h3>
-                </div>
+                </button>
                 
                 <Link 
                   href={`/movie/${movie.id}/discussions`}

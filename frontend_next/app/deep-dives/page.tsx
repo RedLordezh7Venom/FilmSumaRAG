@@ -50,7 +50,26 @@ export default function DeepDivesIndex() {
                 existing.updated_at = new Date(msg.created_at).toLocaleString();
               }
             }
-            setSessions(Array.from(threadMap.values()));
+            const initialSessions = Array.from(threadMap.values());
+            setSessions(initialSessions);
+            
+            // Enrich with TMDB titles
+            const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+            const enriched = await Promise.all(
+              initialSessions.map(async (session) => {
+                 try {
+                   const res = await fetch(`https://api.themoviedb.org/3/movie/${session.movie_id}?api_key=${TMDB_API_KEY}`);
+                   if (res.ok) {
+                     const tmdbData = await res.json();
+                     if (tmdbData.title) {
+                        return { ...session, movie_title: tmdbData.title };
+                     }
+                   }
+                 } catch {}
+                 return session;
+              })
+            );
+            setSessions(enriched);
           }
         }
       } catch (err) {

@@ -22,6 +22,8 @@ export default function MovieDiscussionsPage({ params }: { params: Promise<{ id:
   const [newPostTitle, setNewPostTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyContent, setReplyContent] = useState("");
 
   useEffect(() => {
     const fetchMovieAndPosts = async () => {
@@ -70,6 +72,29 @@ export default function MovieDiscussionsPage({ params }: { params: Promise<{ id:
       }
     } catch (err) {
       console.error("Post error:", err);
+    }
+  };
+
+  const handleReply = async (postId: number) => {
+    if (!replyContent.trim()) return;
+    try {
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
+      const response = await fetch(`${primaryApiUrl}/discussions/threads/${postId}/replies`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          content: replyContent,
+          clerk_id: null
+        })
+      });
+      if (response.ok) {
+        // Ideally we'd map this reply into the local state, but for now just close the box
+        // To be fully reactive we handle it gracefully:
+        setReplyingTo(null);
+        setReplyContent("");
+      }
+    } catch (err) {
+      console.error("Reply error:", err);
     }
   };
 
@@ -156,7 +181,12 @@ export default function MovieDiscussionsPage({ params }: { params: Promise<{ id:
                         <span className="text-white font-black italic">Anonymous</span>
                         <span className="opacity-20">{new Date(post.created_at).toLocaleString()}</span>
                         <span className="text-white/40 hover:underline cursor-pointer">{post.post_number}</span>
-                        <span className="opacity-10 group-hover:opacity-100 transition-opacity ml-auto hover:text-white cursor-pointer">[ REPLY ]</span>
+                        <span 
+                          onClick={() => setReplyingTo(replyingTo === post.id ? null : post.id)} 
+                          className="opacity-10 group-hover:opacity-100 transition-opacity ml-auto hover:text-white cursor-pointer"
+                        >
+                          [ REPLY ]
+                        </span>
                      </div>
                      
                      <div className="space-y-6">
@@ -167,6 +197,35 @@ export default function MovieDiscussionsPage({ params }: { params: Promise<{ id:
                            {post.content}
                         </p>
                      </div>
+
+                     <AnimatePresence>
+                       {replyingTo === post.id && (
+                         <motion.div 
+                           initial={{ opacity: 0, height: 0 }}
+                           animate={{ opacity: 1, height: 'auto' }}
+                           exit={{ opacity: 0, height: 0 }}
+                           className="overflow-hidden mt-6"
+                         >
+                            <div className="pl-8 border-l border-white/10 space-y-4">
+                               <textarea 
+                                 placeholder="COMPOSE_REPLY..."
+                                 value={replyContent}
+                                 onChange={(e) => setReplyContent(e.target.value)}
+                                 className="w-full bg-white/[0.02] border border-white/5 p-4 rounded-xl text-white font-serif italic outline-none resize-none no-scrollbar focus:border-white/20 transition-all"
+                                 rows={3}
+                               />
+                               <div className="flex justify-end">
+                                  <button 
+                                    onClick={() => handleReply(post.id)}
+                                    className="bg-white/10 text-white hover:bg-white hover:text-black font-black text-[10px] tracking-widest px-8 py-3 rounded-lg transition-all"
+                                  >
+                                    SUBMIT
+                                  </button>
+                               </div>
+                            </div>
+                         </motion.div>
+                       )}
+                     </AnimatePresence>
                   </div>
                 ))}
              </div>
