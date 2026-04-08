@@ -23,6 +23,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [movieTitle, setMovieTitle] = useState<string>("Unknown Film");
+  const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch movie title from TMDB on load
@@ -106,7 +107,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           chat_id: msgId,
           rating: type === 'up' ? 1 : 0,
           downvote: type === 'down',
-          persona: "critic"
+          persona: persona
         })
       });
       if (!res.ok) {
@@ -141,7 +142,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           movie: movieTitle,
           question: userText,
           thread_id: threadId,
-          persona: "critic"
+          persona: persona
         })
       });
 
@@ -205,9 +206,23 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                 <h2 className="text-4xl font-black italic tracking-tighter text-white uppercase mt-1">Deep Dive Session</h2>
              </div>
           </div>
-          <div className="text-right">
-             <div className="text-criterion opacity-30 text-[9px]">THREAD_ID</div>
-             <div className="text-white font-mono text-xs font-bold">{threadId.substring(0,18)}...</div>
+          <div className="text-right flex flex-col items-end gap-3">
+             <div className="flex items-center gap-3 border border-white/5 rounded-full px-4 py-2 bg-white/[0.02]">
+                <span className="text-criterion opacity-50 text-[9px]">PERSONA</span>
+                <select 
+                  value={persona}
+                  onChange={(e) => setPersona(e.target.value as any)}
+                  className="bg-transparent text-white font-serif italic text-sm outline-none cursor-pointer appearance-none text-right hover:text-slate-300 transition-colors [&>option]:bg-[#0b0f17] [&>option]:font-sans [&>option]:not-italic [&>option]:text-xs"
+                >
+                  <option value="critic">The Critic</option>
+                  <option value="philosopher">The Philosopher</option>
+                  <option value="scene_creator">Scene Creator</option>
+                </select>
+             </div>
+             <div className="flex items-center gap-3">
+               <div className="text-criterion opacity-30 text-[9px]">THREAD_ID</div>
+               <div className="text-white font-mono text-[10px] font-bold opacity-50">{threadId.substring(0,18)}...</div>
+             </div>
           </div>
         </header>
 
