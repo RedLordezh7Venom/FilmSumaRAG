@@ -51,6 +51,7 @@ async def retrieve_context_node(state: RAGState) -> dict:
     from src.models.sql_models import Feedback, ChatHistory, SummaryCache, SummaryType, Movie
     db = SessionLocal()
     
+    from src.utils.logger import logger
     start_time = time.time()
     
     try:
@@ -59,12 +60,12 @@ async def retrieve_context_node(state: RAGState) -> dict:
             movie_record = db.query(Movie).filter(Movie.tmdb_id == tid).first()
             movie_name = movie_record.title if movie_record else f"ID:{tid}"
             
-            print(f"[RAG] Retrieving context for {movie_name}...")
+            logger.rag(f"Starting lookup for '{movie_name}' (TMDB:{tid})")
             
             # 2. Vector Search
             v_start = time.time()
             vector_results = vector_db.search_movie(tid, query_vector, n_results=k_per_movie * 2)
-            print(f"[RAG] Vector search took {time.time() - v_start:.3f}s")
+            logger.rag(f"Vector search found {len(vector_results)} chunks (Time: {time.time() - v_start:.3f}s)")
             
             # 3. Hybrid / BM25
             bm_start = time.time()
@@ -78,7 +79,7 @@ async def retrieve_context_node(state: RAGState) -> dict:
             # Check cache for tokenized corpus (Keyed by tmdb_id)
             tid_key = str(tid)
             if tid_key not in BM25_CACHE:
-                print(f"[RAG] Tokenizing corpus for {movie_name} (first time)...")
+                logger.rag(f"Tokenizing corpus for {movie_name} (first-time optimization)...")
                 BM25_CACHE[tid_key] = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
             
             tokenized_corpus = BM25_CACHE[tid_key]
@@ -86,10 +87,12 @@ async def retrieve_context_node(state: RAGState) -> dict:
             tokenized_query = word_tokenize(question.lower())
             bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k_per_movie * 2)
             bm25_results = [all_docs_data[i] for i in bm25_indices]
-            print(f"[RAG] BM25 calculation took {time.time() - bm_start:.3f}s")
+            logger.rag(f"BM25 ranker finished in {time.time() - bm_start:.3f}s")
             
             from src.core.active_learning import get_discredited_chunks, apply_penalties
             penalties = get_discredited_chunks(db, movie_record.id) if movie_record else {}
+            if penalties:
+                logger.active_learning(f"Applying penalties to {len(penalties)} discredited fragments.")
 
             ranks = {}
             id_to_text = {}
@@ -123,14 +126,15 @@ async def retrieve_context_node(state: RAGState) -> dict:
             if movie_record:
                 research_summary = db.query(SummaryCache).filter(
                     SummaryCache.movie_id == movie_record.id,
-                    SummaryCache.summary_type == SummaryType.VIDEO_ESSAY
+                    SummaryCache.summary_type == "video_essay"
                 ).first()
                 if research_summary:
+                    logger.rag(f"Injecting external research dossier for {movie_name}")
                     all_relevant_chunks.append(f"\n--- EXTERNAL RESEARCH: {movie_name} ---\n{research_summary.content}")
     finally:
         db.close()
 
-    print(f"[RAG] Total retrieval node execution: {time.time() - start_time:.3f}s")
+    logger.rag(f"Context assembly complete. Total retrieval time: {time.time() - start_time:.3f}s")
     return {
         "context": "\n\n".join(all_relevant_chunks),
         "relevant_ids": all_relevant_ids,
@@ -138,6 +142,7 @@ async def retrieve_context_node(state: RAGState) -> dict:
     }
 
 async def generate_answer_node(state: RAGState) -> dict:
+    from src.utils.logger import logger
     persona = state.get("persona", "critic")
     tmdb_ids = state["tmdb_ids"]
     context = state["context"]
@@ -161,8 +166,10 @@ async def generate_answer_node(state: RAGState) -> dict:
         HumanMessage(content=f"{prompt_content}\n\nQUESTION: {question}\nANSWER:")
     ]
     
-    print(f"[RAG] Starting LLM generation for persona: {persona}")
+    gen_start = time.time()
+    logger.agent(f"Generating {persona.upper()} response for '{display_title}'...")
     response = await llm.ainvoke(messages)
+    logger.agent(f"Generation finished in {time.time() - gen_start:.3f}s")
     return {"messages": [response]}
 
 def create_rag_graph(checkpointer=None):

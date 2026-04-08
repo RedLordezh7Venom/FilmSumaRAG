@@ -29,7 +29,8 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
         const titleWithYear = `${movie.title} (${releaseYear})`;
 
-        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+        // Use 127.0.0.1 specifically to avoid Windows localhost/IPv6 name resolution conflicts
+        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
 
         const response = await fetch(`${primaryApiUrl}/summarize`, {
           method: "POST",
