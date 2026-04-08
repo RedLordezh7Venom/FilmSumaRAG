@@ -28,6 +28,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [compareSearch, setCompareSearch] = useState("");
   const [compareResults, setCompareResults] = useState<any[]>([]);
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
+  const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch movie title from TMDB on load
@@ -120,11 +121,19 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isSending]);
 
-  const handleFeedback = async (msgId: number, type: 'up' | 'down') => {
-    // Optimistic UI update only — backend feedback requires clerk_id which
-    // may not be available for anonymous users. Silently skip the API call
-    // if it fails, but always update the UI.
+  const handleFeedbackClick = (msgId: number, type: 'up' | 'down') => {
+    if (type === 'down') {
+      setFeedbackDraft({ msgId, type: 'down', comment: '' });
+    } else {
+      submitFeedback(msgId, 'up', '');
+    }
+  };
+
+  const submitFeedback = async (msgId: number, type: 'up' | 'down', comment: string = '') => {
+    // Optimistic UI update only
     setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
+    if (type === 'down') setFeedbackDraft(null);
+
     try {
       const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
       const res = await fetch(`${primaryApiUrl}/feedback`, {
@@ -136,7 +145,8 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           chat_id: msgId,
           rating: type === 'up' ? 1 : 0,
           downvote: type === 'down',
-          persona: persona
+          persona: persona,
+          comment: comment
         })
       });
       if (!res.ok) {
@@ -318,19 +328,38 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                      </div>
                      
                      {m.text && (
-                       <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button 
-                            onClick={() => handleFeedback(m.id, 'up')}
-                            className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'up' ? 'text-white' : 'opacity-20 hover:opacity-100'}`}
-                          >
-                            <ThumbsUp size={12} /> VALIDATE_CONTEXT
-                          </button>
-                          <button 
-                            onClick={() => handleFeedback(m.id, 'down')}
-                            className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'down' ? 'text-red-500' : 'opacity-20 hover:opacity-100'}`}
-                          >
-                            <ThumbsDown size={12} /> DISCREDIT_CHUNK
-                          </button>
+                       <div className="flex flex-col gap-4">
+                         <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button 
+                              onClick={() => handleFeedbackClick(m.id, 'up')}
+                              className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'up' ? 'text-white' : 'opacity-20 hover:opacity-100'}`}
+                            >
+                              <ThumbsUp size={12} /> VALIDATE_CONTEXT
+                            </button>
+                            <button 
+                              onClick={() => handleFeedbackClick(m.id, 'down')}
+                              className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'down' ? 'text-red-500' : 'opacity-20 hover:opacity-100'}`}
+                            >
+                              <ThumbsDown size={12} /> DISCREDIT_CHUNK
+                            </button>
+                         </div>
+
+                         {feedbackDraft?.msgId === m.id && (
+                           <div className="p-5 border border-red-500/20 bg-red-500/5 rounded-2xl space-y-4 animate-in fade-in slide-in-from-top-2">
+                              <div className="text-[9px] text-red-500/50 uppercase font-black tracking-widest font-sans">Discredit Rationale</div>
+                              <textarea
+                                value={feedbackDraft.comment}
+                                onChange={e => setFeedbackDraft({...feedbackDraft, comment: e.target.value})}
+                                placeholder="Specify inaccuracies to penalize archive chunk..."
+                                className="w-full bg-transparent border-b border-red-500/20 text-white font-serif italic text-lg outline-none resize-none focus:border-red-500/50 transition-colors py-2 no-scrollbar"
+                                rows={2}
+                              />
+                              <div className="flex justify-end gap-6 pt-2">
+                                 <button onClick={() => setFeedbackDraft(null)} className="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white transition-colors">Abort</button>
+                                 <button onClick={() => submitFeedback(m.id, 'down', feedbackDraft.comment)} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-red-400 transition-colors">Submit Penalty</button>
+                              </div>
+                           </div>
+                         )}
                        </div>
                      )}
                    </div>

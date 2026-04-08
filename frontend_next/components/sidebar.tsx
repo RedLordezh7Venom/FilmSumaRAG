@@ -10,7 +10,8 @@ import {
   ArrowRight,
   MonitorPlay,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Youtube
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -24,6 +25,7 @@ export function Sidebar() {
     { label: "Discussions", icon: MessageSquare, path: "/boards", shortcut: "02" },
     { label: "Collection", icon: Bookmark, path: "/collection", shortcut: "03" },
     { label: "Deep Dives", icon: MonitorPlay, path: "/deep-dives", shortcut: "04" },
+    { label: "Video Essays", icon: Youtube, path: "/research", shortcut: "05" },
   ];
 
   return (
