@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink, X } from 'lucide-react';
 import { Typewriter } from "@/components/effects/typewriter";
 import Link from 'next/link';
 
@@ -40,6 +40,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [compareResults, setCompareResults] = useState<any[]>([]);
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
+  const [activeSource, setActiveSource] = useState<{msgId: number, sourceIdx: number} | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch movie title from TMDB on load
@@ -330,25 +331,53 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                     {m.citations && m.citations.length > 0 && m.text && (
                        <div className="flex flex-wrap gap-3 pt-2">
                           <div className="text-criterion opacity-20 text-[9px] w-full mb-1 uppercase tracking-widest">Supporting Archive Fragments:</div>
-                          {m.citations.map((cite, idx) => (
-                             <div key={idx} className="group/cite relative">
-                                <div className="px-3 py-1.5 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 transition-all cursor-crosshair flex items-center gap-2">
-                                   <ExternalLink size={10} className="text-criterion opacity-40" />
-                                   <span className="text-[10px] font-bold text-criterion tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
-                                </div>
-                                {/* Hover Preview */}
-                                <div className="absolute bottom-full left-0 mb-4 w-80 p-6 glass-surface border border-white/10 rounded-2xl shadow-2xl opacity-0 group-hover/cite:opacity-100 pointer-events-none transition-opacity z-50">
-                                   <div className="text-[9px] text-criterion opacity-30 mb-3 tracking-widest uppercase font-sans">Fragment Context [ID: {cite.id.split('_').pop()}]</div>
-                                   <div className="text-white font-serif italic text-sm leading-relaxed max-h-48 overflow-y-auto no-scrollbar">
-                                      "{cite.text.split('] ').pop()}"
+                          {m.citations.map((cite, idx) => {
+                             const isPinned = activeSource?.msgId === m.id && activeSource?.sourceIdx === idx;
+                             
+                             return (
+                                <div key={idx} className="group/cite relative">
+                                   <button 
+                                      onClick={() => setActiveSource(isPinned ? null : { msgId: m.id, sourceIdx: idx })}
+                                      className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-2 ${isPinned ? 'bg-indigo-600 border-indigo-400 text-white' : 'border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 text-criterion'}`}
+                                   >
+                                      <Zap size={10} className={isPinned ? 'fill-current' : 'opacity-40'} />
+                                      <span className="text-[10px] font-bold tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
+                                   </button>
+                                   
+                                   {/* Hover/Pinned Preview */}
+                                   <div className={`absolute bottom-full left-0 mb-4 w-96 p-6 bg-[#161b22] border-2 border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-300 z-50 transform 
+                                      ${isPinned ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-1 scale-95 pointer-events-none group-hover/cite:opacity-100 group-hover/cite:translate-y-0 group-hover/cite:scale-100'}`}
+                                   >
+                                      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+                                         <div className="text-[10px] text-criterion font-black tracking-[0.2em] uppercase">Fragment Context</div>
+                                         <button onClick={(e) => { e.stopPropagation(); setActiveSource(null); }} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                                            <X size={14} className="text-white/40" />
+                                         </button>
+                                      </div>
+                                      <div className="text-white font-serif italic text-base leading-relaxed max-h-60 overflow-y-auto pr-4 custom-scrollbar">
+                                         <span className="text-indigo-400 text-2xl leading-none mr-2 font-serif opacity-50">"</span>
+                                         {cite.text.split('] ').pop()}
+                                         <span className="text-indigo-400 text-2xl leading-none ml-1 font-serif opacity-50">"</span>
+                                      </div>
+                                      <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                                         <div className="flex gap-4">
+                                            <div className="flex flex-col">
+                                               <span className="text-[8px] text-white/20 uppercase tracking-tighter">Reliability</span>
+                                               <span className="text-[10px] text-green-500 font-bold">VERIFIED</span>
+                                            </div>
+                                            <div className="flex flex-col">
+                                               <span className="text-[8px] text-white/20 uppercase tracking-tighter">Source</span>
+                                               <span className="text-[10px] text-indigo-400 font-bold">TRANSCRIPT</span>
+                                            </div>
+                                         </div>
+                                         <div className="w-12 h-1 bg-white/5 rounded-full relative overflow-hidden">
+                                            <div className="absolute inset-0 bg-indigo-500 w-3/4 animate-pulse"></div>
+                                         </div>
+                                      </div>
                                    </div>
-                                   <div className="mt-4 pt-4 border-t border-white/5 text-[8px] text-criterion opacity-20 flex justify-between font-sans">
-                                      <span>SEMANTIC_WEIGHT: HIGH</span>
-                                      <span>VERIFIED_TRANSCRIPT</span>
-                                   </div>
                                 </div>
-                             </div>
-                          ))}
+                             );
+                          })}
                        </div>
                     )}
 
