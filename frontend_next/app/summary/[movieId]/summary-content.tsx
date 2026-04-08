@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
-import { Typewriter } from "@/components/effects/typewriter";
 
 interface SummaryContentProps {
   movieId: string;
@@ -30,16 +29,12 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
         const titleWithYear = `${movie.title} (${releaseYear})`;
 
-        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
+        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
 
         const response = await fetch(`${primaryApiUrl}/summarize`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            moviename: titleWithYear
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ moviename: titleWithYear }),
           signal: controller.signal
         });
 
@@ -47,6 +42,19 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
           throw new Error(`API failed with status: ${response.status}`);
         }
 
+        const contentType = response.headers.get("content-type") || "";
+        
+        // Backend returns JSON directly for cached summaries
+        if (contentType.includes("application/json")) {
+          const data = await response.json();
+          if (isMounted) {
+            setSummary(data.token || JSON.stringify(data));
+            setIsLoading(false);
+          }
+          return;
+        }
+
+        // SSE streaming for fresh summaries
         const reader = response.body?.getReader();
         if (!reader) {
           throw new Error("Response body is not readable");
@@ -54,7 +62,6 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
 
         const decoder = new TextDecoder();
         let currentSummary = "";
-        setIsLoading(false);
 
         while (true) {
           const { done, value } = await reader.read();
@@ -67,17 +74,19 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
             if (line.startsWith("data: ")) {
               const dataStr = line.slice(6).trim();
               if (dataStr === "[DONE]") {
+                if (isMounted) setIsLoading(false);
                 break;
               }
               try {
                 const data = JSON.parse(dataStr);
                 if (data.token) {
                   currentSummary += data.token;
-                  if (isMounted) setSummary(currentSummary);
+                  if (isMounted) {
+                    setSummary(currentSummary);
+                    setIsLoading(false);
+                  }
                 }
-              } catch (e) {
-                console.error("Error parsing SSE data:", e, dataStr);
-              }
+              } catch (e) { /* partial SSE line, skip */ }
             }
           }
         }
@@ -102,9 +111,9 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
   if (isLoading && !summary) {
     return (
       <div className="py-20 flex flex-col items-center justify-center gap-8">
-         <div className="w-1 h-20 bg-white/10" />
+         <div className="w-1 h-32 bg-white/10" />
          <div className="text-criterion opacity-20 animate-pulse uppercase tracking-[0.5em] text-[10px]">
-            SYNCHRONIZING_NARRATIVE_SUMMARY...
+            SYNCHRONIZING_COLLECTIVE_ARCHIVE...
          </div>
       </div>
     );
@@ -113,14 +122,9 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
   if (error && !summary) {
     return (
       <div className="p-12 border border-red-500/20 bg-red-500/5 rounded-[2rem] text-center space-y-6">
-        <div className="text-criterion text-red-500 uppercase">Archive_Access_Error</div>
-        <p className="text-slate-400 font-serif italic text-lg leading-relaxed">{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="text-criterion border-b border-white pb-1 hover:opacity-50 transition-opacity"
-        >
-          [ RE_INITIATE_FETCH ]
-        </button>
+        <div className="text-criterion text-red-500">Archive_Access_Error</div>
+        <p className="text-slate-400 font-serif italic text-lg">{error}</p>
+        <button onClick={() => window.location.reload()} className="text-criterion border-b border-white pb-1">[ RE_INITIATE ]</button>
       </div>
     );
   }
@@ -128,8 +132,44 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
   return (
     <div className="space-y-12">
       <div className="text-criterion opacity-20 text-[9px] mb-4">ARCHIVAL_BREAKDOWN_OUTPUT:</div>
-      <div className="text-3xl font-serif italic text-slate-300 leading-loose">
-        <Typewriter text={summary} speed={5} />
+      <div className="prose prose-invert max-w-none">
+        <ReactMarkdown
+          components={{
+            h1: ({ children }) => (
+              <h1 className="text-5xl font-black italic tracking-tighter text-white mb-8">{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className="text-3xl font-black italic tracking-tighter text-white mb-6 mt-12">{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className="text-2xl font-bold italic text-white mb-4 mt-8">{children}</h3>
+            ),
+            p: ({ children }) => (
+              <p className="mb-6 text-slate-300 font-serif italic text-xl leading-loose">{children}</p>
+            ),
+            ul: ({ children }) => (
+              <ul className="list-none pl-0 mb-6 text-slate-300 space-y-3">{children}</ul>
+            ),
+            li: ({ children }) => (
+              <li className="font-serif italic text-lg text-slate-400 flex gap-4 items-start">
+                <span className="text-white/20 text-criterion text-[9px] mt-2">▪</span>
+                <span>{children}</span>
+              </li>
+            ),
+            blockquote: ({ children }) => (
+              <blockquote className="border-l-2 border-white/10 pl-8 my-8 text-slate-500 font-serif italic text-2xl">
+                {children}
+              </blockquote>
+            ),
+            code: ({ children }) => (
+              <code className="bg-white/5 rounded px-2 py-1 text-sm text-white font-mono">
+                {children}
+              </code>
+            ),
+          }}
+        >
+          {summary}
+        </ReactMarkdown>
       </div>
       
       {isLoading && (

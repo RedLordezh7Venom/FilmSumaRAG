@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef, use } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Send, Loader2, Sparkles, User, Zap, MessageSquare, ThumbsUp, ThumbsDown, ArrowLeft } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft, ThumbsUp, ThumbsDown, Zap } from 'lucide-react';
 import { Typewriter } from "@/components/effects/typewriter";
 import Link from 'next/link';
 
@@ -14,38 +14,93 @@ interface Message {
 }
 
 export default function DeepDiveChatPage({ params }: { params: Promise<{ threadId: string }> }) {
-  const { threadId } = use(params);
+  const unwrappedParams = use(params);
+  const threadId = unwrappedParams.threadId;
+  const searchParams = useSearchParams();
+  const movieId = searchParams.get('movie');
   
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 0, text: `AUTHENTICATING_THREAD_SESSION... [ID: ${threadId.substring(0,8)}]`, sender: 'ai' }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [movieTitle, setMovieTitle] = useState<string>("Unknown Film");
   const scrollEndRef = useRef<HTMLDivElement>(null);
+
+  // Fetch movie title from TMDB on load
+  useEffect(() => {
+    const fetchMovieTitle = async () => {
+      if (!movieId) return;
+      try {
+        const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+        const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`);
+        const data = await res.json();
+        if (data.title) {
+          const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
+          setMovieTitle(`${data.title}${year}`);
+        }
+      } catch (err) {
+        console.error("Failed to fetch movie title:", err);
+      }
+    };
+    fetchMovieTitle();
+  }, [movieId]);
+
+  // Load existing thread history from backend
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+        const res = await fetch(`${primaryApiUrl}/history/chat-history/thread/${threadId}`);
+        if (res.ok) {
+          const history = await res.json();
+          if (Array.isArray(history) && history.length > 0) {
+            const restored: Message[] = history.map((h: any, i: number) => ({
+              id: h.id || i,
+              text: h.message,
+              sender: h.role === 'user' ? 'user' as const : 'ai' as const,
+            }));
+            setMessages(restored);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load thread history:", err);
+      }
+      // Default greeting if no history exists
+      setMessages([
+        { id: 0, text: `SESSION_INITIALIZED. [THREAD: ${threadId.substring(0,8)}] READY_FOR_INQUIRY.`, sender: 'ai' }
+      ]);
+    };
+    loadHistory();
+  }, [threadId]);
 
   useEffect(() => {
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isSending]);
 
   const handleFeedback = async (msgId: number, type: 'up' | 'down') => {
-    // Optimistic UI
+    // Optimistic UI update only — backend feedback requires clerk_id which
+    // may not be available for anonymous users. Silently skip the API call
+    // if it fails, but always update the UI.
     setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
-    
     try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
-      await fetch(`${primaryApiUrl}/feedback`, {
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      const res = await fetch(`${primaryApiUrl}/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          movie_title: "Active Movie",
+          clerk_id: "anonymous",
+          movie_title: movieTitle,
           chat_id: msgId,
           rating: type === 'up' ? 1 : 0,
           downvote: type === 'down',
           persona: "critic"
         })
       });
+      if (!res.ok) {
+        console.warn("Feedback not saved (user may not be logged in)");
+      }
     } catch (err) {
-      console.error("Feedback error:", err);
+      console.warn("Feedback endpoint unavailable:", err);
     }
   };
 
@@ -65,17 +120,22 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     setIsSending(true);
 
     try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
       const response = await fetch(`${primaryApiUrl}/deep_dive`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          movie: "Active Movie",
+          movie: movieTitle,
           question: userText,
           thread_id: threadId,
           persona: "critic"
         })
       });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.detail || `Server error: ${response.status}`);
+      }
 
       if (!response.body) throw new Error("No response body");
 
@@ -102,12 +162,15 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                   msg.id === aiMsgId ? { ...msg, text: fullText } : msg
                 ));
               }
-            } catch {}
+            } catch (e) { /* partial SSE line */ }
           }
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Chat error:", err);
+      setMessages(prev => prev.map(msg => 
+        msg.id === aiMsgId ? { ...msg, text: `ERROR: ${err.message || 'CONNECTION_INTERRUPTED'}` } : msg
+      ));
     } finally {
       setIsSending(false);
     }
@@ -117,17 +180,16 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     <div className="min-h-screen bg-[#0b0f17] flex flex-col items-center py-20 px-8 font-sans selection:bg-white selection:text-black">
       <div className="film-grain" />
       
-      <div className="max-w-5xl w-full flex flex-col h-[80vh] glass-surface rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10">
+      <div className="max-w-5xl w-full flex flex-col h-[80vh] glass-surface rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10 border border-white/5">
         
-        {/* Cinematic Header */}
         <header className="p-10 border-b border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-6">
-             <Link href="/" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+             <Link href={movieId ? `/movie/${movieId}` : '/'} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
                 <ArrowLeft size={20} />
              </Link>
              <div>
-                <div className="text-criterion opacity-30">Archive_Analysis / Secure_Stream /</div>
-                <h2 className="text-4xl font-black italic tracking-tighter text-white uppercase leading-none mt-1">Deep Dive Session</h2>
+                <div className="text-criterion opacity-30">Archive_Analysis / {movieTitle}</div>
+                <h2 className="text-4xl font-black italic tracking-tighter text-white uppercase mt-1">Deep Dive Session</h2>
              </div>
           </div>
           <div className="text-right">
@@ -136,38 +198,39 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           </div>
         </header>
 
-        {/* Messaging Area */}
-        <div className="flex-1 overflow-y-auto p-12 space-y-16 custom-scrollbar">
-          {messages.map((m, idx) => (
+        <div className="flex-1 overflow-y-auto p-12 space-y-16 custom-scrollbar no-scrollbar">
+          {messages.map((m) => (
             <div key={m.id} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] space-y-4 ${m.sender === 'user' ? 'text-right' : 'text-left'}`}>
+              <div className={`max-w-[85%] space-y-4 ${m.sender === 'user' ? 'text-right' : 'text-left'}`}>
                 
                 {m.sender === 'ai' ? (
-                   <div className="space-y-6">
+                   <div className="space-y-6 group">
                      <div className="text-criterion opacity-20 text-[9px]">CRITIC_RESPONSE</div>
                      <div className="text-white font-serif italic text-2xl leading-relaxed">
-                        <Typewriter text={m.text} speed={10} key={m.id} delay={idx === 0 ? 500 : 0} />
+                        {m.text ? <Typewriter text={m.text} speed={8} key={`${m.id}-${m.text.length}`} delay={0} /> : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>}
                      </div>
                      
-                     <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          onClick={() => handleFeedback(m.id, 'up')}
-                          className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'up' ? 'text-white' : 'opacity-20 hover:opacity-100'}`}
-                        >
-                          <ThumbsUp size={12} /> VALIDATE_CONTEXT
-                        </button>
-                        <button 
-                          onClick={() => handleFeedback(m.id, 'down')}
-                          className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'down' ? 'text-red-500' : 'opacity-20 hover:opacity-100'}`}
-                        >
-                          <ThumbsDown size={12} /> DISCREDIT_CHUNK
-                        </button>
-                     </div>
+                     {m.text && (
+                       <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => handleFeedback(m.id, 'up')}
+                            className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'up' ? 'text-white' : 'opacity-20 hover:opacity-100'}`}
+                          >
+                            <ThumbsUp size={12} /> VALIDATE_CONTEXT
+                          </button>
+                          <button 
+                            onClick={() => handleFeedback(m.id, 'down')}
+                            className={`flex items-center gap-2 text-[9px] text-criterion transition-colors ${m.feedback === 'down' ? 'text-red-500' : 'opacity-20 hover:opacity-100'}`}
+                          >
+                            <ThumbsDown size={12} /> DISCREDIT_CHUNK
+                          </button>
+                       </div>
+                     )}
                    </div>
                 ) : (
                   <div className="space-y-2">
                     <div className="text-criterion opacity-20 text-[9px]">RESEARCHER_INQUIRY</div>
-                    <div className="bg-white/5 border border-white/5 p-8 rounded-[2rem] rounded-tr-none text-white text-xl font-serif italic shadow-inner">
+                    <div className="bg-white/5 border border-white/10 p-8 rounded-[2rem] rounded-tr-none text-white text-xl font-serif italic shadow-2xl">
                         {m.text}
                     </div>
                   </div>
@@ -183,8 +246,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           <div ref={scrollEndRef} />
         </div>
 
-        {/* Clinical Input bar */}
-        <div className="p-10 border-t border-white/5">
+        <div className="p-10 border-t border-white/5 bg-[#0b0f17]/50 backdrop-blur-md">
            <div className="relative flex items-center">
               <input 
                 type="text"
@@ -197,7 +259,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               <button 
                 disabled={isSending || !inputMessage.trim()}
                 onClick={handleSendMessage}
-                className="absolute right-0 bottom-6 text-criterion hover:text-white transition-colors flex items-center gap-3"
+                className="absolute right-0 bottom-6 text-criterion hover:text-white disabled:opacity-10 transition-all flex items-center gap-3"
               >
                 INITIATE <Zap size={14} fill="currentColor" />
               </button>
