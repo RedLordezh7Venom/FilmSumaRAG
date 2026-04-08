@@ -22,7 +22,10 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [movieTitle, setMovieTitle] = useState<string>("Unknown Film");
+  const [movieTitles, setMovieTitles] = useState<string[]>([]);
+  const [isComparing, setIsComparing] = useState(false);
+  const [compareSearch, setCompareSearch] = useState("");
+  const [compareResults, setCompareResults] = useState<any[]>([]);
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +39,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         const data = await res.json();
         if (data.title) {
           const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
-          setMovieTitle(`${data.title}${year}`);
+          setMovieTitles([`${data.title}${year}`]);
         }
       } catch (err) {
         console.error("Failed to fetch movie title:", err);
@@ -44,6 +47,30 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     };
     fetchMovieTitle();
   }, [movieId]);
+
+  // TMDB Comparison Search
+  useEffect(() => {
+    if (compareSearch.trim().length < 3) {
+      setCompareResults([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(compareSearch)}`);
+        const data = await res.json();
+        setCompareResults(data.results?.slice(0, 4) || []);
+      } catch (err) {}
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [compareSearch]);
+
+  const addMovieToCompare = (title: string, date: string) => {
+    const year = date ? ` (${date.split('-')[0]})` : '';
+    setMovieTitles(prev => [...prev, `${title}${year}`]);
+    setIsComparing(false);
+    setCompareSearch("");
+  };
 
   // Load existing thread history from backend
   useEffect(() => {
@@ -69,7 +96,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                 .then(data => {
                   if (data.title) {
                     const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
-                    setMovieTitle(`${data.title}${year}`);
+                    setMovieTitles([`${data.title}${year}`]);
                   }
                 }).catch(() => {});
             }
@@ -103,7 +130,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clerk_id: "anonymous",
-          movie_title: movieTitle,
+          movie_title: movieTitles.join(" vs "),
           chat_id: msgId,
           rating: type === 'up' ? 1 : 0,
           downvote: type === 'down',
@@ -139,7 +166,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          movie: movieTitle,
+          movie: movieTitles,
           question: userText,
           thread_id: threadId,
           persona: persona
@@ -201,9 +228,40 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
              <Link href={movieId ? `/movie/${movieId}` : '/'} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
                 <ArrowLeft size={20} />
              </Link>
-             <div>
-                <div className="text-criterion opacity-30">Archive_Analysis / {movieTitle}</div>
+             <div className="relative">
+                <div className="text-criterion opacity-30 flex items-center gap-3">
+                   Archive_Analysis / {movieTitles.join(' vs ')}
+                   <button 
+                     onClick={() => setIsComparing(!isComparing)}
+                     className="hover:text-white px-2 py-1 rounded border border-white/10 text-[8px] transition-colors"
+                   >
+                     + COMPARE
+                   </button>
+                </div>
                 <h2 className="text-4xl font-black italic tracking-tighter text-white uppercase mt-1">Deep Dive Session</h2>
+                
+                {isComparing && (
+                   <div className="absolute top-full left-0 mt-2 p-4 w-96 glass-surface rounded-2xl shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 border border-white/10 bg-[#0b0f17]/90 backdrop-blur-xl">
+                      <input 
+                        type="text" 
+                        placeholder="Search TMDB for comparison..."
+                        value={compareSearch}
+                        onChange={e => setCompareSearch(e.target.value)}
+                        className="w-full bg-transparent border-b border-white/10 py-2 text-white font-serif outline-none focus:border-white transition-all text-sm mb-4"
+                      />
+                      <div className="space-y-2">
+                         {compareResults.map(m => (
+                            <div 
+                              key={m.id} 
+                              onClick={() => addMovieToCompare(m.title, m.release_date)}
+                              className="font-sans text-xs text-slate-300 hover:text-white cursor-pointer px-2 py-2 hover:bg-white/5 rounded transition-all"
+                            >
+                               {m.title} {m.release_date ? `(${m.release_date.split('-')[0]})` : ''}
+                            </div>
+                         ))}
+                      </div>
+                   </div>
+                )}
              </div>
           </div>
           <div className="text-right flex flex-col items-end gap-3">
