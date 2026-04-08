@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from typing import List
 from src.db.database import get_db
 from src.models import sql_models, schemas
@@ -13,6 +14,12 @@ def get_user_chat_history(clerk_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     
     return db.query(sql_models.ChatHistory).filter(sql_models.ChatHistory.user_id == db_user.id).order_by(sql_models.ChatHistory.created_at.desc()).all()
+
+@router.get("/chat-history/thread/all", response_model=List[schemas.ChatHistoryResponse])
+def get_all_threads(db: Session = Depends(get_db)):
+    """Return all chat messages across all threads, ordered by most recent first.
+    The frontend groups these by thread_id to build the session list."""
+    return db.query(sql_models.ChatHistory).order_by(sql_models.ChatHistory.created_at.desc()).limit(500).all()
 
 @router.get("/chat-history/thread/{thread_id}", response_model=List[schemas.ChatHistoryResponse])
 def get_thread_history(thread_id: str, db: Session = Depends(get_db)):
