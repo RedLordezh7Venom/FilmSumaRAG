@@ -48,7 +48,11 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
           `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}&language=en-US`
         );
         const data = await response.json();
-        setMovie(data);
+        if (response.ok) {
+          setMovie(data);
+        } else {
+          setMovie(null);
+        }
       } catch (error) {
         console.error('Error fetching movie details:', error);
       } finally {
@@ -108,7 +112,7 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
                    <div className="opacity-30 mb-2">SCORE / TMDB</div>
                    <div className="text-white text-3xl font-black italic flex items-center gap-3">
                       <Star size={24} fill="currentColor" strokeWidth={0} className="text-white" />
-                      {movie.vote_average.toFixed(1)}
+                      {movie.vote_average ? movie.vote_average.toFixed(1) : '—'}
                    </div>
                 </div>
                 <div>
