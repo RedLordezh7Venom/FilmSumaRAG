@@ -30,6 +30,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
+  const wsRef = useRef<WebSocket | null>(null);
 
   // Fetch movie title from TMDB on load
   useEffect(() => {
@@ -117,6 +118,58 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     loadHistory();
   }, [threadId]);
 
+  // WebSocket Connection Initialization
+  useEffect(() => {
+    if (!movieTitles[0] || !threadId) return;
+    
+    // Only connect if not already connected
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
+    const primaryMovie = encodeURIComponent(movieTitles[0]);
+    const wsUrl = (process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000").replace("http", "ws");
+    
+    const ws = new WebSocket(`${wsUrl}/ws/chat/${primaryMovie}/${threadId}`);
+    wsRef.current = ws;
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "error") {
+        setMessages(prev => {
+          const aiMsgId = prev[prev.length - 1]?.id || 0;
+          return prev.map(msg => msg.id === aiMsgId ? { ...msg, text: `ERROR: ${data.message}` } : msg);
+        });
+        setIsSending(false);
+      } else if (data.type === "citations") {
+        setMessages(prev => {
+          const aiMsgId = prev[prev.length - 1]?.id || 0;
+          return prev.map(msg => msg.id === aiMsgId ? { ...msg, citations: data.ids } : msg);
+        });
+      } else if (data.type === "token") {
+        setMessages(prev => {
+          const aiMsgId = prev[prev.length - 1]?.id || 0;
+          return prev.map(msg => msg.id === aiMsgId ? { ...msg, text: msg.text + data.token } : msg);
+        });
+      } else if (data.type === "done") {
+        setIsSending(false);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setIsSending(false);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket Closed.");
+    };
+
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
+  }, [movieTitles[0], threadId]);
+
   useEffect(() => {
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isSending]);
@@ -172,65 +225,19 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     setInputMessage("");
     setIsSending(true);
 
-    try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
-      const response = await fetch(`${primaryApiUrl}/deep_dive`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          movie: movieTitles,
-          question: userText,
-          thread_id: threadId,
-          persona: persona
-        })
-      });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.detail || `Server error: ${response.status}`);
-      }
-
-      if (!response.body) throw new Error("No response body");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const dataStr = line.slice(6).trim();
-            if (dataStr === "[DONE]") continue;
-            try {
-              const data = JSON.parse(dataStr);
-              if (data.type === "citations") {
-                setMessages(prev => prev.map(msg => 
-                  msg.id === aiMsgId ? { ...msg, citations: data.ids } : msg
-                ));
-              } else if (data.token) {
-                fullText += data.token;
-                setMessages(prev => prev.map(msg => 
-                  msg.id === aiMsgId ? { ...msg, text: fullText } : msg
-                ));
-              }
-            } catch (e) { /* partial SSE line */ }
-          }
-        }
-      }
-    } catch (err: any) {
-      console.error("Chat error:", err);
-      setMessages(prev => prev.map(msg => 
-        msg.id === aiMsgId ? { ...msg, text: `ERROR: ${err.message || 'CONNECTION_INTERRUPTED'}` } : msg
-      ));
-    } finally {
-      setIsSending(false);
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+       setMessages(prev => prev.map(msg => 
+         msg.id === aiMsgId ? { ...msg, text: `ERROR: Connection unavailable. Please refresh.` } : msg
+       ));
+       setIsSending(false);
+       return;
     }
+
+    wsRef.current.send(JSON.stringify({
+      question: userText,
+      persona: persona,
+      movies: movieTitles
+    }));
   };
 
   return (
