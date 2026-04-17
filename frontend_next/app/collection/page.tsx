@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { 
   Bookmark, FileText, MessageSquare, MonitorPlay, 
-  ArrowRight, CheckCircle2, Circle, ExternalLink 
+  ArrowRight, CheckCircle2, Circle, Search, LayoutGrid, List as ListIcon, BarChart
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -30,6 +30,8 @@ export default function CollectionPage() {
   const router = useRouter();
   const [movies, setMovies] = useState<CollectionMovie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -79,11 +81,15 @@ export default function CollectionPage() {
     fetchCollection();
   }, []);
 
-  const ActivityBadge = ({ active, label, icon: Icon }: { active: boolean; label: string; icon: any }) => (
+  const ActivityBadge = ({ active, label, count, icon: Icon }: { active: boolean; label: string; count?: number; icon: any }) => (
     <div className={`flex items-center gap-2 text-[10px] transition-all ${active ? 'text-white' : 'text-white/10'}`}>
-      {active ? <CheckCircle2 size={12} className="text-green-500" /> : <Circle size={12} />}
-      <span className="text-criterion">{label}</span>
+      {active ? <CheckCircle2 size={12} className="text-emerald-500" /> : <Circle size={12} />}
+      <span className="text-criterion tracking-widest">{label} {count !== undefined && count > 0 && `(${count})`}</span>
     </div>
+  );
+
+  const filteredMovies = movies.filter(m => 
+    (m.tmdb_title || m.title).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -107,26 +113,88 @@ export default function CollectionPage() {
           </div>
         </header>
 
-        {/* Collection Grid */}
+        {/* Toolbar: Search & View Toggle */}
+        <div className="flex items-center justify-between bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+          <div className="flex items-center gap-4 px-4 w-96 flex-1 max-w-sm">
+            <Search size={16} className="text-white/20" />
+            <input 
+              type="text" 
+              placeholder="Search your archive..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent border-none outline-none text-white font-serif italic w-full placeholder:text-white/20"
+            />
+          </div>
+          
+          <div className="flex items-center gap-2 px-4 border-l border-white/5">
+            <button 
+              onClick={() => setViewMode("list")}
+              className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-black' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+            >
+              <ListIcon size={16} />
+            </button>
+            <button 
+              onClick={() => setViewMode("grid")}
+              className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-black' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+            >
+              <LayoutGrid size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Collection Grid / List */}
         {loading ? (
-          <div className="py-20 text-center text-criterion opacity-20 animate-pulse">SYNCHRONIZING_PERSONAL_ARCHIVE...</div>
+          <div className="py-20 text-center text-criterion opacity-20 animate-pulse uppercase tracking-[0.3em]">Synchronizing_Personal_Archive...</div>
         ) : movies.length === 0 ? (
-          <div className="py-40 text-center space-y-8">
+          <div className="py-40 text-center space-y-8 glass-surface border border-white/5 rounded-3xl mx-12">
             <Bookmark size={48} className="mx-auto text-white/10" />
             <div className="space-y-2">
-              <h3 className="text-4xl font-black italic tracking-tighter text-white">EMPTY COLLECTION</h3>
-              <p className="text-slate-600 font-serif italic text-xl">Search for a film and generate a summary or start a deep dive to begin building your collection.</p>
+              <h3 className="text-4xl font-black italic tracking-tighter text-white">EMPTY ARCHIVE</h3>
+              <p className="text-slate-600 font-serif italic text-xl">Search for a film and generate a summary or start a deep dive to begin.</p>
             </div>
-            <Link href="/" className="inline-block pt-8">
-              <div className="text-criterion border-b border-white hover:opacity-50 transition-opacity pb-2">BACK_TO_ARCHIVE_SEARCH</div>
+            <Link href="/" className="inline-block pt-8 group">
+              <div className="text-criterion border-b border-white hover:border-emerald-500 hover:text-emerald-500 transition-all pb-2 tracking-[0.2em]">BACK_TO_SEARCH / INITIATE</div>
             </Link>
           </div>
+        ) : filteredMovies.length === 0 ? (
+          <div className="py-20 text-center text-white/30 font-serif italic text-xl">
+             No artifacts match your current filter parameters.
+          </div>
         ) : (
-          <div className="space-y-6">
-            {movies.map((movie) => (
+          <div className={viewMode === 'grid' ? "grid grid-cols-2 md:grid-cols-4 gap-6" : "space-y-4"}>
+            {filteredMovies.map((movie) => {
+              if (viewMode === 'grid') {
+                return (
+                  <div
+                    key={movie.id}
+                    onClick={() => router.push(`/movie/${movie.id}`)}
+                    className="group relative aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-white/40 transition-all duration-500"
+                  >
+                    {movie.tmdb_poster ? (
+                      <img src={`https://image.tmdb.org/t/p/w500${movie.tmdb_poster}`} className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
+                    ) : (
+                      <div className="w-full h-full bg-[#0a0f16] flex items-center justify-center p-6 text-center">
+                         <span className="font-black italic text-white/20 text-2xl uppercase break-words leading-none">{movie.tmdb_title || movie.title}</span>
+                      </div>
+                    )}
+                    
+                    {/* Grid Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#05080c] via-[#05080c]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end">
+                      <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 space-y-4">
+                        <h2 className="text-2xl font-black italic tracking-tighter text-white leading-none uppercase drop-shadow-xl">
+                          {(movie.tmdb_title || movie.title)}
+                        </h2>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // List Mode
+              return (
               <div
                 key={movie.id}
-                className="group grid grid-cols-12 gap-8 items-center p-8 hover:bg-white/[0.01] transition-all rounded-2xl border border-transparent hover:border-white/5 cursor-pointer"
+                className="group grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer"
                 onClick={() => router.push(`/movie/${movie.id}`)}
               >
                 {/* Poster */}
@@ -135,45 +203,45 @@ export default function CollectionPage() {
                     <img
                       src={`https://image.tmdb.org/t/p/w92${movie.tmdb_poster}`}
                       alt=""
-                      className="w-full rounded-lg archive-poster border border-white/5"
+                      className="w-full rounded-xl archive-poster border border-white/10 grayscale group-hover:grayscale-0 transition-all duration-500"
                     />
                   ) : (
-                    <div className="w-full aspect-[2/3] bg-white/[0.02] border border-white/5 rounded-lg flex items-center justify-center">
+                    <div className="w-full aspect-[2/3] bg-white/[0.02] border border-white/5 rounded-xl flex items-center justify-center">
                       <Bookmark size={16} className="text-white/10" />
                     </div>
                   )}
                 </div>
 
                 {/* Title + metadata */}
-                <div className="col-span-5 space-y-3">
+                <div className="col-span-4 space-y-3">
                   <div>
-                    <h2 className="text-3xl font-black italic tracking-tighter text-white leading-none group-hover:pl-2 transition-all duration-300">
+                    <h2 className="text-3xl font-black italic tracking-tighter text-white leading-none group-hover:translate-x-2 transition-transform duration-300">
                       {(movie.tmdb_title || movie.title).toUpperCase()}
                     </h2>
-                    <div className="flex gap-6 mt-2 text-criterion opacity-30 text-[9px]">
-                      <span>{movie.tmdb_year || "—"}</span>
-                      {movie.tmdb_rating && <span>TMDB: {movie.tmdb_rating.toFixed(1)}</span>}
-                      <span>DB_ID: {movie.id}</span>
+                    <div className="flex gap-4 mt-3 text-criterion opacity-40 text-[9px]">
+                      <span className="bg-white/10 px-2 py-0.5 rounded">{movie.tmdb_year || "—"}</span>
+                      {movie.tmdb_rating && <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded border border-emerald-500/20">TMDB {movie.tmdb_rating.toFixed(1)}</span>}
                     </div>
                   </div>
                 </div>
 
                 {/* Activity badges */}
-                <div className="col-span-4 flex gap-8">
-                  <ActivityBadge active={movie.has_summary} label="SUMMARIZED" icon={FileText} />
-                  <ActivityBadge active={movie.has_deep_dive} label={`DEEP_DIVE (${movie.deep_dive_threads})`} icon={MonitorPlay} />
-                  <ActivityBadge active={movie.has_discussions} label={`DISCUSSED (${movie.discussion_posts})`} icon={MessageSquare} />
+                <div className="col-span-4 flex justify-end gap-x-8 gap-y-3 flex-wrap pl-8">
+                  <ActivityBadge active={movie.has_summary} label="SUMMARY" icon={FileText} />
+                  <ActivityBadge active={movie.deep_dive_threads > 0} label="CHATS" count={movie.deep_dive_threads} icon={MonitorPlay} />
+                  <ActivityBadge active={movie.discussion_posts > 0} label="POSTS" count={movie.discussion_posts} icon={MessageSquare} />
                 </div>
 
                 {/* Action */}
-                <div className="col-span-2 text-right">
-                  <div className="flex items-center justify-end gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-criterion text-[9px]">OPEN_DASHBOARD</span>
-                    <ArrowRight size={14} className="text-white" />
+                <div className="col-span-3 text-right">
+                  <div className="flex items-center justify-end gap-4 opacity-10 group-hover:opacity-100 transition-opacity text-emerald-500">
+                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Open_Dash</span>
+                    <ArrowRight size={14} />
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>

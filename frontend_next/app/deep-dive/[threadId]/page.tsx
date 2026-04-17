@@ -5,23 +5,22 @@ import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink, X } from 'lucide-react';
 import Link from 'next/link';
 
-// Reveals completed text fast (4ms/char) — stable key = never restarts on re-render
-function SlowReveal({ text }: { text: string }) {
-  const [displayed, setDisplayed] = useState(0);
 
+
+// Mounts immediately but fades in after `delay` ms — for post-stream reveals
+function DelayedReveal({ children, delay = 1000 }: { children: React.ReactNode; delay?: number }) {
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    if (displayed >= text.length) return;
-    const t = setTimeout(() => setDisplayed(d => d + 1), 4);
+    const t = setTimeout(() => setVisible(true), delay);
     return () => clearTimeout(t);
-  }, [displayed, text.length]);
-
+  }, [delay]);
   return (
-    <span className="text-white font-serif italic text-2xl leading-relaxed whitespace-pre-wrap">
-      {text.slice(0, displayed)}
-      {displayed < text.length && (
-        <span className="inline-block w-0.5 h-5 bg-white/50 ml-0.5 animate-pulse align-middle" />
-      )}
-    </span>
+    <div
+      className="transition-opacity duration-500"
+      style={{ opacity: visible ? 1 : 0 }}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -31,12 +30,14 @@ interface Source {
   text: string;
 }
 
+
 interface Message {
   id: number;
   text: string;
   sender: 'user' | 'ai';
   feedback?: 'up' | 'down';
   citations?: Source[];
+  thoughts?: { tag: string; content: string }[];
 }
 
 interface MovieIdentity {
@@ -50,7 +51,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const searchParams = useSearchParams();
   const movieIdStr = searchParams.get('movie');
   const movieId = movieIdStr ? parseInt(movieIdStr) : null;
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -59,9 +60,10 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [compareSearch, setCompareSearch] = useState("");
   const [compareResults, setCompareResults] = useState<any[]>([]);
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
-  const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
-  const [activeSource, setActiveSource] = useState<{msgId: number, sourceIdx: number} | null>(null);
+  const [feedbackDraft, setFeedbackDraft] = useState<{ msgId: number, type: 'up' | 'down', comment: string } | null>(null);
+  const [activeSource, setActiveSource] = useState<{ msgId: number, sourceIdx: number } | null>(null);
   const [streamingMsgId, setStreamingMsgId] = useState<number | null>(null);
+  const [activeThinker, setActiveThinker] = useState<number | null>(null); // msgId of open thoughts panel
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch movie title from TMDB on load
@@ -74,7 +76,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         const data = await res.json();
         if (data.title) {
           const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
-          setMovieList([{id: movieId, title: `${data.title}${year}`}]);
+          setMovieList([{ id: movieId, title: `${data.title}${year}` }]);
         }
       } catch (err) {
         console.error("Failed to fetch movie title:", err);
@@ -95,7 +97,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(compareSearch)}`);
         const data = await res.json();
         setCompareResults(data.results?.slice(0, 5) || []);
-      } catch (err) {}
+      } catch (err) { }
     }, 500);
     return () => clearTimeout(timer);
   }, [compareSearch]);
@@ -134,7 +136,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                     const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
                     setMovieList([{ id: history[0].movie_id, title: `${data.title}${year}` }]);
                   }
-                }).catch(() => {});
+                }).catch(() => { });
             }
             return;
           }
@@ -208,7 +210,11 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
             if (dataStr === "[DONE]") continue;
             try {
               const data = JSON.parse(dataStr);
-              if (data.type === "citations") {
+              if (data.type === "thoughts") {
+                setMessages(prev => prev.map(msg =>
+                  msg.id === aiMsgId ? { ...msg, thoughts: data.thoughts } : msg
+                ));
+              } else if (data.type === "citations") {
                 setMessages(prev => prev.map(msg =>
                   msg.id === aiMsgId ? { ...msg, citations: data.sources } : msg
                 ));
@@ -348,67 +354,101 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                 {m.sender === 'ai' ? (
                   <div className="space-y-6 group">
                     <div className="text-criterion opacity-20 text-[9px]">{personaLabel}_RESPONSE</div>
-                    <div className="text-white font-serif italic text-2xl leading-relaxed">
+                    <div className="text-white font-serif italic text-2xl leading-relaxed whitespace-pre-wrap">
                       {m.text
-                        ? streamingMsgId === m.id
-                          ? <span className="text-white font-serif italic text-2xl leading-relaxed whitespace-pre-wrap">{m.text}</span>
-                          : <SlowReveal key={m.id} text={m.text} />
+                        ? m.text
                         : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>
                       }
                     </div>
 
-                    {/* Rich Citations */}
-                    {m.citations && m.citations.length > 0 && m.text && (
-                       <div className="flex flex-wrap gap-3 pt-2">
+                    {/* Rich Citations — shown 1s after generation completes */}
+                    {m.citations && m.citations.length > 0 && m.text && streamingMsgId !== m.id && (
+                      <DelayedReveal delay={1000}>
+                        <div className="flex flex-wrap gap-3 pt-2">
                           <div className="text-criterion opacity-20 text-[9px] w-full mb-1 uppercase tracking-widest">Supporting Archive Fragments:</div>
                           {m.citations.map((cite, idx) => {
-                             const isPinned = activeSource?.msgId === m.id && activeSource?.sourceIdx === idx;
-                             
-                             return (
-                                <div key={idx} className="group/cite relative">
-                                   <button 
-                                      onClick={() => setActiveSource(isPinned ? null : { msgId: m.id, sourceIdx: idx })}
-                                      className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-2 ${isPinned ? 'bg-indigo-600 border-indigo-400 text-white' : 'border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 text-criterion'}`}
-                                   >
-                                      <Zap size={10} className={isPinned ? 'fill-current' : 'opacity-40'} />
-                                      <span className="text-[10px] font-bold tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
-                                   </button>
-                                   
-                                   {/* Hover/Pinned Preview */}
-                                   <div className={`absolute bottom-full left-0 mb-4 w-96 p-6 bg-[#161b22] border-2 border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-300 z-50 transform 
+                            const isPinned = activeSource?.msgId === m.id && activeSource?.sourceIdx === idx;
+
+                            return (
+                              <div key={idx} className="group/cite relative">
+                                <button
+                                  onClick={() => setActiveSource(isPinned ? null : { msgId: m.id, sourceIdx: idx })}
+                                  className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-2 ${isPinned ? 'bg-indigo-600 border-indigo-400 text-white' : 'border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 text-criterion'}`}
+                                >
+                                  <Zap size={10} className={isPinned ? 'fill-current' : 'opacity-40'} />
+                                  <span className="text-[10px] font-bold tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
+                                </button>
+
+                              {/* Hover/Pinned Preview */}
+                              <div className={`absolute bottom-full left-0 mb-4 w-96 p-6 bg-[#161b22] border-2 border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-300 z-50 transform 
                                       ${isPinned ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-1 scale-95 pointer-events-none group-hover/cite:opacity-100 group-hover/cite:translate-y-0 group-hover/cite:scale-100'}`}
-                                   >
-                                      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                                         <div className="text-[10px] text-criterion font-black tracking-[0.2em] uppercase">Fragment Context</div>
-                                         <button onClick={(e) => { e.stopPropagation(); setActiveSource(null); }} className="p-1 hover:bg-white/5 rounded-full transition-colors">
-                                            <X size={14} className="text-white/40" />
-                                         </button>
-                                      </div>
-                                      <div className="text-white font-serif italic text-base leading-relaxed max-h-60 overflow-y-auto pr-4 custom-scrollbar">
-                                         <span className="text-indigo-400 text-2xl leading-none mr-2 font-serif opacity-50">"</span>
-                                         {cite.text.split('] ').pop()}
-                                         <span className="text-indigo-400 text-2xl leading-none ml-1 font-serif opacity-50">"</span>
-                                      </div>
-                                      <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                                         <div className="flex gap-4">
-                                            <div className="flex flex-col">
-                                               <span className="text-[8px] text-white/20 uppercase tracking-tighter">Reliability</span>
-                                               <span className="text-[10px] text-green-500 font-bold">VERIFIED</span>
-                                            </div>
-                                            <div className="flex flex-col">
-                                               <span className="text-[8px] text-white/20 uppercase tracking-tighter">Source</span>
-                                               <span className="text-[10px] text-indigo-400 font-bold">TRANSCRIPT</span>
-                                            </div>
-                                         </div>
-                                         <div className="w-12 h-1 bg-white/5 rounded-full relative overflow-hidden">
-                                            <div className="absolute inset-0 bg-indigo-500 w-3/4 animate-pulse"></div>
-                                         </div>
-                                      </div>
-                                   </div>
+                              >
+                                <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+                                  <div className="text-[10px] text-criterion font-black tracking-[0.2em] uppercase">Fragment Context</div>
+                                  <button onClick={(e) => { e.stopPropagation(); setActiveSource(null); }} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                                    <X size={14} className="text-white/40" />
+                                  </button>
                                 </div>
-                             );
-                          })}
-                       </div>
+                                <div className="text-white font-serif italic text-base leading-relaxed max-h-60 overflow-y-auto pr-4 custom-scrollbar">
+                                  <span className="text-indigo-400 text-2xl leading-none mr-2 font-serif opacity-50">"</span>
+                                  {cite.text.split('] ').pop()}
+                                  <span className="text-indigo-400 text-2xl leading-none ml-1 font-serif opacity-50">"</span>
+                                </div>
+                                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                                  <div className="flex gap-4">
+                                    <div className="flex flex-col">
+                                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Reliability</span>
+                                      <span className="text-[10px] text-green-500 font-bold">VERIFIED</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Source</span>
+                                      <span className="text-[10px] text-indigo-400 font-bold">TRANSCRIPT</span>
+                                    </div>
+                                  </div>
+                                  <div className="w-12 h-1 bg-white/5 rounded-full relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-indigo-500 w-3/4 animate-pulse"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                        </div>
+                      </DelayedReveal>
+                    )}
+
+                    {/* Model Thoughts — toggleable panel */}
+                    {m.thoughts && m.thoughts.length > 0 && m.text && (
+                      <div className="pt-2">
+                        <button
+                          onClick={() => setActiveThinker(activeThinker === m.id ? null : m.id)}
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-[10px] font-bold tracking-widest uppercase ${activeThinker === m.id
+                              ? 'bg-amber-600/20 border-amber-500/40 text-amber-400'
+                              : 'border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 text-criterion'
+                            }`}
+                        >
+                          <span className="text-[10px]">⚡</span>
+                          MODEL THOUGHTS
+                          <span className="font-mono opacity-50">({m.thoughts.length})</span>
+                        </button>
+
+                        {activeThinker === m.id && (
+                          <div className="mt-4 p-6 bg-[#161b22] border border-amber-500/20 rounded-2xl shadow-2xl space-y-5">
+                            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                              <div className="text-[10px] text-amber-400 font-black tracking-[0.2em] uppercase">Internal Reasoning Chain</div>
+                              <button onClick={() => setActiveThinker(null)} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                                <X size={14} className="text-white/40" />
+                              </button>
+                            </div>
+                            {m.thoughts.map((t, ti) => (
+                              <div key={ti} className="space-y-2">
+                                <div className="text-[9px] font-mono tracking-widest text-amber-500/60 uppercase">[{t.tag}]</div>
+                                <p className="text-slate-400 font-serif italic text-sm leading-relaxed">{t.content}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     )}
 
                     {m.text && (
