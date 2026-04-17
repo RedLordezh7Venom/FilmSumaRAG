@@ -170,9 +170,13 @@ async def generate_answer_node(state: RAGState, config: RunnableConfig) -> dict:
     
     gen_start = time.time()
     logger.agent(f"Generating {persona.upper()} response for '{display_title}'...")
-    response = await llm.ainvoke(messages, config)
+    # Use astream so each token fires on_chat_model_stream in astream_events
+    full_content = ""
+    async for chunk in llm.astream(messages, config):
+        if chunk.content:
+            full_content += chunk.content
     logger.agent(f"Generation finished in {time.time() - gen_start:.3f}s")
-    return {"messages": [response]}
+    return {"messages": [AIMessage(content=full_content)]}
 
 def create_rag_graph(checkpointer=None):
     workflow = StateGraph(RAGState)

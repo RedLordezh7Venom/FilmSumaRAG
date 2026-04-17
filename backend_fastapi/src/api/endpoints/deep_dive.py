@@ -119,6 +119,8 @@ async def deep_dive_chat(
                     if item["type"] == "token":
                         token = item["token"]
                         full_answer += token
+                        import asyncio
+                        await asyncio.sleep(0.05)
                         yield f"data: {json.dumps({'token': token})}\n\n"
                     if item["type"] == "done":
                         break
