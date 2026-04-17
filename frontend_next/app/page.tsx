@@ -78,11 +78,11 @@ export default function Home() {
   return (
     <div className="cinematic-canvas font-sans selection:bg-white selection:text-black">
       <div className="film-grain" />
-      
+
       {/* Background Layer: Dynamic Backdrop */}
       <AnimatePresence mode="wait">
         {movie && (
-          <motion.div 
+          <motion.div
             key={movie.backdrop_path}
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.15 }}
@@ -90,8 +90,8 @@ export default function Home() {
             transition={{ duration: 2 }}
             className="absolute inset-0 z-0"
           >
-            <img 
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} 
+            <img
+              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
               className="w-full h-full object-cover grayscale"
               alt=""
             />
@@ -102,7 +102,7 @@ export default function Home() {
 
       <div className="relative z-10 container mx-auto px-12 h-screen flex items-center">
         <div className="grid grid-cols-12 gap-24 w-full">
-          
+
           {/* Landing / Search Section */}
           <div className="col-span-12 lg:col-span-5 space-y-16">
             <header className="space-y-6">
@@ -113,7 +113,7 @@ export default function Home() {
             </header>
 
             <div className="space-y-12">
-               <div className="relative group max-w-md">
+              <div className="relative group max-w-md">
                 <input
                   type="text"
                   placeholder="SEARCH ARCHIVES..."
@@ -132,7 +132,7 @@ export default function Home() {
                 {/* Suggestions Ledger Style */}
                 <AnimatePresence>
                   {suggestions.length > 0 && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
@@ -158,11 +158,11 @@ export default function Home() {
 
               {!movie && !loading && (
                 <div className="space-y-4 max-w-sm">
-                   <p className="font-serif italic text-2xl text-slate-500 leading-tight">
+                  <p className="font-serif italic text-2xl text-slate-500 leading-tight">
                     "Every film is a journey that deserves a deep, analytical entry."
                   </p>
                   <Link href="/browse" className="text-criterion hover:text-white transition-colors block pt-4">
-                    [ BROWSE ALL BOARDS ]
+                    [ BROWSE ARCHIVE ]
                   </Link>
                 </div>
               )}
@@ -172,50 +172,50 @@ export default function Home() {
           {/* Result / Dashboard Card Section */}
           <div className="col-span-12 lg:col-span-7 flex items-center justify-center relative">
             {loading ? (
-                <div className="flex flex-col items-center gap-8 animate-pulse">
-                   <div className="w-1 h-32 bg-white/10" />
-                   <div className="text-criterion">INDEXING_NARRATIVE...</div>
-                </div>
+              <div className="flex flex-col items-center gap-8 animate-pulse">
+                <div className="w-1 h-32 bg-white/10" />
+                <div className="text-criterion">INDEXING_NARRATIVE...</div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {movie && (
-                  <motion.div 
+                  <motion.div
                     key={movie.id}
                     initial={{ opacity: 0, scale: 0.98, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 1.02, x: -20 }}
                     className="w-full glass-surface p-12 rounded-[2rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/5 flex gap-12"
                   >
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       className="w-64 aspect-[2/3] object-cover rounded-2xl shadow-2xl archive-poster"
                       alt={movie.title}
                     />
                     <div className="flex flex-col justify-between py-2">
-                       <div className="space-y-8">
-                         <div className="space-y-2">
-                            <div className="text-criterion opacity-50">RELEASED / {new Date(movie.release_date).getFullYear()}</div>
-                            <h2 className="text-7xl font-black italic tracking-tighter text-white leading-none">
-                              {movie.title}
-                            </h2>
-                         </div>
-                         <p className="text-xl text-slate-400 font-serif italic leading-relaxed max-w-md script-reveal">
-                           "{movie.overview}"
-                         </p>
-                       </div>
+                      <div className="space-y-8">
+                        <div className="space-y-2">
+                          <div className="text-criterion opacity-50">RELEASED / {new Date(movie.release_date).getFullYear()}</div>
+                          <h2 className="text-7xl font-black italic tracking-tighter text-white leading-none">
+                            {movie.title}
+                          </h2>
+                        </div>
+                        <p className="text-xl text-slate-400 font-serif italic leading-relaxed max-w-md script-reveal">
+                          "{movie.overview}"
+                        </p>
+                      </div>
 
-                       <div className="flex gap-8">
-                          <Link href={`/movie/${movie.id}`} className="group">
-                             <div className="text-criterion group-hover:text-white transition-colors flex items-center gap-4">
-                                DASHBOARD <ArrowRight size={14} />
-                             </div>
-                          </Link>
-                          <Link href={`/deep-dive/${movie.id}`} className="group">
-                             <div className="text-criterion group-hover:text-white transition-colors flex items-center gap-4">
-                                DEEP DIVE <ArrowRight size={14} />
-                             </div>
-                          </Link>
-                       </div>
+                      <div className="flex gap-8">
+                        <Link href={`/movie/${movie.id}`} className="group">
+                          <div className="text-criterion group-hover:text-white transition-colors flex items-center gap-4">
+                            DASHBOARD <ArrowRight size={14} />
+                          </div>
+                        </Link>
+                        <Link href={`/deep-dive/${movie.id}`} className="group">
+                          <div className="text-criterion group-hover:text-white transition-colors flex items-center gap-4">
+                            DEEP DIVE <ArrowRight size={14} />
+                          </div>
+                        </Link>
+                      </div>
                     </div>
                   </motion.div>
                 )}
