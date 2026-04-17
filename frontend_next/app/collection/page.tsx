@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { 
   Bookmark, FileText, MessageSquare, MonitorPlay, 
-  ArrowRight, CheckCircle2, Circle, Search, LayoutGrid, List as ListIcon, BarChart
+  ArrowRight, CheckCircle2, Circle, Search, LayoutGrid, List as ListIcon, BarChart,
+  Download, CheckSquare, Square, Archive, Trash2, Loader2
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -33,6 +34,10 @@ export default function CollectionPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [activeFilter, setActiveFilter] = useState<"all" | "summary" | "chats" | "posts">("all");
+  
+  // Batch & Export State
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -82,6 +87,36 @@ export default function CollectionPage() {
     fetchCollection();
   }, []);
 
+  const toggleSelection = (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedIds(next);
+  };
+
+  const handleExportArchive = async () => {
+    setIsExporting(true);
+    // Mocking export generation delay
+    await new Promise(r => setTimeout(r, 2000));
+    const exportData = JSON.stringify(movies, null, 2);
+    const blob = new Blob([exportData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `FilmSuma_Archive_Report_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setIsExporting(false);
+  };
+
+  const handleBatchRemove = () => {
+    setMovies(prev => prev.filter(m => !selectedIds.has(m.id)));
+    setSelectedIds(new Set());
+  };
+
   const ActivityBadge = ({ active, label, count, icon: Icon, href }: { active: boolean; label: string; count?: number; icon: any; href?: string }) => {
     const badge = (
       <div className={`flex items-center gap-2 text-[10px] transition-all ${active ? (href ? 'text-white hover:text-emerald-400 group/badge' : 'text-white') : 'text-white/10'}`}>
@@ -119,9 +154,20 @@ export default function CollectionPage() {
               Every film you've touched leaves a trace. Summaries, deep dives, and discussions — all indexed here.
             </p>
           </div>
-          <div className="text-right space-y-2">
-            <div className="text-white font-mono text-4xl">{movies.length}</div>
-            <div className="text-criterion opacity-30 text-[9px]">FILMS_IN_ARCHIVE</div>
+          <div className="text-right space-y-4 flex flex-col items-end">
+            <div className="space-y-2">
+               <div className="text-white font-mono text-4xl">{movies.length}</div>
+               <div className="text-criterion opacity-30 text-[9px]">FILMS_IN_ARCHIVE</div>
+            </div>
+            
+            <button 
+               onClick={handleExportArchive}
+               disabled={isExporting || movies.length === 0}
+               className="flex items-center gap-2 px-4 py-3 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-xl transition-all font-bold tracking-widest text-[9px] uppercase disabled:opacity-50"
+            >
+               {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+               {isExporting ? "PACKAGING_REPORT..." : "EXPORT_ARCHIVE"}
+            </button>
           </div>
         </header>
 
@@ -198,12 +244,20 @@ export default function CollectionPage() {
           <div className={viewMode === 'grid' ? "grid grid-cols-2 md:grid-cols-4 gap-6" : "space-y-4"}>
             {filteredMovies.map((movie) => {
               if (viewMode === 'grid') {
+                const isSelected = selectedIds.has(movie.id);
                 return (
                   <div
                     key={movie.id}
                     onClick={() => router.push(`/movie/${movie.id}`)}
-                    className="group relative aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-white/40 transition-all duration-500"
+                    className={`group relative aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/50 scale-[0.98]' : 'border-white/10 hover:border-white/40'}`}
                   >
+                    {/* Grid Checkbox */}
+                    <button 
+                      onClick={(e) => toggleSelection(e, movie.id)}
+                      className={`absolute top-4 right-4 z-20 p-1.5 rounded-md transition-all ${isSelected ? 'bg-emerald-500 text-white opacity-100' : 'bg-black/40 text-white/40 opacity-0 group-hover:opacity-100 hover:text-white'}`}
+                    >
+                      {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
+                    </button>
                     {movie.tmdb_poster ? (
                       <img src={`https://image.tmdb.org/t/p/w500${movie.tmdb_poster}`} className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
                     ) : (
@@ -225,12 +279,23 @@ export default function CollectionPage() {
               }
 
               // List Mode
+              const isSelected = selectedIds.has(movie.id);
               return (
               <div
                 key={movie.id}
-                className="group relative grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer overflow-hidden"
+                className={`group relative grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border cursor-pointer overflow-hidden ${isSelected ? 'border-emerald-500/50 bg-emerald-500/[0.03]' : 'border-white/5 hover:border-white/20'}`}
                 onClick={() => router.push(`/movie/${movie.id}`)}
               >
+                {/* List Checkbox (Absolute Left) */}
+                <div 
+                   onClick={(e) => toggleSelection(e, movie.id)}
+                   className="absolute left-6 h-full flex items-center justify-center z-20 w-8"
+                >
+                   <button className={`transition-all ${isSelected ? 'text-emerald-500' : 'text-white/20 group-hover:text-white/60'}`}>
+                      {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
+                   </button>
+                </div>
+
                 {/* Hover Backdrop Blur */}
                 {movie.tmdb_poster && (
                    <div 
@@ -245,7 +310,7 @@ export default function CollectionPage() {
                 )}
                 
                 {/* Poster */}
-                <div className="col-span-1 relative z-10">
+                <div className="col-span-1 relative z-10 ml-8">
                   {movie.tmdb_poster ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w92${movie.tmdb_poster}`}
@@ -292,6 +357,40 @@ export default function CollectionPage() {
           </div>
         )}
       </div>
+
+      {/* Floating Batch Actions Toolbar */}
+      {selectedIds.size > 0 && (
+         <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-300">
+            <div className="bg-[#161b22] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] rounded-2xl flex items-center p-2 pr-4 gap-4">
+               <div className="px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-xl font-mono text-[10px] font-bold">
+                  {selectedIds.size} SELECTED
+               </div>
+               
+               <div className="flex gap-2 border-l border-white/5 pl-4">
+                  <button 
+                     onClick={handleBatchRemove}
+                     className="flex items-center gap-2 px-4 py-2 text-[10px] uppercase font-bold tracking-widest text-criterion hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                  >
+                     <Archive size={14} /> Hide From Ledger
+                  </button>
+                  <button 
+                     onClick={handleBatchRemove}
+                     className="flex items-center gap-2 px-4 py-2 text-[10px] uppercase font-bold tracking-widest text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
+                  >
+                     <Trash2 size={14} /> Delete Data
+                  </button>
+               </div>
+               
+               <button 
+                  onClick={() => setSelectedIds(new Set())}
+                  className="ml-2 text-criterion hover:text-white px-2 py-1 uppercase text-[8px] tracking-widest"
+               >
+                  CANCEL
+               </button>
+            </div>
+         </div>
+      )}
+
     </div>
   );
 }
