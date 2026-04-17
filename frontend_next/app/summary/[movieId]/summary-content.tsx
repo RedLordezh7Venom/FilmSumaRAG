@@ -1,17 +1,148 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from 'react-markdown';
+import { ThumbsUp, ThumbsDown, Send } from "lucide-react";
 
 interface SummaryContentProps {
   movieId: string;
   length: number;
 }
 
+// --- Warm-up preamble: shown while backend fetches subtitles ---
+const WARMUP_LINES = [
+  "Accessing archival transcript database...",
+  "Cross-referencing dialogue signatures...",
+  "Initializing narrative extraction engine...",
+];
+
+function usePreambleTypewriter(active: boolean) {
+  const [text, setText] = useState("");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+
+  useEffect(() => {
+    if (!active) { setText(""); return; }
+    if (lineIndex >= WARMUP_LINES.length) return;
+
+    const currentLine = WARMUP_LINES[lineIndex];
+    if (charIndex < currentLine.length) {
+      const t = setTimeout(() => {
+        setText(prev => prev + currentLine[charIndex]);
+        setCharIndex(c => c + 1);
+      }, 38); // ~38ms per char = slow, readable
+      return () => clearTimeout(t);
+    } else {
+      // Pause at end of line, then move to next
+      const t = setTimeout(() => {
+        setText(prev => prev + "\n");
+        setLineIndex(l => l + 1);
+        setCharIndex(0);
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [active, charIndex, lineIndex]);
+
+  return text;
+}
+
+// --- Feedback Bar ---
+function FeedbackBar({ movieId }: { movieId: string }) {
+  const [rating, setRating] = useState<"up" | "down" | null>(null);
+  const [showComment, setShowComment] = useState(false);
+  const [comment, setComment] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleRate = (r: "up" | "down") => {
+    setRating(r);
+    if (r === "down") setShowComment(true);
+    else submitFeedback(r, "");
+  };
+
+  const submitFeedback = async (r: "up" | "down", c: string) => {
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
+      await fetch(`${apiUrl}/feedback/rate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating: r === "up" ? 5 : 1,
+          comment: c || null,
+          persona: "summary",
+        }),
+      });
+      setSubmitted(true);
+      setShowComment(false);
+    } catch (e) {
+      // Silently fail—feedback is non-critical
+      setSubmitted(true);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div className="flex items-center gap-3 pt-16 pb-8 opacity-40">
+        <span className="text-criterion text-[9px] tracking-widest">ARCHIVE_FEEDBACK_LOGGED</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-16 pb-8 border-t border-white/5 space-y-4">
+      <div className="text-criterion opacity-20 text-[9px] tracking-widest">RATE_ARCHIVAL_ACCURACY</div>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => handleRate("up")}
+          className={`flex items-center gap-2 px-4 py-2 rounded border text-sm transition-all ${
+            rating === "up"
+              ? "border-white/40 text-white bg-white/10"
+              : "border-white/10 text-white/40 hover:border-white/30 hover:text-white/70"
+          }`}
+        >
+          <ThumbsUp size={13} /> Accurate
+        </button>
+        <button
+          onClick={() => handleRate("down")}
+          className={`flex items-center gap-2 px-4 py-2 rounded border text-sm transition-all ${
+            rating === "down"
+              ? "border-red-500/40 text-red-400 bg-red-500/10"
+              : "border-white/10 text-white/40 hover:border-red-500/30 hover:text-red-400/70"
+          }`}
+        >
+          <ThumbsDown size={13} /> Inaccurate
+        </button>
+      </div>
+
+      {showComment && (
+        <div className="flex gap-3 items-start pt-2 animate-in fade-in duration-300">
+          <textarea
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+            placeholder="What was inaccurate? (optional)"
+            rows={2}
+            className="flex-1 bg-white/5 border border-white/10 rounded px-4 py-2 text-sm text-white/70 placeholder:text-white/20 resize-none focus:outline-none focus:border-white/20"
+          />
+          <button
+            onClick={() => submitFeedback("down", comment)}
+            className="mt-1 p-2 rounded border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-all"
+          >
+            <Send size={13} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Main Component ---
 export default function SummaryContent({ movieId, length }: SummaryContentProps) {
   const [summary, setSummary] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isWarmingUp, setIsWarmingUp] = useState(true); // Phase 1: preamble
   const [error, setError] = useState<string | null>(null);
+
+  // Phase 1 typewriter runs while isWarmingUp is true
+  const preamble = usePreambleTypewriter(isWarmingUp);
 
   useEffect(() => {
     let isMounted = true;
@@ -29,43 +160,40 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
         const releaseYear = movie.release_date ? movie.release_date.split('-')[0] : 'Unknown';
         const titleWithYear = `${movie.title} (${releaseYear})`;
 
-        // Use 127.0.0.1 specifically to avoid Windows localhost/IPv6 name resolution conflicts
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
 
         const response = await fetch(`${primaryApiUrl}/summarize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-              moviename: titleWithYear,
-              tmdb_id: parseInt(movieId)
-          }),
+          body: JSON.stringify({ moviename: titleWithYear, tmdb_id: parseInt(movieId) }),
           signal: controller.signal
         });
 
         if (!response.ok) {
-          throw new Error(`API failed with status: ${response.status}`);
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || `API failed with status: ${response.status}`);
         }
 
         const contentType = response.headers.get("content-type") || "";
-        
-        // Backend returns JSON directly for cached summaries
+
+        // Cached: JSON response
         if (contentType.includes("application/json")) {
           const data = await response.json();
           if (isMounted) {
+            setIsWarmingUp(false); // End Phase 1
             setSummary(data.token || JSON.stringify(data));
             setIsLoading(false);
           }
           return;
         }
 
-        // SSE streaming for fresh summaries
+        // Streaming: SSE
         const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error("Response body is not readable");
-        }
+        if (!reader) throw new Error("Response body is not readable");
 
         const decoder = new TextDecoder();
         let currentSummary = "";
+        let firstTokenReceived = false;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -84,6 +212,11 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
               try {
                 const data = JSON.parse(dataStr);
                 if (data.token) {
+                  if (!firstTokenReceived) {
+                    // Phase 1 → Phase 2 handoff: kill the typewriter
+                    firstTokenReceived = true;
+                    if (isMounted) setIsWarmingUp(false);
+                  }
                   currentSummary += data.token;
                   if (isMounted) {
                     setSummary(currentSummary);
@@ -100,6 +233,7 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
         if (isMounted) {
           setError(err.message || "Failed to load summary");
           setIsLoading(false);
+          setIsWarmingUp(false);
         }
       }
     }
@@ -112,13 +246,21 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
     };
   }, [movieId]);
 
-  if (isLoading && !summary) {
+  // Phase 1: Show typewriter preamble while backend works
+  if (isWarmingUp) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center gap-8">
-         <div className="w-1 h-32 bg-white/10" />
-         <div className="text-criterion opacity-20 animate-pulse uppercase tracking-[0.5em] text-[10px]">
-            SYNCHRONIZING_COLLECTIVE_ARCHIVE...
-         </div>
+      <div className="py-20 flex flex-col gap-8">
+        <div className="space-y-3">
+          {preamble.split("\n").filter(Boolean).map((line, i) => (
+            <div key={i} className="text-criterion opacity-30 text-[10px] tracking-[0.4em] uppercase font-mono">
+              {line}
+              {i === preamble.split("\n").filter(Boolean).length - 1 && (
+                <span className="inline-block w-[2px] h-3 bg-white/50 ml-1 animate-pulse" />
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="w-24 h-px bg-white/5 animate-pulse" />
       </div>
     );
   }
@@ -175,12 +317,16 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
           {summary}
         </ReactMarkdown>
       </div>
-      
+
       {isLoading && (
-        <div className="flex gap-3 pt-8 pb-20">
-           <div className="text-criterion opacity-10 animate-pulse">STREAMING_NARRATIVE_DATA...</div>
+        <div className="flex gap-3 pt-8 pb-4">
+          <div className="text-criterion opacity-10 animate-pulse">STREAMING_NARRATIVE_DATA...</div>
         </div>
       )}
+
+      {!isLoading && summary && <FeedbackBar movieId={movieId} />}
     </div>
   );
 }
+
+
