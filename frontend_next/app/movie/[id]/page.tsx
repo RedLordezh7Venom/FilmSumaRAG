@@ -13,7 +13,9 @@ import {
   ArrowLeft,
   Youtube,
   MonitorPlay,
-  MessageSquare
+  MessageSquare,
+  Calendar,
+  ExternalLink
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -121,6 +123,25 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
                       <Clock size={24} className="text-white" />
                       {movie.runtime}
                    </div>
+                </div>
+                <div>
+                   <div className="opacity-30 mb-2">RELEASE / YEAR</div>
+                   <div className="text-white text-3xl font-black italic flex items-center gap-3">
+                      <Calendar size={24} className="text-white" />
+                      {movie.release_date ? movie.release_date.split('-')[0] : '—'}
+                   </div>
+                </div>
+                <div>
+                   <div className="opacity-30 mb-2">DATABASE / LINK</div>
+                   <a 
+                     href={`https://www.themoviedb.org/movie/${movie.id}`}
+                     target="_blank"
+                     rel="noopener noreferrer" 
+                     className="text-white text-3xl font-black italic flex items-center gap-3 hover:text-blue-400 transition-colors group"
+                   >
+                      <ExternalLink size={24} className="text-white group-hover:text-blue-400 transition-colors" />
+                      TMDB
+                   </a>
                 </div>
              </div>
           </motion.div>

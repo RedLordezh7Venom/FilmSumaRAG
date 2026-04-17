@@ -23,6 +23,18 @@ class User(Base):
     chats = relationship("ChatHistory", back_populates="user")
     posts = relationship("ForumPost", back_populates="user")
     replies = relationship("ForumReply", back_populates="user")
+    hidden_movies = relationship("UserHiddenMovie", back_populates="user")
+
+class UserHiddenMovie(Base):
+    __tablename__ = "user_hidden_movies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    movie_id = Column(Integer, ForeignKey("movies.id"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    user = relationship("User", back_populates="hidden_movies")
+    movie = relationship("Movie")
 
 class Movie(Base):
     __tablename__ = "movies"

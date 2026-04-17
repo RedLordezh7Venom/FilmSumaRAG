@@ -4,10 +4,11 @@ import { useState, useEffect } from "react"
 import { 
   Bookmark, FileText, MessageSquare, MonitorPlay, 
   ArrowRight, CheckCircle2, Circle, Search, LayoutGrid, List as ListIcon, BarChart,
-  Download, CheckSquare, Square, Archive, Trash2, Loader2
+  Download, CheckSquare, Square, Archive, Trash2, Loader2, Eye, EyeOff
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useUser } from "@clerk/nextjs"
 
 interface CollectionMovie {
   id: number;
@@ -29,21 +30,26 @@ interface CollectionMovie {
 
 export default function CollectionPage() {
   const router = useRouter();
+  const { user, isLoaded } = useUser();
   const [movies, setMovies] = useState<CollectionMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [activeFilter, setActiveFilter] = useState<"all" | "summary" | "chats" | "posts">("all");
+  const [showHidden, setShowHidden] = useState(false);
   
   // Batch & Export State
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
+    if (!isLoaded) return;
     const fetchCollection = async () => {
       try {
+        setLoading(true);
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
-        const res = await fetch(`${primaryApiUrl}/movies/collection`);
+        const userParam = user ? `&clerk_id=${user.id}` : "";
+        const res = await fetch(`${primaryApiUrl}/movies/collection?show_hidden=${showHidden}${userParam}`);
         if (!res.ok) throw new Error("Failed to fetch collection");
         const data: CollectionMovie[] = await res.json();
 
@@ -85,7 +91,7 @@ export default function CollectionPage() {
       }
     };
     fetchCollection();
-  }, []);
+  }, [isLoaded, user?.id, showHidden]);
 
   const toggleSelection = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
@@ -112,9 +118,48 @@ export default function CollectionPage() {
     setIsExporting(false);
   };
 
-  const handleBatchRemove = () => {
-    setMovies(prev => prev.filter(m => !selectedIds.has(m.id)));
-    setSelectedIds(new Set());
+  const handleBatchHide = async () => {
+    if (!user) return;
+    try {
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      await fetch(`${primaryApiUrl}/movies/collection/hide`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+            clerk_id: user.id,
+            movie_ids: Array.from(selectedIds),
+            unhide: showHidden
+         })
+      });
+      setMovies(prev => prev.filter(m => !selectedIds.has(m.id)));
+      setSelectedIds(new Set());
+    } catch (e) {
+      console.error("Failed to batch hide", e);
+    }
+  };
+
+  const handleBatchDelete = async () => {
+    if (!user) return;
+    const isConfirmed = window.confirm(`WARNING: This will permanently delete your Deep Dives and Chat Histories for these ${selectedIds.size} films. This action cannot be undone. \n\nAre you sure you wish to initiate data destruction?`);
+    if (!isConfirmed) return;
+
+    try {
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      await fetch(`${primaryApiUrl}/movies/collection/delete`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+            clerk_id: user.id,
+            movie_ids: Array.from(selectedIds),
+            unhide: false
+         })
+      });
+      // Purge them from current UI state
+      setMovies(prev => prev.filter(m => !selectedIds.has(m.id)));
+      setSelectedIds(new Set());
+    } catch (e) {
+      console.error("Failed to delete user analytics data", e);
+    }
   };
 
   const ActivityBadge = ({ active, label, count, icon: Icon, href }: { active: boolean; label: string; count?: number; icon: any; href?: string }) => {
@@ -148,8 +193,8 @@ export default function CollectionPage() {
         {/* Header */}
         <header className="flex items-end justify-between border-b border-white/10 pb-16">
           <div className="space-y-6">
-            <div className="text-criterion opacity-30">Archive_Unit / Personal_Collection</div>
-            <h1 className="text-8xl font-black italic tracking-tighter leading-none text-white">MY COLLECTION</h1>
+            <div className="text-criterion opacity-30 uppercase">{showHidden ? "Hidden_Archive_Unit / Secret_Ledger" : "Archive_Unit / Personal_Collection"}</div>
+            <h1 className="text-8xl font-black italic tracking-tighter leading-none text-white">{showHidden ? "HIDDEN LEDGER" : "MY COLLECTION"}</h1>
             <p className="text-2xl text-slate-500 font-serif italic max-w-xl">
               Every film you've touched leaves a trace. Summaries, deep dives, and discussions — all indexed here.
             </p>
@@ -160,14 +205,24 @@ export default function CollectionPage() {
                <div className="text-criterion opacity-30 text-[9px]">FILMS_IN_ARCHIVE</div>
             </div>
             
-            <button 
-               onClick={handleExportArchive}
-               disabled={isExporting || movies.length === 0}
-               className="flex items-center gap-2 px-4 py-3 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-xl transition-all font-bold tracking-widest text-[9px] uppercase disabled:opacity-50"
-            >
-               {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-               {isExporting ? "PACKAGING_REPORT..." : "EXPORT_ARCHIVE"}
-            </button>
+            <div className="flex gap-4">
+              <button 
+                 onClick={() => { setShowHidden(!showHidden); setSelectedIds(new Set()); }}
+                 className={`flex items-center gap-2 px-4 py-3 border rounded-xl transition-all font-bold tracking-widest text-[9px] uppercase ${showHidden ? 'bg-amber-500/10 text-amber-500 border-amber-500/20 hover:bg-amber-500/20' : 'bg-white/5 text-white/50 border-white/5 hover:text-white hover:bg-white/10'}`}
+              >
+                 {showHidden ? <EyeOff size={14} /> : <Eye size={14} />}
+                 {showHidden ? "Hide Ledger" : "View Hidden"}
+              </button>
+              
+              <button 
+                 onClick={handleExportArchive}
+                 disabled={isExporting || movies.length === 0}
+                 className="flex items-center gap-2 px-4 py-3 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-xl transition-all font-bold tracking-widest text-[9px] uppercase disabled:opacity-50"
+              >
+                 {isExporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                 {isExporting ? "PACKAGING_REPORT..." : "EXPORT_ARCHIVE"}
+              </button>
+            </div>
           </div>
         </header>
 
@@ -368,13 +423,13 @@ export default function CollectionPage() {
                
                <div className="flex gap-2 border-l border-white/5 pl-4">
                   <button 
-                     onClick={handleBatchRemove}
+                     onClick={handleBatchHide}
                      className="flex items-center gap-2 px-4 py-2 text-[10px] uppercase font-bold tracking-widest text-criterion hover:text-white hover:bg-white/5 rounded-xl transition-all"
                   >
-                     <Archive size={14} /> Hide From Ledger
+                     <Archive size={14} /> {showHidden ? "Restore to Ledger" : "Hide From Ledger"}
                   </button>
                   <button 
-                     onClick={handleBatchRemove}
+                     onClick={handleBatchDelete}
                      className="flex items-center gap-2 px-4 py-2 text-[10px] uppercase font-bold tracking-widest text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
                   >
                      <Trash2 size={14} /> Delete Data
