@@ -141,7 +141,9 @@ async def retrieve_context_node(state: RAGState) -> dict:
         "relevant_sources": state.get("relevant_sources", [])
     }
 
-async def generate_answer_node(state: RAGState) -> dict:
+from langchain_core.runnables import RunnableConfig
+
+async def generate_answer_node(state: RAGState, config: RunnableConfig) -> dict:
     from src.utils.logger import logger
     persona = state.get("persona", "critic")
     tmdb_ids = state["tmdb_ids"]
@@ -168,7 +170,7 @@ async def generate_answer_node(state: RAGState) -> dict:
     
     gen_start = time.time()
     logger.agent(f"Generating {persona.upper()} response for '{display_title}'...")
-    response = await llm.ainvoke(messages)
+    response = await llm.ainvoke(messages, config)
     logger.agent(f"Generation finished in {time.time() - gen_start:.3f}s")
     return {"messages": [response]}
 

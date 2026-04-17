@@ -101,26 +101,37 @@ async def deep_dive_chat(
         async def event_generator():
             full_answer = ""
             citations = []
-            async for item in answer_question_stream(
-                tmdb_id=resolved_tmdb_ids,
-                question=payload.question,
-                persona=payload.persona,
-                thread_id=payload.thread_id
-            ):
-                if item["type"] == "status":
-                    status_json = json.dumps({'token': f"💡 _{item['message']}_ \n\n"})
-                    yield f"data: {status_json}\n\n"
-                    continue
-                if item["type"] == "citations":
-                    citations = item["sources"]
-                    yield f"data: {json.dumps(item)}\n\n"
-                    continue
-                if item["type"] == "token":
-                    token = item["token"]
-                    full_answer += token
-                    yield f"data: {json.dumps({'token': token})}\n\n"
-                if item["type"] == "done":
-                    break
+            try:
+                async for item in answer_question_stream(
+                    tmdb_id=resolved_tmdb_ids,
+                    question=payload.question,
+                    persona=payload.persona,
+                    thread_id=payload.thread_id
+                ):
+                    if item["type"] == "status":
+                        status_json = json.dumps({'token': f"💡 _{item['message']}_ \n\n"})
+                        yield f"data: {status_json}\n\n"
+                        continue
+                    if item["type"] == "citations":
+                        citations = item["sources"]
+                        yield f"data: {json.dumps(item)}\n\n"
+                        continue
+                    if item["type"] == "token":
+                        token = item["token"]
+                        full_answer += token
+                        yield f"data: {json.dumps({'token': token})}\n\n"
+                    if item["type"] == "done":
+                        break
+            except FileNotFoundError as e:
+                logger.error(f"Embeddings missing: {e}")
+                err_msg = "⚠️ *This film hasn't been indexed yet. Please visit its summary page first to generate the archive.*"
+                yield f"data: {json.dumps({'token': err_msg})}\n\n"
+                full_answer = err_msg
+            except Exception as e:
+                logger.error(f"Stream error in event_generator: {e}")
+                err_msg = f"⚠️ *An error occurred: {str(e)[:120]}*"
+                yield f"data: {json.dumps({'token': err_msg})}\n\n"
+                full_answer = err_msg
 
             # Finalize: Save to DB
             assistant_msg = sql_models.ChatHistory(

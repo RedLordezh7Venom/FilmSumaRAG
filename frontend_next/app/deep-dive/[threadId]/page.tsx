@@ -91,7 +91,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   useEffect(() => {
     const loadHistory = async () => {
       try {
-        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+        const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
         const res = await fetch(`${primaryApiUrl}/history/chat-history/thread/${threadId}`);
         if (res.ok) {
           const history = await res.json();
@@ -148,12 +148,13 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     setIsSending(true);
 
     try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
       const response = await fetch(`${primaryApiUrl}/deep_dive`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           movie: movieList.length > 0 ? movieList.map(m => m.title) : ["Unknown Film"],
+          tmdb_ids: movieList.map(m => m.id),
           question: userText,
           thread_id: threadId,
           persona: persona
@@ -221,15 +222,17 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
     if (type === 'down') setFeedbackDraft(null);
     try {
-      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
+      const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
       await fetch(`${primaryApiUrl}/feedback/rate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          clerk_id: "guest", // TODO: wire Clerk user.id here
+          tmdb_id: movieList[0]?.id || 0,
+          upvote: type === 'up',
+          context: "deep_dive",
           chat_id: msgId,
-          rating: type === 'up' ? 5 : 1,
-          comment: comment,
-          persona: persona
+          comment: comment || null,
         })
       });
     } catch (err) {
@@ -324,7 +327,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                     <div className="text-criterion opacity-20 text-[9px]">{personaLabel}_RESPONSE</div>
                     <div className="text-white font-serif italic text-2xl leading-relaxed">
                       {m.text
-                        ? <Typewriter text={m.text} speed={8} key={`${m.id}-${m.text.length}`} delay={0} />
+                        ? <span className="text-white font-serif italic text-2xl leading-relaxed">{m.text}</span>
                         : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>
                       }
                     </div>
