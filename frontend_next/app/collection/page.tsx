@@ -32,6 +32,7 @@ export default function CollectionPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [activeFilter, setActiveFilter] = useState<"all" | "summary" | "chats" | "posts">("all");
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -81,16 +82,27 @@ export default function CollectionPage() {
     fetchCollection();
   }, []);
 
-  const ActivityBadge = ({ active, label, count, icon: Icon }: { active: boolean; label: string; count?: number; icon: any }) => (
-    <div className={`flex items-center gap-2 text-[10px] transition-all ${active ? 'text-white' : 'text-white/10'}`}>
-      {active ? <CheckCircle2 size={12} className="text-emerald-500" /> : <Circle size={12} />}
-      <span className="text-criterion tracking-widest">{label} {count !== undefined && count > 0 && `(${count})`}</span>
-    </div>
-  );
+  const ActivityBadge = ({ active, label, count, icon: Icon, href }: { active: boolean; label: string; count?: number; icon: any; href?: string }) => {
+    const badge = (
+      <div className={`flex items-center gap-2 text-[10px] transition-all ${active ? (href ? 'text-white hover:text-emerald-400 group/badge' : 'text-white') : 'text-white/10'}`}>
+        {active ? <CheckCircle2 size={12} className={href ? 'text-emerald-500 group-hover/badge:text-emerald-400 transition-colors' : 'text-emerald-500'} /> : <Circle size={12} />}
+        <span className="text-criterion tracking-widest">{label} {count !== undefined && count > 0 && `(${count})`}</span>
+      </div>
+    );
+    if (active && href) return <Link href={href} onClick={(e) => e.stopPropagation()}>{badge}</Link>;
+    return badge;
+  };
 
-  const filteredMovies = movies.filter(m => 
-    (m.tmdb_title || m.title).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredMovies = movies.filter(m => {
+    const matchesSearch = (m.tmdb_title || m.title).toLowerCase().includes(searchQuery.toLowerCase());
+    if (!matchesSearch) return false;
+    
+    if (activeFilter === "summary") return m.has_summary;
+    if (activeFilter === "chats") return m.has_deep_dive;
+    if (activeFilter === "posts") return m.has_discussions;
+    
+    return true;
+  });
 
   return (
     <div className="cinematic-canvas p-20 selection:bg-white selection:text-black">
@@ -115,7 +127,7 @@ export default function CollectionPage() {
 
         {/* Toolbar: Search & View Toggle */}
         <div className="flex items-center justify-between bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
-          <div className="flex items-center gap-4 px-4 w-96 flex-1 max-w-sm">
+          <div className="flex items-center gap-2 px-4 w-96 flex-1 max-w-sm">
             <Search size={16} className="text-white/20" />
             <input 
               type="text" 
@@ -126,7 +138,28 @@ export default function CollectionPage() {
             />
           </div>
           
-          <div className="flex items-center gap-2 px-4 border-l border-white/5">
+          <div className="flex items-center gap-6 px-4">
+             {/* Quick Filters */}
+             <div className="flex items-center gap-2 text-[9px] font-bold tracking-widest border-l border-white/5 pl-6">
+                <span className="text-criterion opacity-50 mr-2 uppercase">Filter:</span>
+                {[
+                  { id: "all", label: "Any" },
+                  { id: "summary", label: "Summaries" },
+                  { id: "chats", label: "Deep Dives" },
+                  { id: "posts", label: "Discussions" }
+                ].map(f => (
+                  <button 
+                     key={f.id}
+                     onClick={() => setActiveFilter(f.id as any)}
+                     className={`px-3 py-1 rounded-full transition-all border ${activeFilter === f.id ? 'bg-emerald-500/10 border-emerald-500 text-emerald-500' : 'border-white/5 text-white/30 hover:border-white/20 hover:text-white'}`}
+                  >
+                     {f.label}
+                  </button>
+                ))}
+             </div>
+
+             {/* Grid/List Views */}
+             <div className="flex items-center gap-2 border-l border-white/5 pl-6">
             <button 
               onClick={() => setViewMode("list")}
               className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-black' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
@@ -141,6 +174,7 @@ export default function CollectionPage() {
             </button>
           </div>
         </div>
+      </div>
 
         {/* Collection Grid / List */}
         {loading ? (
@@ -194,11 +228,24 @@ export default function CollectionPage() {
               return (
               <div
                 key={movie.id}
-                className="group grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer"
+                className="group relative grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer overflow-hidden"
                 onClick={() => router.push(`/movie/${movie.id}`)}
               >
+                {/* Hover Backdrop Blur */}
+                {movie.tmdb_poster && (
+                   <div 
+                      className="absolute inset-0 z-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none"
+                      style={{
+                         backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.tmdb_poster})`,
+                         backgroundSize: 'cover',
+                         backgroundPosition: 'center',
+                         filter: 'blur(40px)'
+                      }}
+                   />
+                )}
+                
                 {/* Poster */}
-                <div className="col-span-1">
+                <div className="col-span-1 relative z-10">
                   {movie.tmdb_poster ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w92${movie.tmdb_poster}`}
@@ -226,14 +273,14 @@ export default function CollectionPage() {
                 </div>
 
                 {/* Activity badges */}
-                <div className="col-span-4 flex justify-end gap-x-8 gap-y-3 flex-wrap pl-8">
-                  <ActivityBadge active={movie.has_summary} label="SUMMARY" icon={FileText} />
-                  <ActivityBadge active={movie.deep_dive_threads > 0} label="CHATS" count={movie.deep_dive_threads} icon={MonitorPlay} />
-                  <ActivityBadge active={movie.discussion_posts > 0} label="POSTS" count={movie.discussion_posts} icon={MessageSquare} />
+                <div className="col-span-4 flex justify-end gap-x-8 gap-y-3 flex-wrap pl-8 relative z-10">
+                  <ActivityBadge active={movie.has_summary} label="SUMMARY" icon={FileText} href={`/movie/${movie.id}`} />
+                  <ActivityBadge active={movie.deep_dive_threads > 0} label="CHATS" count={movie.deep_dive_threads} icon={MonitorPlay} href={`/deep-dives?movie=${movie.id}`} />
+                  <ActivityBadge active={movie.discussion_posts > 0} label="POSTS" count={movie.discussion_posts} icon={MessageSquare} href={`/boards?movie=${movie.id}`} />
                 </div>
 
                 {/* Action */}
-                <div className="col-span-3 text-right">
+                <div className="col-span-3 text-right relative z-10">
                   <div className="flex items-center justify-end gap-4 opacity-10 group-hover:opacity-100 transition-opacity text-emerald-500">
                     <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Open_Dash</span>
                     <ArrowRight size={14} />
