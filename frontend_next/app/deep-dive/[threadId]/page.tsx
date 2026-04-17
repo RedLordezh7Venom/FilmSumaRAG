@@ -3,8 +3,28 @@
 import { useState, useEffect, useRef, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink, X } from 'lucide-react';
-import { Typewriter } from "@/components/effects/typewriter";
 import Link from 'next/link';
+
+// Reveals completed text fast (4ms/char) — stable key = never restarts on re-render
+function SlowReveal({ text }: { text: string }) {
+  const [displayed, setDisplayed] = useState(0);
+
+  useEffect(() => {
+    if (displayed >= text.length) return;
+    const t = setTimeout(() => setDisplayed(d => d + 1), 4);
+    return () => clearTimeout(t);
+  }, [displayed, text.length]);
+
+  return (
+    <span className="text-white font-serif italic text-2xl leading-relaxed whitespace-pre-wrap">
+      {text.slice(0, displayed)}
+      {displayed < text.length && (
+        <span className="inline-block w-0.5 h-5 bg-white/50 ml-0.5 animate-pulse align-middle" />
+      )}
+    </span>
+  );
+}
+
 
 interface Source {
   id: string;
@@ -41,6 +61,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const [persona, setPersona] = useState<"critic" | "philosopher" | "scene_creator">("critic");
   const [feedbackDraft, setFeedbackDraft] = useState<{msgId: number, type: 'up' | 'down', comment: string} | null>(null);
   const [activeSource, setActiveSource] = useState<{msgId: number, sourceIdx: number} | null>(null);
+  const [streamingMsgId, setStreamingMsgId] = useState<number | null>(null);
   const scrollEndRef = useRef<HTMLDivElement>(null);
 
   // Fetch movie title from TMDB on load
@@ -146,6 +167,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     ]);
     setInputMessage("");
     setIsSending(true);
+    setStreamingMsgId(aiMsgId);
 
     try {
       const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
@@ -207,6 +229,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
       ));
     } finally {
       setIsSending(false);
+      setStreamingMsgId(null);
     }
   };
 
@@ -327,7 +350,9 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                     <div className="text-criterion opacity-20 text-[9px]">{personaLabel}_RESPONSE</div>
                     <div className="text-white font-serif italic text-2xl leading-relaxed">
                       {m.text
-                        ? <span className="text-white font-serif italic text-2xl leading-relaxed">{m.text}</span>
+                        ? streamingMsgId === m.id
+                          ? <span className="text-white font-serif italic text-2xl leading-relaxed whitespace-pre-wrap">{m.text}</span>
+                          : <SlowReveal key={m.id} text={m.text} />
                         : <span className="animate-pulse text-criterion opacity-30">ANALYZING...</span>
                       }
                     </div>
