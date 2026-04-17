@@ -43,14 +43,13 @@ class ChatHistoryResponse(ChatHistoryBase):
     class Config:
         from_attributes = True
 
-class FeedbackBase(BaseModel):
+class FeedbackRate(BaseModel):
     clerk_id: str
-    movie_title: str
-    chat_id: Optional[int] = None
-    rating: int # 1 for good, 0 for bad, or 1-5
-    downvote: bool = False # Explicit context disqualification
+    tmdb_id: int
+    upvote: bool                        # True = thumbs up, False = thumbs down
+    context: str = "summary"           # "summary" or "deep_dive"
+    chat_id: Optional[int] = None      # Only for deep_dive feedback on a specific message
     comment: Optional[str] = None
-    persona: Optional[str] = "critic"
 
 class FeedbackResponse(BaseModel):
     id: int
