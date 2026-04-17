@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from 'react-markdown';
 import { ThumbsUp, ThumbsDown, Send } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 interface SummaryContentProps {
   movieId: string;
@@ -30,10 +31,9 @@ function usePreambleTypewriter(active: boolean) {
       const t = setTimeout(() => {
         setText(prev => prev + currentLine[charIndex]);
         setCharIndex(c => c + 1);
-      }, 38); // ~38ms per char = slow, readable
+      }, 38);
       return () => clearTimeout(t);
     } else {
-      // Pause at end of line, then move to next
       const t = setTimeout(() => {
         setText(prev => prev + "\n");
         setLineIndex(l => l + 1);
@@ -48,34 +48,42 @@ function usePreambleTypewriter(active: boolean) {
 
 // --- Feedback Bar ---
 function FeedbackBar({ movieId }: { movieId: string }) {
+  const { user, isSignedIn } = useUser();
   const [rating, setRating] = useState<"up" | "down" | null>(null);
   const [showComment, setShowComment] = useState(false);
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleRate = (r: "up" | "down") => {
+    if (!isSignedIn) return;
     setRating(r);
-    if (r === "down") setShowComment(true);
-    else submitFeedback(r, "");
+    if (r === "down") {
+      setShowComment(true); // Ask for optional comment before submitting downvote
+    } else {
+      submitFeedback(r, "");
+    }
   };
 
   const submitFeedback = async (r: "up" | "down", c: string) => {
+    if (!user) return;
     try {
       const apiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
       await fetch(`${apiUrl}/feedback/rate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          rating: r === "up" ? 5 : 1,
+          clerk_id: user.id,
+          tmdb_id: parseInt(movieId),
+          upvote: r === "up",
+          context: "summary",
           comment: c || null,
-          persona: "summary",
         }),
       });
+    } catch (e) {
+      // Silently fail — feedback is non-critical
+    } finally {
       setSubmitted(true);
       setShowComment(false);
-    } catch (e) {
-      // Silently fail—feedback is non-critical
-      setSubmitted(true);
     }
   };
 
@@ -83,6 +91,16 @@ function FeedbackBar({ movieId }: { movieId: string }) {
     return (
       <div className="flex items-center gap-3 pt-16 pb-8 opacity-40">
         <span className="text-criterion text-[9px] tracking-widest">ARCHIVE_FEEDBACK_LOGGED</span>
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div className="pt-16 pb-8 border-t border-white/5">
+        <p className="text-white/20 text-[10px] font-mono tracking-widest">
+          [ SIGN_IN_TO_RATE_THIS_ANALYSIS ]
+        </p>
       </div>
     );
   }
@@ -114,7 +132,7 @@ function FeedbackBar({ movieId }: { movieId: string }) {
       </div>
 
       {showComment && (
-        <div className="flex gap-3 items-start pt-2 animate-in fade-in duration-300">
+        <div className="flex gap-3 items-start pt-2">
           <textarea
             value={comment}
             onChange={e => setComment(e.target.value)}
@@ -133,6 +151,7 @@ function FeedbackBar({ movieId }: { movieId: string }) {
     </div>
   );
 }
+
 
 // --- Main Component ---
 export default function SummaryContent({ movieId, length }: SummaryContentProps) {
