@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink, X } from 'lucide-react';
 import Link from 'next/link';
-
+import { useUser } from '@clerk/nextjs';
 
 
 // Mounts immediately but fades in after `delay` ms — for post-stream reveals
@@ -46,6 +46,7 @@ interface MovieIdentity {
 }
 
 export default function DeepDiveChatPage({ params }: { params: Promise<{ threadId: string }> }) {
+  const { user } = useUser();
   const unwrappedParams = use(params);
   const threadId = unwrappedParams.threadId;
   const searchParams = useSearchParams();
@@ -181,7 +182,8 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
           tmdb_ids: movieList.map(m => m.id),
           question: userText,
           thread_id: threadId,
-          persona: persona
+          persona: persona,
+          clerk_id: user?.id
         })
       });
 

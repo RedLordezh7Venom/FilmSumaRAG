@@ -11,6 +11,10 @@
 }
 
 @layer base {
+  html {
+    zoom: 0.8;
+  }
+  
   body {
     @apply bg-[#0b0f17] text-[#94a3b8] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";

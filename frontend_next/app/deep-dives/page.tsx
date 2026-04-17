@@ -9,6 +9,7 @@ import {
   Trash2
 } from "lucide-react"
 import Link from "next/link"
+import { useUser } from "@clerk/nextjs"
 
 interface ChatSession {
   thread_id: string;
@@ -19,15 +20,18 @@ interface ChatSession {
 }
 
 export default function DeepDivesIndex() {
+  const { user, isLoaded } = useUser();
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isLoaded) return;
     const fetchSessions = async () => {
       try {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
         // Fetch all chat history, grouped by thread_id
-        const response = await fetch(`${primaryApiUrl}/history/chat-history/thread/all`);
+        const userParam = user ? `?clerk_id=${user.id}` : "";
+        const response = await fetch(`${primaryApiUrl}/history/chat-history/thread/all${userParam}`);
         
         if (response.ok) {
           const data = await response.json();
@@ -79,7 +83,7 @@ export default function DeepDivesIndex() {
       }
     };
     fetchSessions();
-  }, []);
+  }, [isLoaded, user?.id]);
 
   return (
     <div className="cinematic-canvas p-20 selection:bg-white selection:text-black">
