@@ -146,7 +146,7 @@ export default function Home() {
                         >
                           <div className="text-left">
                             <div className="text-white font-serif italic text-lg leading-none">{s.title}</div>
-                            <div className="text-criterion opacity-40 mt-1">{new Date(s.release_date).getFullYear()}</div>
+                            <div className="text-criterion opacity-40 mt-1">{s.release_date ? new Date(s.release_date).getFullYear() : '—'}</div>
                           </div>
                           <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity text-white" />
                         </button>
