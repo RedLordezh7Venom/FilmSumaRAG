@@ -274,10 +274,10 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
   const personaLabel = persona === 'critic' ? 'CRITIC' : persona === 'philosopher' ? 'PHILOSOPHER' : 'SCENE_CREATOR';
 
   return (
-    <div className="min-h-screen bg-[#0b0f17] flex flex-col items-center py-20 px-8 font-sans selection:bg-white selection:text-black">
+    <div className="flex-1 w-full bg-[#0b0f17] flex flex-col items-center p-6 lg:p-8 font-sans selection:bg-white selection:text-black">
       <div className="film-grain" />
 
-      <div className="max-w-5xl w-full flex flex-col h-[80vh] glass-surface rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10 border border-white/5">
+      <div className="w-full flex-1 max-w-[1600px] flex flex-col glass-surface rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10 border border-white/5">
 
         {/* Header */}
         <header className="p-10 border-b border-white/5 flex items-center justify-between">
