@@ -21,6 +21,7 @@ class EngageRequest(BaseModel):
     clerk_id: str
     tmdb_id: Optional[int] = None
     movie_id: Optional[int] = None
+    movie_title: Optional[str] = None
     type: str # 'seen', 'summary', 'deep_dive'
 
 @router.get("/collection")
@@ -59,19 +60,23 @@ def get_collection(
         # Check Data Presence First
         if user:
             engagement_q = db.query(sql_models.UserMovieEngagement).filter(sql_models.UserMovieEngagement.user_id == user.id, sql_models.UserMovieEngagement.movie_id == movie.id)
-            has_engaged = engagement_q.first() is not None
-            has_seen_summary = engagement_q.filter(sql_models.UserMovieEngagement.engagement_type == sql_models.EngagementType.SUMMARY).first() is not None
+            user_engagements = {e.engagement_type for e in engagement_q.all()}
             
-            if deep_dive_count == 0 and discussion_count == 0 and not has_engaged:
+            if not user_engagements and deep_dive_count == 0 and discussion_count == 0:
                 continue
             
-            # If user has an explicit summary engagement, ensure we treat has_summary as true for their collection
-            if has_seen_summary:
-                summary_count = max(summary_count, 1)
-
+            # The "Green Tick" status should respond to verified user actions only
+            has_summary = sql_models.EngagementType.SUMMARY in user_engagements
+            has_deep_dive = deep_dive_count > 0 or sql_models.EngagementType.DEEP_DIVE in user_engagements
+            has_discussions = discussion_count > 0
+            
+            # If the only engagement is 'seen', it stays in collection but without ticks
         else:
             if summary_count == 0 and deep_dive_count == 0 and discussion_count == 0:
                 continue
+            has_summary = summary_count > 0
+            has_deep_dive = deep_dive_count > 0
+            has_discussions = discussion_count > 0
 
         # Check if movie is explicitly hidden
         is_hidden = movie.id in hidden_movie_ids
@@ -85,9 +90,9 @@ def get_collection(
             "title": movie.title,
             "status": movie.status.value if movie.status else "pending",
             "created_at": movie.created_at.isoformat() if movie.created_at else None,
-            "has_summary": summary_count > 0,
-            "has_deep_dive": deep_dive_count > 0,
-            "has_discussions": discussion_count > 0,
+            "has_summary": has_summary,
+            "has_deep_dive": has_deep_dive,
+            "has_discussions": has_discussions,
             "summary_count": summary_count,
             "deep_dive_threads": deep_dive_count,
             "discussion_posts": discussion_count,
@@ -109,8 +114,19 @@ def engage_movie(payload: EngageRequest, db: Session = Depends(get_db)):
         db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.id == payload.movie_id).first()
         
     if not db_movie:
-        return {"status": "error", "message": "Movie not found"}
-        
+        if payload.tmdb_id:
+            # Auto-initialize movie record if it doesn't exist
+            db_movie = sql_models.Movie(
+                title=payload.movie_title or f"Movie #{payload.tmdb_id}",
+                tmdb_id=payload.tmdb_id,
+                status=sql_models.JobStatus.PENDING
+            )
+            db.add(db_movie)
+            db.commit()
+            db.refresh(db_movie)
+        else:
+            return {"status": "error", "message": "Movie not found"}
+            
     existing = db.query(sql_models.UserMovieEngagement).filter(
         sql_models.UserMovieEngagement.user_id == user.id,
         sql_models.UserMovieEngagement.movie_id == db_movie.id,

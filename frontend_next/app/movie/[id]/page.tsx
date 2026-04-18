@@ -60,7 +60,12 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
             fetch(`${primaryApiUrl}/movies/collection/engage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ clerk_id: user.id, tmdb_id: parseInt(id), type: 'seen' })
+              body: JSON.stringify({ 
+                clerk_id: user.id, 
+                tmdb_id: parseInt(id), 
+                type: 'seen',
+                movie_title: data.title 
+              })
             }).catch(() => {});
           }
         } else {

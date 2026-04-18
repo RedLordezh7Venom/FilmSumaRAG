@@ -223,7 +223,12 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                  fetch(`${primaryApiUrl}/movies/collection/engage`, {
                    method: 'POST',
                    headers: { 'Content-Type': 'application/json' },
-                   body: JSON.stringify({ clerk_id: user.id, tmdb_id: movieList[0].id, type: 'deep_dive' })
+                   body: JSON.stringify({ 
+                     clerk_id: user.id, 
+                     tmdb_id: movieList[0].id, 
+                     type: 'deep_dive',
+                     movie_title: movieList[0].title
+                   })
                  }).catch(() => {});
               }
               continue;

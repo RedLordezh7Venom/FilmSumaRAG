@@ -74,7 +74,7 @@ export default async function SummaryPage({ params, searchParams }: SummaryPageP
             </div>
           }>
             <div className="max-w-4xl mx-auto">
-              <SummaryContent movieId={movieId} length={length} />
+              <SummaryContent movieId={movieId} length={length} movieTitle={movie.title} />
             </div>
           </Suspense>
 

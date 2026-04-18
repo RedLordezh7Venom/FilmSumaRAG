@@ -8,6 +8,7 @@ import { useUser } from "@clerk/nextjs";
 interface SummaryContentProps {
   movieId: string;
   length: number;
+  movieTitle?: string;
 }
 
 // --- Warm-up preamble: shown while backend fetches subtitles ---
@@ -154,7 +155,7 @@ function FeedbackBar({ movieId }: { movieId: string }) {
 
 
 // --- Main Component ---
-export default function SummaryContent({ movieId, length }: SummaryContentProps) {
+export default function SummaryContent({ movieId, length, movieTitle }: SummaryContentProps) {
   const [summary, setSummary] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isWarmingUp, setIsWarmingUp] = useState(true); // Phase 1: preamble
@@ -202,7 +203,12 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
             fetch(`${primaryApiUrl}/movies/collection/engage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ clerk_id: user.id, tmdb_id: parseInt(movieId), type: 'summary' })
+              body: JSON.stringify({ 
+                clerk_id: user.id, 
+                tmdb_id: parseInt(movieId), 
+                type: 'summary',
+                movie_title: movieTitle
+              })
             }).catch(() => {});
           }
         };
