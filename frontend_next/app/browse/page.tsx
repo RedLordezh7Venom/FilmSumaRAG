@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Film, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ScrollReveal } from '@/components/effects/scroll-reveal';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Movie {
   id: number;
@@ -23,6 +29,7 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 export default function BrowsePage() {
   const router = useRouter();
+  const gridRef = useRef<HTMLDivElement>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | 'all'>('all');
@@ -36,6 +43,31 @@ export default function BrowsePage() {
   useEffect(() => {
     fetchMovies();
   }, [selectedGenre, searchQuery]);
+
+  useEffect(() => {
+    if (!loading && gridRef.current) {
+      const cards = gridRef.current.querySelectorAll('[data-movie-card]') as NodeListOf<HTMLElement>;
+      
+      cards.forEach((card, index) => {
+        gsap.from(card, {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+          delay: index * 0.05,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            once: true,
+          },
+        });
+      });
+
+      return () => {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      };
+    }
+  }, [movies, loading]);
 
   const fetchGenres = async () => {
     try {
@@ -78,41 +110,64 @@ export default function BrowsePage() {
       
       <div className="max-w-7xl mx-auto space-y-20 relative z-10">
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16">
-          <div className="space-y-6">
+        <motion.header 
+          className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
             <div className="text-criterion opacity-30">Archive_Unit / Browse_Catalog</div>
             <h1 className="text-8xl font-black italic tracking-tighter leading-none text-white">BROWSE ARCHIVE</h1>
             <p className="text-2xl text-slate-500 font-serif italic max-w-xl">
               Discover films and trigger deep dives into their hidden meanings.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="relative">
+          <motion.div 
+            className="relative"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={18} />
-            <input 
+            <motion.input 
               type="text"
               placeholder="SEARCH_ARCHIVE..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-72 bg-transparent border-b border-white/10 py-4 pl-12 pr-4 text-white font-serif italic outline-none focus:border-white transition-all text-lg"
+              whileFocus={{ scale: 1.05 }}
             />
-          </div>
-        </header>
+          </motion.div>
+        </motion.header>
 
         {/* Genre Filter */}
-        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-          <button
+        <motion.div 
+          className="flex gap-4 overflow-x-auto pb-4 no-scrollbar"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <motion.button
             onClick={() => setSelectedGenre('all')}
             className={`px-8 py-3 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all border ${
               selectedGenre === 'all' 
                 ? 'bg-white text-black border-white' 
                 : 'bg-transparent text-white/30 border-white/5 hover:border-white/20 hover:text-white'
             }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             ALL
-          </button>
-          {genres.map((genre) => (
-            <button
+          </motion.button>
+          {genres.map((genre, index) => (
+            <motion.button
               key={genre.id}
               onClick={() => setSelectedGenre(genre.id)}
               className={`px-8 py-3 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all border ${
@@ -120,24 +175,37 @@ export default function BrowsePage() {
                   ? 'bg-white text-black border-white' 
                   : 'bg-transparent text-white/30 border-white/5 hover:border-white/20 hover:text-white'
               }`}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 + index * 0.02 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {genre.name}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Movie Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
+        <motion.div 
+          ref={gridRef}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        >
           {loading ? (
             Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="aspect-[2/3] rounded-2xl bg-white/[0.02] border border-white/5 animate-pulse" />
             ))
           ) : (
             movies.map((movie) => (
-              <div
+              <motion.div
                 key={movie.id}
                 onClick={() => router.push(`/movie/${movie.id}`)}
                 className="group relative cursor-pointer"
+                data-movie-card
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
               >
                 <div className="aspect-[2/3] rounded-2xl overflow-hidden border border-white/5 transition-all duration-500 group-hover:border-white/20 group-hover:shadow-[0_0_60px_rgba(0,0,0,0.5)]">
                   {movie.poster_path ? (
@@ -170,10 +238,10 @@ export default function BrowsePage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

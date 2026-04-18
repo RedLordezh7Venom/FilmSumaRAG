@@ -46,6 +46,22 @@
     @apply text-white uppercase tracking-[0.4em] font-sans text-[10px] font-bold;
   }
 
+  /* GPU Acceleration for Animations */
+  [data-movie-card],
+  .archive-poster {
+    will-change: transform, opacity;
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   .film-grain {
     position: fixed;
     top: 0;

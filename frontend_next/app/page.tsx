@@ -9,6 +9,12 @@ import { debounce } from "lodash"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
+import { SplitText } from "@/components/effects/split-text"
+import { ParallaxSection } from "@/components/effects/parallax-section"
+import gsap from "gsap"
+import ScrollTrigger from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface Movie {
   id: number
@@ -106,20 +112,41 @@ export default function Home() {
           {/* Landing / Search Section */}
           <div className="col-span-12 lg:col-span-5 space-y-16">
             <header className="space-y-6">
-              <div className="text-criterion">The Cinema Archive / Cinematic Analysis /</div>
-              <h1 className="text-9xl font-black italic tracking-tighter leading-none text-white drop-shadow-2xl">
-                SUM<br />A<br />FILM
-              </h1>
+              <motion.div 
+                className="text-criterion overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                The Cinema Archive / Cinematic Analysis /
+              </motion.div>
+              <SplitText 
+                className="text-9xl font-black italic tracking-tighter leading-none text-white drop-shadow-2xl block"
+                duration={0.6}
+                stagger={0.05}
+                delay={0.1}
+              >
+                SUM A FILM
+              </SplitText>
             </header>
 
-            <div className="space-y-12">
+            <motion.div 
+              className="space-y-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
               <div className="relative group max-w-md">
-                <input
+                <motion.input
                   type="text"
                   placeholder="SEARCH ARCHIVES..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full bg-transparent border-b-2 border-white/10 py-6 text-2xl font-serif italic text-white placeholder:text-slate-700 outline-none focus:border-white transition-all tracking-tight"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  whileFocus={{ scale: 1.02 }}
                 />
                 <Button
                   onClick={() => suggestions[0] && searchMovie(suggestions[0].id)}
@@ -157,33 +184,44 @@ export default function Home() {
               </div>
 
               {!movie && !loading && (
-                <div className="space-y-4 max-w-sm">
+                <motion.div 
+                  className="space-y-4 max-w-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                >
                   <p className="font-serif italic text-2xl text-slate-500 leading-tight">
                     "Every film is a journey that deserves a deep, analytical entry."
                   </p>
                   <Link href="/browse" className="text-criterion hover:text-white transition-colors block pt-4">
                     [ BROWSE ARCHIVE ]
                   </Link>
-                </div>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
           </div>
 
           {/* Result / Dashboard Card Section */}
-          <div className="col-span-12 lg:col-span-7 flex items-center justify-center relative">
+          <ParallaxSection intensity={0.3} className="col-span-12 lg:col-span-7 flex items-center justify-center relative">
             {loading ? (
-              <div className="flex flex-col items-center gap-8 animate-pulse">
+              <motion.div 
+                className="flex flex-col items-center gap-8 animate-pulse"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+              >
                 <div className="w-1 h-32 bg-white/10" />
                 <div className="text-criterion">INDEXING_NARRATIVE...</div>
-              </div>
+              </motion.div>
             ) : (
               <AnimatePresence mode="wait">
                 {movie && (
                   <motion.div
                     key={movie.id}
-                    initial={{ opacity: 0, scale: 0.98, x: 20 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 1.02, x: -20 }}
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 1.05, y: -20 }}
+                    transition={{ duration: 0.6, ease: "backOut" }}
                     className="w-full glass-surface p-12 rounded-[2rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/5 flex gap-12"
                   >
                     <img
@@ -221,7 +259,7 @@ export default function Home() {
                 )}
               </AnimatePresence>
             )}
-          </div>
+          </ParallaxSection>
 
         </div>
       </div>
