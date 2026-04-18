@@ -305,7 +305,10 @@ export default function CollectionPage() {
                 return (
                   <div
                     key={movie.id}
-                    onClick={() => router.push(`/movie/${movie.id}`)}
+                    onClick={(e) => {
+                      if (e.target instanceof HTMLElement && e.target.closest('button')) return;
+                      router.push(`/movie/${movie.tmdb_id || movie.id}`)
+                    }}
                     className={`group relative aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/50 scale-[0.98]' : 'border-white/10 hover:border-white/40'}`}
                   >
                     {/* Grid Checkbox */}
@@ -341,7 +344,10 @@ export default function CollectionPage() {
               <div
                 key={movie.id}
                 className={`group relative grid grid-cols-12 gap-8 items-center p-6 hover:bg-white/[0.02] bg-[#0a0f16]/40 transition-all rounded-3xl border cursor-pointer overflow-hidden ${isSelected ? 'border-emerald-500/50 bg-emerald-500/[0.03]' : 'border-white/5 hover:border-white/20'}`}
-                onClick={() => router.push(`/movie/${movie.id}`)}
+                onClick={(e) => {
+                   if (e.target instanceof HTMLElement && e.target.closest('button')) return;
+                   router.push(`/movie/${movie.tmdb_id || movie.id}`)
+                }}
               >
                 {/* List Checkbox (Absolute Left) */}
                 <div 
@@ -396,9 +402,9 @@ export default function CollectionPage() {
 
                 {/* Activity badges */}
                 <div className="col-span-4 flex justify-end gap-x-8 gap-y-3 flex-wrap pl-8 relative z-10">
-                  <ActivityBadge active={movie.has_summary} label="SUMMARY" icon={FileText} href={`/movie/${movie.id}`} />
-                  <ActivityBadge active={movie.deep_dive_threads > 0} label="CHATS" count={movie.deep_dive_threads} icon={MonitorPlay} href={`/deep-dives?movie=${movie.id}`} />
-                  <ActivityBadge active={movie.discussion_posts > 0} label="POSTS" count={movie.discussion_posts} icon={MessageSquare} href={`/boards?movie=${movie.id}`} />
+                  <ActivityBadge active={movie.has_summary} label="SUMMARY" icon={FileText} href={`/movie/${movie.tmdb_id || movie.id}`} />
+                  <ActivityBadge active={movie.deep_dive_threads > 0} label="CHATS" count={movie.deep_dive_threads} icon={MonitorPlay} href={`/deep-dives?movie=${movie.tmdb_id || movie.id}`} />
+                  <ActivityBadge active={movie.discussion_posts > 0} label="POSTS" count={movie.discussion_posts} icon={MessageSquare} href={`/boards?movie=${movie.tmdb_id || movie.id}`} />
                 </div>
 
                 {/* Action */}
