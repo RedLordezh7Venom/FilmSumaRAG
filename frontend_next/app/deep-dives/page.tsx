@@ -31,7 +31,7 @@ export default function DeepDivesIndex() {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
         // Fetch all chat history, grouped by thread_id
         const userParam = user ? `?clerk_id=${user.id}` : "";
-        const response = await fetch(`${primaryApiUrl}/history/chat-history/thread/all${userParam}`);
+        const response = await fetch(`${primaryApiUrl}/history/thread/all${userParam}`);
         
         if (response.ok) {
           const data = await response.json();
@@ -45,7 +45,7 @@ export default function DeepDivesIndex() {
                   movie_title: `Movie #${msg.movie_id}`,
                   last_message: msg.message,
                   updated_at: new Date(msg.created_at).toLocaleString(),
-                  movie_id: msg.movie_id
+                  movie_id: msg.tmdb_id || msg.movie_id
                 });
               } else {
                 // Update last message
@@ -54,17 +54,16 @@ export default function DeepDivesIndex() {
                 existing.updated_at = new Date(msg.created_at).toLocaleString();
               }
             }
-            const initialSessions = Array.from(threadMap.values());
-            setSessions(initialSessions);
+            const sessionList = Array.from(threadMap.values());
             
-            // Enrich with TMDB titles
+            // Enrich titles with TMDB
             const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
             const enriched = await Promise.all(
-              initialSessions.map(async (session) => {
-                 try {
-                   const res = await fetch(`https://api.themoviedb.org/3/movie/${session.movie_id}?api_key=${TMDB_API_KEY}`);
-                   if (res.ok) {
-                     const tmdbData = await res.json();
+              sessionList.map(async (session) => {
+                try {
+                  const tmdbRes = await fetch(`https://api.themoviedb.org/3/movie/${session.movie_id}?api_key=${TMDB_API_KEY}`);
+                   if (tmdbRes.ok) {
+                     const tmdbData = await tmdbRes.json();
                      if (tmdbData.title) {
                         return { ...session, movie_title: tmdbData.title };
                      }

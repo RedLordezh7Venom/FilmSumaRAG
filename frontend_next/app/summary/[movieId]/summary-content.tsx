@@ -159,6 +159,7 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
   const [isLoading, setIsLoading] = useState(true);
   const [isWarmingUp, setIsWarmingUp] = useState(true); // Phase 1: preamble
   const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
 
   // Phase 1 typewriter runs while isWarmingUp is true
   const preamble = usePreambleTypewriter(isWarmingUp);
@@ -195,6 +196,17 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
 
         const contentType = response.headers.get("content-type") || "";
 
+        // Background Collection Sync for this User
+        const syncEngagement = () => {
+          if (user) {
+            fetch(`${primaryApiUrl}/movies/collection/engage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ clerk_id: user.id, tmdb_id: parseInt(movieId), type: 'summary' })
+            }).catch(() => {});
+          }
+        };
+
         // Cached: JSON response
         if (contentType.includes("application/json")) {
           const data = await response.json();
@@ -202,6 +214,7 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
             setIsWarmingUp(false); // End Phase 1
             setSummary(data.token || JSON.stringify(data));
             setIsLoading(false);
+            syncEngagement();
           }
           return;
         }
@@ -227,7 +240,10 @@ export default function SummaryContent({ movieId, length }: SummaryContentProps)
             if (line.startsWith("data: ")) {
               const dataStr = line.slice(6).trim();
               if (dataStr === "[DONE]") {
-                if (isMounted) setIsLoading(false);
+                if (isMounted) {
+                   setIsLoading(false);
+                   syncEngagement();
+                }
                 break;
               }
               try {

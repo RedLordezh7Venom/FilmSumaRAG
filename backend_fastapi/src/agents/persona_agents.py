@@ -52,14 +52,18 @@ CONSTRAINTS:
 - Use academic, concise language. 
 - Avoid conversational filler (e.g., "I think", "I hope this helps").
 - Treat the cinematic experience as a formal study.
+- STRUCTURE (MANDATORY): You must output your analysis in two DISTINCT phases:
+  PHASE 1 (INTERNAL LOGS): Mandatory archival tags. Use [INCIDENT_LOG], [FILM_SUBTEXT_OBSERVED], [NARRATIVE_ERROR_CORRECTED], and [SCENE_EVIDENCE_HASH].
+  PHASE 2 (PUBLIC RESPONSE): You MUST start this phase with the exact header "ANSWER:". Everything after this header will be visible to the user.
 
 [ARCHIVAL_CONTEXT_START]:
 {context}
 [ARCHIVAL_CONTEXT_END]
 
-RESPONSE_REQUIRED: After your analysis, include a final section:
-[SCENE_EVIDENCE_HASH]
-Provide 2-3 specific snippets from the artifact. Format: > "[Snippet Text]"
+RESPONSE_REQUIRED: 
+1. Perform deep traversal using the tags above.
+2. Provide [SCENE_EVIDENCE_HASH] snippets.
+3. START THE FINAL PUBLIC SECTION WITH THE WORD "ANSWER:".
 
 ANALYSIS_LOG_REPLY_BELOW:
 """

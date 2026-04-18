@@ -17,6 +17,12 @@ class HideCollectionRequest(BaseModel):
     movie_ids: List[int]
     unhide: Optional[bool] = False
 
+class EngageRequest(BaseModel):
+    clerk_id: str
+    tmdb_id: Optional[int] = None
+    movie_id: Optional[int] = None
+    type: str # 'seen', 'summary', 'deep_dive'
+
 @router.get("/collection")
 def get_collection(
     clerk_id: Optional[str] = None, 
@@ -52,8 +58,17 @@ def get_collection(
 
         # Check Data Presence First
         if user:
-            if deep_dive_count == 0 and discussion_count == 0:
+            engagement_q = db.query(sql_models.UserMovieEngagement).filter(sql_models.UserMovieEngagement.user_id == user.id, sql_models.UserMovieEngagement.movie_id == movie.id)
+            has_engaged = engagement_q.first() is not None
+            has_seen_summary = engagement_q.filter(sql_models.UserMovieEngagement.engagement_type == sql_models.EngagementType.SUMMARY).first() is not None
+            
+            if deep_dive_count == 0 and discussion_count == 0 and not has_engaged:
                 continue
+            
+            # If user has an explicit summary engagement, ensure we treat has_summary as true for their collection
+            if has_seen_summary:
+                summary_count = max(summary_count, 1)
+
         else:
             if summary_count == 0 and deep_dive_count == 0 and discussion_count == 0:
                 continue
@@ -76,9 +91,41 @@ def get_collection(
             "summary_count": summary_count,
             "deep_dive_threads": deep_dive_count,
             "discussion_posts": discussion_count,
-            "is_hidden": is_hidden
+            "is_hidden": is_hidden,
+            "tmdb_id": movie.tmdb_id
         })
     return result
+
+@router.post("/collection/engage")
+def engage_movie(payload: EngageRequest, db: Session = Depends(get_db)):
+    user = db.query(sql_models.User).filter(sql_models.User.clerk_id == payload.clerk_id).first()
+    if not user:
+        return {"status": "error", "message": "User not found"}
+        
+    db_movie = None
+    if payload.tmdb_id:
+        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.tmdb_id == payload.tmdb_id).first()
+    elif payload.movie_id:
+        db_movie = db.query(sql_models.Movie).filter(sql_models.Movie.id == payload.movie_id).first()
+        
+    if not db_movie:
+        return {"status": "error", "message": "Movie not found"}
+        
+    existing = db.query(sql_models.UserMovieEngagement).filter(
+        sql_models.UserMovieEngagement.user_id == user.id,
+        sql_models.UserMovieEngagement.movie_id == db_movie.id,
+        sql_models.UserMovieEngagement.engagement_type == payload.type
+    ).first()
+    
+    if not existing:
+        new_engagement = sql_models.UserMovieEngagement(
+            user_id=user.id, 
+            movie_id=db_movie.id,
+            engagement_type=payload.type
+        )
+        db.add(new_engagement)
+        db.commit()
+    return {"status": "success"}
 
 @router.post("/collection/hide")
 def hide_movies(payload: HideCollectionRequest, db: Session = Depends(get_db)):

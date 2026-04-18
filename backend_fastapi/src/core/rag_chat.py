@@ -46,6 +46,8 @@ async def retrieve_context_node(state: RAGState) -> dict:
     
     all_relevant_chunks = []
     all_relevant_ids = []
+    # Explicitly reset sources for the current turn to avoid accumulation from state memory
+    current_sources = []
     
     from src.db.database import SessionLocal
     from src.models.sql_models import Feedback, ChatHistory, SummaryCache, SummaryType, Movie
@@ -114,11 +116,8 @@ async def retrieve_context_node(state: RAGState) -> dict:
             all_relevant_chunks.extend([id_to_text[cid] for cid, score in top_items])
             all_relevant_ids.extend([cid for cid, score in top_items])
             
-            # Store structured sources for the frontend
-            if "relevant_sources" not in state:
-                state["relevant_sources"] = []
             for cid, score in top_items:
-                state["relevant_sources"].append({
+                current_sources.append({
                     "id": cid,
                     "text": id_to_text[cid]
                 })
@@ -138,7 +137,7 @@ async def retrieve_context_node(state: RAGState) -> dict:
     return {
         "context": "\n\n".join(all_relevant_chunks),
         "relevant_ids": all_relevant_ids,
-        "relevant_sources": state.get("relevant_sources", [])
+        "relevant_sources": current_sources
     }
 
 from langchain_core.runnables import RunnableConfig

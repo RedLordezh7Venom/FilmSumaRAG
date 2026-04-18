@@ -20,6 +20,7 @@ import {
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
+import { useUser } from '@clerk/nextjs';
 
 interface MovieDetails {
   id: number;
@@ -39,9 +40,11 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
   
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useUser();
 
   const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
   const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+  const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://localhost:8000";
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -52,6 +55,14 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
         const data = await response.json();
         if (response.ok) {
           setMovie(data);
+          // Auto-track that the user visited this library item
+          if (user) {
+            fetch(`${primaryApiUrl}/movies/collection/engage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ clerk_id: user.id, tmdb_id: parseInt(id), type: 'seen' })
+            }).catch(() => {});
+          }
         } else {
           setMovie(null);
         }

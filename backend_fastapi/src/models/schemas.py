@@ -40,6 +40,8 @@ class ChatHistoryCreate(ChatHistoryBase):
 class ChatHistoryResponse(ChatHistoryBase):
     id: int
     created_at: datetime
+    tmdb_id: Optional[int] = None
+    
     class Config:
         from_attributes = True
 

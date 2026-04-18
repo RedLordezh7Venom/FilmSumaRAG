@@ -21,6 +21,7 @@ interface CollectionMovie {
   summary_count: number;
   deep_dive_threads: number;
   discussion_posts: number;
+  tmdb_id?: number | null;
   // TMDB enrichment (client-side)
   tmdb_title?: string;
   tmdb_poster?: string;
@@ -57,9 +58,10 @@ export default function CollectionPage() {
         const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
         const enriched = await Promise.all(
           data.map(async (movie) => {
+            if (!movie.tmdb_id) return movie;
             try {
               const tmdbRes = await fetch(
-                `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_API_KEY}`
+                `https://api.themoviedb.org/3/movie/${movie.tmdb_id}?api_key=${TMDB_API_KEY}`
               );
               if (tmdbRes.ok) {
                 const tmdb = await tmdbRes.json();

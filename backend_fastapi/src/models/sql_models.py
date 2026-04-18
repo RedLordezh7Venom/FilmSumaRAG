@@ -10,6 +10,11 @@ class JobStatus(str, enum.Enum):
     COMPLETED = "completed"
     FAILED = "failed"
 
+class EngagementType(str, enum.Enum):
+    SEEN = "seen"
+    SUMMARY = "summary"
+    DEEP_DIVE = "deep_dive"
+
 class User(Base):
     __tablename__ = "users"
 
@@ -34,6 +39,18 @@ class UserHiddenMovie(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="hidden_movies")
+    movie = relationship("Movie")
+
+class UserMovieEngagement(Base):
+    __tablename__ = "user_movie_engagements"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    movie_id = Column(Integer, ForeignKey("movies.id"))
+    engagement_type = Column(Enum(EngagementType), default=EngagementType.SEEN)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    user = relationship("User")
     movie = relationship("Movie")
 
 class Movie(Base):
@@ -90,6 +107,10 @@ class ChatHistory(Base):
 
     user = relationship("User", back_populates="chats")
     movie = relationship("Movie", back_populates="chats")
+
+    @property
+    def tmdb_id(self):
+        return self.movie.tmdb_id if self.movie else None
 
 class Feedback(Base):
     __tablename__ = "feedback"

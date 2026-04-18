@@ -6,6 +6,7 @@ from src.db.database import get_db
 from src.models import sql_models
 from sqlalchemy.orm import Session
 import json
+import re
 from typing import Optional, List, Union
 
 router = APIRouter()
@@ -99,8 +100,23 @@ async def deep_dive_chat(
 
         # 4. Stream response using SSE
         async def event_generator():
-            full_answer = ""
+            full_raw = ""
+            phase_answer = False # True once we hit the ANSWER: block
             citations = []
+            
+            # Patterns for parsing (Handle with or without colons)
+            THOUGHT_PATTERN = re.compile(r'\[([A-Z_]+)\]:?\s*(.*?)(?=\n\[(?:[A-Z_]+)\]:?|ANSWER:|$)', re.DOTALL)
+            ANSWER_MARKER = "ANSWER:"
+
+            async def stream_words(text: str, delay: float = 0.3):
+                """Yields text in chunks of ~10 words with a delay."""
+                words = text.split()
+                for i in range(0, len(words), 10):
+                    chunk = " ".join(words[i:i+10]) + " "
+                    yield f"data: {json.dumps({'token': chunk})}\n\n"
+                    import asyncio
+                    await asyncio.sleep(delay)
+
             try:
                 async for item in answer_question_stream(
                     tmdb_id=resolved_tmdb_ids,
@@ -109,21 +125,64 @@ async def deep_dive_chat(
                     thread_id=payload.thread_id
                 ):
                     if item["type"] == "status":
-                        status_json = json.dumps({'token': f"💡 _{item['message']}_ \n\n"})
-                        yield f"data: {status_json}\n\n"
+                        status_text = f"💡 _{item['message']}_ \n\n"
+                        yield f"data: {json.dumps({'token': status_text})}\n\n"
                         continue
                     if item["type"] == "citations":
                         citations = item["sources"]
                         yield f"data: {json.dumps(item)}\n\n"
                         continue
+                    
                     if item["type"] == "token":
                         token = item["token"]
-                        full_answer += token
-                        import asyncio
-                        await asyncio.sleep(0.05)
-                        yield f"data: {json.dumps({'token': token})}\n\n"
+                        full_raw += token
+                        
+                        # Detect transition: Strict divide at the FIRST occurrence of "ANSWER:"
+                        if not phase_answer and (ANSWER_MARKER in full_raw):
+                            phase_answer = True
+                            
+                            # Split into Pre and Post
+                            parts = full_raw.split(ANSWER_MARKER, 1)
+                            pre_answer = parts[0].strip()
+                            post_answer = parts[1].strip() if len(parts) > 1 else ""
+                            
+                            # 1. Capture ALL pre-answer text into thoughts
+                            thoughts = []
+                            # Try to parse any archival tags first
+                            for m in THOUGHT_PATTERN.finditer(pre_answer):
+                                tag = m.group(1).strip()
+                                content = m.group(2).strip()
+                                if content: thoughts.append({"tag": tag, "content": content})
+                            
+                            # 2. Capture anything else in that block as general archival logs
+                            leftover = THOUGHT_PATTERN.sub("", pre_answer).strip()
+                            if leftover:
+                                thoughts.insert(0, {"tag": "ARCHIVAL_LOGS", "content": leftover})
+                            
+                            if thoughts:
+                                yield f"data: {json.dumps({'type': 'thoughts', 'thoughts': thoughts})}\n\n"
+                            
+                            # 3. Paced stream of the initial answer block
+                            if post_answer:
+                                async for word_chunk in stream_words(post_answer):
+                                    yield word_chunk
+                        
+                        elif phase_answer:
+                            # We are past the boundary, stream tokens as they arrive
+                            yield f"data: {json.dumps({'token': token})}\n\n"
+                            
                     if item["type"] == "done":
                         break
+                
+                # FINAL FLUSH: Handle case where 'ANSWER:' never appeared
+                if not phase_answer:
+                    # If model was stubborn, treat everything as thoughts/logs
+                    thoughts = [{"tag": "ARCHIVAL_LOGS", "content": full_raw}]
+                    yield f"data: {json.dumps({'type': 'thoughts', 'thoughts': thoughts})}\n\n"
+                    # And use a fallback summary as the 'answer' or just tell the user to check logs
+                    err_msg = "_Final response captured in Archive Reasoning._"
+                    yield f"data: {json.dumps({'token': err_msg})}\n\n"
+
             except FileNotFoundError as e:
                 logger.error(f"Embeddings missing: {e}")
                 err_msg = "⚠️ *This film hasn't been indexed yet. Please visit its summary page first to generate the archive.*"
@@ -135,13 +194,16 @@ async def deep_dive_chat(
                 yield f"data: {json.dumps({'token': err_msg})}\n\n"
                 full_answer = err_msg
 
-            # Finalize: Save to DB
+            # Finalize: Save the clean answer to DB
+            answer_match = full_raw.split(ANSWER_MARKER)
+            clean_answer = answer_match[-1].strip() if len(answer_match) > 1 else full_raw
+
             assistant_msg = sql_models.ChatHistory(
                 thread_id=payload.thread_id,
                 user_id=db_user.id if db_user else None,
                 movie_id=first_movie_db_id,
                 role="assistant",
-                message=full_answer,
+                message=clean_answer,
                 citations=json.dumps(citations),
                 persona=payload.persona
             )

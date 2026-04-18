@@ -46,7 +46,7 @@ interface MovieIdentity {
 }
 
 export default function DeepDiveChatPage({ params }: { params: Promise<{ threadId: string }> }) {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const unwrappedParams = use(params);
   const threadId = unwrappedParams.threadId;
   const searchParams = useSearchParams();
@@ -113,10 +113,12 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
 
   // Load existing thread history from backend
   useEffect(() => {
+    if (!isLoaded) return;
     const loadHistory = async () => {
       try {
         const primaryApiUrl = process.env.NEXT_PUBLIC_FASTAPI_URL || "http://127.0.0.1:8000";
-        const res = await fetch(`${primaryApiUrl}/history/chat-history/thread/${threadId}`);
+        const userParam = user ? `?clerk_id=${user.id}` : "";
+        const res = await fetch(`${primaryApiUrl}/history/thread/${threadId}${userParam}`);
         if (res.ok) {
           const history = await res.json();
           if (Array.isArray(history) && history.length > 0) {
@@ -129,13 +131,14 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
             setMessages(restored);
 
             if (!movieId && history[0].movie_id) {
+              const fetchId = history[0].tmdb_id || history[0].movie_id;
               const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-              fetch(`https://api.themoviedb.org/3/movie/${history[0].movie_id}?api_key=${TMDB_API_KEY}`)
+              fetch(`https://api.themoviedb.org/3/movie/${fetchId}?api_key=${TMDB_API_KEY}`)
                 .then(r => r.json())
                 .then(data => {
                   if (data.title) {
                     const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : '';
-                    setMovieList([{ id: history[0].movie_id, title: `${data.title}${year}` }]);
+                    setMovieList([{ id: fetchId, title: `${data.title}${year}` }]);
                   }
                 }).catch(() => { });
             }
@@ -150,7 +153,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
       ]);
     };
     loadHistory();
-  }, [threadId]);
+  }, [threadId, isLoaded, user?.id]);
 
   useEffect(() => {
     scrollEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -209,7 +212,16 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             const dataStr = line.slice(6).trim();
-            if (dataStr === "[DONE]") continue;
+            if (dataStr === "[DONE]") {
+              if (user && movieList.length > 0) {
+                 fetch(`${primaryApiUrl}/movies/collection/engage`, {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify({ clerk_id: user.id, tmdb_id: movieList[0].id, type: 'deep_dive' })
+                 }).catch(() => {});
+              }
+              continue;
+            }
             try {
               const data = JSON.parse(dataStr);
               if (data.type === "thoughts") {
@@ -226,7 +238,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                   msg.id === aiMsgId ? { ...msg, text: fullText } : msg
                 ));
               }
-            } catch (e) { /* partial SSE line */ }
+            } catch (e) { }
           }
         }
       }
@@ -241,14 +253,6 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
     }
   };
 
-  const handleFeedbackClick = (msgId: number, type: 'up' | 'down') => {
-    if (type === 'down') {
-      setFeedbackDraft({ msgId, type: 'down', comment: '' });
-    } else {
-      submitFeedback(msgId, 'up', '');
-    }
-  };
-
   const submitFeedback = async (msgId: number, type: 'up' | 'down', comment: string = '') => {
     setMessages(prev => prev.map(m => m.id === msgId ? { ...m, feedback: type } : m));
     if (type === 'down') setFeedbackDraft(null);
@@ -258,7 +262,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          clerk_id: "guest", // TODO: wire Clerk user.id here
+          clerk_id: user?.id || "guest",
           tmdb_id: movieList[0]?.id || 0,
           upvote: type === 'up',
           context: "deep_dive",
@@ -268,6 +272,14 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
       });
     } catch (err) {
       console.warn("Feedback endpoint unavailable:", err);
+    }
+  };
+
+  const handleFeedbackClick = (msgId: number, type: 'up' | 'down') => {
+    if (type === 'down') {
+      setFeedbackDraft({ msgId, type: 'down', comment: '' });
+    } else {
+      submitFeedback(msgId, 'up', '');
     }
   };
 
@@ -363,14 +375,13 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                       }
                     </div>
 
-                    {/* Rich Citations — shown 1s after generation completes */}
+                    {/* Rich Citations */}
                     {m.citations && m.citations.length > 0 && m.text && streamingMsgId !== m.id && (
                       <DelayedReveal delay={1000}>
                         <div className="flex flex-wrap gap-3 pt-2">
                           <div className="text-criterion opacity-20 text-[9px] w-full mb-1 uppercase tracking-widest">Supporting Archive Fragments:</div>
                           {m.citations.map((cite, idx) => {
                             const isPinned = activeSource?.msgId === m.id && activeSource?.sourceIdx === idx;
-
                             return (
                               <div key={idx} className="group/cite relative">
                                 <button
@@ -380,74 +391,82 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
                                   <Zap size={10} className={isPinned ? 'fill-current' : 'opacity-40'} />
                                   <span className="text-[10px] font-bold tracking-widest uppercase">FRAGMENT_{idx + 1}</span>
                                 </button>
-
-                              {/* Hover/Pinned Preview */}
-                              <div className={`absolute bottom-full left-0 mb-4 w-96 p-6 bg-[#161b22] border-2 border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-300 z-50 transform 
-                                      ${isPinned ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-1 scale-95 pointer-events-none group-hover/cite:opacity-100 group-hover/cite:translate-y-0 group-hover/cite:scale-100'}`}
-                              >
-                                <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                                  <div className="text-[10px] text-criterion font-black tracking-[0.2em] uppercase">Fragment Context</div>
-                                  <button onClick={(e) => { e.stopPropagation(); setActiveSource(null); }} className="p-1 hover:bg-white/5 rounded-full transition-colors">
-                                    <X size={14} className="text-white/40" />
-                                  </button>
-                                </div>
-                                <div className="text-white font-serif italic text-base leading-relaxed max-h-60 overflow-y-auto pr-4 custom-scrollbar">
-                                  <span className="text-indigo-400 text-2xl leading-none mr-2 font-serif opacity-50">"</span>
-                                  {cite.text.split('] ').pop()}
-                                  <span className="text-indigo-400 text-2xl leading-none ml-1 font-serif opacity-50">"</span>
-                                </div>
-                                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                                  <div className="flex gap-4">
-                                    <div className="flex flex-col">
-                                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Reliability</span>
-                                      <span className="text-[10px] text-green-500 font-bold">VERIFIED</span>
-                                    </div>
-                                    <div className="flex flex-col">
-                                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Source</span>
-                                      <span className="text-[10px] text-indigo-400 font-bold">TRANSCRIPT</span>
-                                    </div>
+                                <div className={`absolute bottom-full left-0 mb-4 w-96 p-6 bg-[#161b22] border-2 border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-300 z-50 transform 
+                                        ${isPinned ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-1 scale-95 pointer-events-none group-hover/cite:opacity-100 group-hover/cite:translate-y-0 group-hover/cite:scale-100'}`}
+                                >
+                                  <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+                                    <div className="text-[10px] text-criterion font-black tracking-[0.2em] uppercase">Fragment Context</div>
+                                    <button onClick={(e) => { e.stopPropagation(); setActiveSource(null); }} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                                      <X size={14} className="text-white/40" />
+                                    </button>
                                   </div>
-                                  <div className="w-12 h-1 bg-white/5 rounded-full relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-indigo-500 w-3/4 animate-pulse"></div>
+                                  <div className="text-white font-serif italic text-base leading-relaxed max-h-60 overflow-y-auto pr-4 custom-scrollbar">
+                                    <span className="text-indigo-400 text-2xl leading-none mr-2 font-serif opacity-50">"</span>
+                                    {cite.text.split('] ').pop()}
+                                    <span className="text-indigo-400 text-2xl leading-none ml-1 font-serif opacity-50">"</span>
+                                  </div>
+                                  <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                                    <div className="flex gap-4">
+                                      <div className="flex flex-col">
+                                        <span className="text-[8px] text-white/20 uppercase tracking-tighter">Reliability</span>
+                                        <span className="text-[10px] text-green-500 font-bold">VERIFIED</span>
+                                      </div>
+                                      <div className="flex flex-col">
+                                        <span className="text-[8px] text-white/20 uppercase tracking-tighter">Source</span>
+                                        <span className="text-[10px] text-indigo-400 font-bold">TRANSCRIPT</span>
+                                      </div>
+                                    </div>
+                                    <div className="w-12 h-1 bg-white/5 rounded-full relative overflow-hidden">
+                                      <div className="absolute inset-0 bg-indigo-500 w-3/4 animate-pulse"></div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
                         </div>
                       </DelayedReveal>
                     )}
 
-                    {/* Model Thoughts — toggleable panel */}
-                    {m.thoughts && m.thoughts.length > 0 && m.text && (
+                    {/* Archive Logic Toggle (Gemini-style Thinking Box) */}
+                    {m.thoughts && m.thoughts.length > 0 && (
                       <div className="pt-2">
                         <button
                           onClick={() => setActiveThinker(activeThinker === m.id ? null : m.id)}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-[10px] font-bold tracking-widest uppercase ${activeThinker === m.id
-                              ? 'bg-amber-600/20 border-amber-500/40 text-amber-400'
+                          className={`flex items-center gap-3 px-4 py-2 rounded-xl border transition-all text-[11px] font-bold tracking-widest uppercase group ${
+                            activeThinker === m.id
+                              ? 'bg-amber-600/20 border-amber-500/40 text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
                               : 'border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 text-criterion'
-                            }`}
+                          }`}
                         >
-                          <span className="text-[10px]">⚡</span>
-                          MODEL THOUGHTS
-                          <span className="font-mono opacity-50">({m.thoughts.length})</span>
+                          <Zap size={12} className={`${activeThinker === m.id ? 'fill-amber-400' : 'opacity-40 group-hover:opacity-100'}`} />
+                          {activeThinker === m.id ? 'Collapse Research Logic' : 'View Archive Reasoning'}
                         </button>
-
+                        
                         {activeThinker === m.id && (
-                          <div className="mt-4 p-6 bg-[#161b22] border border-amber-500/20 rounded-2xl shadow-2xl space-y-5">
-                            <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                              <div className="text-[10px] text-amber-400 font-black tracking-[0.2em] uppercase">Internal Reasoning Chain</div>
-                              <button onClick={() => setActiveThinker(null)} className="p-1 hover:bg-white/5 rounded-full transition-colors">
-                                <X size={14} className="text-white/40" />
-                              </button>
-                            </div>
-                            {m.thoughts.map((t, ti) => (
-                              <div key={ti} className="space-y-2">
-                                <div className="text-[9px] font-mono tracking-widest text-amber-500/60 uppercase">[{t.tag}]</div>
-                                <p className="text-slate-400 font-serif italic text-sm leading-relaxed">{t.content}</p>
-                              </div>
-                            ))}
+                          <div className="mt-4 p-6 bg-[#161b22] border border-amber-500/10 rounded-2xl space-y-6 animate-in fade-in slide-in-from-top-2 duration-300 shadow-2xl">
+                             <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                                <div className="text-[10px] text-amber-500/40 font-black tracking-[0.2em] uppercase flex items-center gap-2">
+                                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500/40 animate-pulse" />
+                                   Internal Archival reasoning
+                                </div>
+                                <button onClick={() => setActiveThinker(null)} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                                   <X size={14} className="text-white/40" />
+                                </button>
+                             </div>
+                             <div className="space-y-6">
+                                {m.thoughts.map((t, ti) => (
+                                  <div key={ti} className="space-y-2 group/thought">
+                                     <div className="text-[9px] font-mono tracking-[0.3em] text-amber-500/60 uppercase flex items-center gap-2">
+                                        <div className="w-4 h-[1px] bg-amber-500/20" />
+                                        {t.tag.replace(/_/g, ' ')}
+                                     </div>
+                                     <div className="text-slate-400 font-serif italic text-base leading-relaxed pl-6 border-l border-white/5 transition-colors group-hover/thought:border-amber-500/20">
+                                        {t.content}
+                                     </div>
+                                  </div>
+                                ))}
+                             </div>
                           </div>
                         )}
                       </div>
@@ -500,11 +519,6 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               </div>
             </div>
           ))}
-          {isSending && messages[messages.length - 1]?.text === "" && (
-            <div className="flex justify-start">
-              <div className="text-criterion opacity-20 animate-pulse">SYNCHRONIZING_COLLECTIVE_ARCHIVE...</div>
-            </div>
-          )}
           <div ref={scrollEndRef} />
         </div>
 
