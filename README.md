@@ -27,10 +27,12 @@ Sum A Film isn't just another movie database. It's an **Agentic AI Playground** 
 
 <!-- PROJECT_DEMO_VIDEO -->
 <div align="center">
-  <p><b>WATCH THE FULL PLATFORM DEMO:</b></p>
-  <a href="https://drive.google.com/file/d/1CPpkNBeMNEGJVIra651uwYKOHpwv97cf/view?usp=sharing">
-    <img src="https://via.placeholder.com/800x450/0b0f17/ffffff?text=Click+to+Watch+FilmSumaRAG+Demo" width="800" alt="Video Placeholder">
-  </a>
+  <h3>🎞️ Platform Walkthrough</h3>
+  <video src="https://drive.google.com/u/0/uc?id=1CPpkNBeMNEGJVIra651uwYKOHpwv97cf&export=download" width="100%" style="max-width: 800px;" controls muted>
+    Your browser does not support the video tag. 
+    <a href="https://drive.google.com/file/d/1CPpkNBeMNEGJVIra651uwYKOHpwv97cf/view?usp=sharing">Click here to watch the demo on Google Drive.</a>
+  </video>
+  <p><i>Experience the future of cinematic analysis.</i></p>
 </div>
 
 ---
