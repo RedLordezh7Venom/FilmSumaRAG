@@ -148,6 +148,12 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
       } catch (err) {
         console.error("Failed to load thread history:", err);
       }
+      if (!movieId) {
+        setMessages([
+          { id: 0, text: `ERROR: 403_UNAUTHORIZED. Thread does not exist or access is restricted.`, sender: 'ai' }
+        ]);
+        return;
+      }
       setMessages([
         { id: 0, text: `SESSION_INITIALIZED. [THREAD: ${threadId.substring(0, 8)}] READY_FOR_INQUIRY.`, sender: 'ai' }
       ]);
@@ -534,7 +540,7 @@ export default function DeepDiveChatPage({ params }: { params: Promise<{ threadI
               className="w-full bg-transparent border-b border-white/10 py-6 pr-32 text-2xl font-serif italic text-white outline-none focus:border-white transition-all tracking-tight"
             />
             <button
-              disabled={isSending || !inputMessage.trim()}
+              disabled={isSending || !inputMessage.trim() || (!movieId && messages.length <= 1)}
               onClick={handleSendMessage}
               className="absolute right-0 bottom-6 text-criterion hover:text-white disabled:opacity-10 transition-all flex items-center gap-3"
             >
