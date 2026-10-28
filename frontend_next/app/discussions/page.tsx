@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   ArrowLeft, 
   User, 
@@ -10,7 +10,6 @@ import {
   Shield,
   FileText
 } from 'lucide-react';
-import Link from 'next/link';
 
 interface Thread {
   id: string;
@@ -60,11 +59,11 @@ export default function GlobalForumPage() {
             <h1 className="text-2xl font-bold text-[#e1e4e8] tracking-tight">FilmSuma boards /film/ - Discussion</h1>
             <div className="flex gap-4 text-[11px] font-sans text-[#a3a9b1]">
               <span className="hover:underline cursor-pointer">Catalog</span>
-              <span>•</span>
+              <span>â€¢</span>
               <span className="hover:underline cursor-pointer">Rules</span>
-              <span>•</span>
+              <span>â€¢</span>
               <span className="hover:underline cursor-pointer">Wiki</span>
-              <span>•</span>
+              <span>â€¢</span>
               <span className="hover:underline cursor-pointer">Search</span>
             </div>
           </div>
@@ -126,9 +125,9 @@ export default function GlobalForumPage() {
             <Shield size={14} />
             <span className="font-bold">Board Statistics:</span> 
             <span>Threads: 14,021</span>
-            <span>•</span>
+            <span>â€¢</span>
             <span>Posts: 298,401</span>
-            <span>•</span>
+            <span>â€¢</span>
             <span className="text-emerald-500">Online: 1,402</span>
           </div>
           <p className="text-[10px] text-[#484f58] font-sans italic">

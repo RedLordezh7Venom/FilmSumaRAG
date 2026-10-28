@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Sparkles, Loader2, Play } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function SummaryContent({ movie }: { movie: any }) {
   const [summary, setSummary] = useState("");

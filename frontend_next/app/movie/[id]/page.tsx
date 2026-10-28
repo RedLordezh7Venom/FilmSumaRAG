@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, use } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Film, 
   Star, 
@@ -130,7 +130,7 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
                    <div className="opacity-30 mb-2">SCORE / TMDB</div>
                    <div className="text-white text-3xl font-black italic flex items-center gap-3">
                       <Star size={24} fill="currentColor" strokeWidth={0} className="text-white" />
-                      {movie.vote_average ? movie.vote_average.toFixed(1) : '—'}
+                      {movie.vote_average ? movie.vote_average.toFixed(1) : 'â€”'}
                    </div>
                 </div>
                 <div>
@@ -144,7 +144,7 @@ export default function MovieDashboard({ params }: { params: Promise<{ id: strin
                    <div className="opacity-30 mb-2">RELEASE / YEAR</div>
                    <div className="text-white text-3xl font-black italic flex items-center gap-3">
                       <Calendar size={24} className="text-white" />
-                      {movie.release_date ? movie.release_date.split('-')[0] : '—'}
+                      {movie.release_date ? movie.release_date.split('-')[0] : 'â€”'}
                    </div>
                 </div>
                 <div>

@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Send, Loader2, Sparkles, User, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Loader2, User } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Message {
   id: number;

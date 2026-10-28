@@ -1,5 +1,4 @@
 import os
-import requests
 from typing import List, Dict, Optional
 from langchain_core.messages import HumanMessage
 from src.core.llm_model import llm
@@ -51,18 +50,6 @@ Only return the JSON list.
 
     async def _query_perplexity(self, movie_name: str) -> List[Dict[str, str]]:
         # Mock Perplexity integration
-        endpoint = "https://api.perplexity.ai/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {self.perplexity_key}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "model": "pplx-7b-online",
-            "messages": [
-                {"role": "system", "content": "You search for YouTube video essays. Only return JSON list of {title, url}."},
-                {"role": "human", "content": f"Find best YouTube video essays for the movie {movie_name}."}
-            ]
-        }
         # response = requests.post(endpoint, headers=headers, json=payload)
         # return response.json()['choices'][0]['message']['content']
         return []

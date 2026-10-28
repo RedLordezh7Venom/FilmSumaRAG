@@ -1,13 +1,11 @@
 import sys
 import os
 import asyncio
-import json
 
 # Add src to path
 sys.path.append(os.getcwd())
 
-from src.core.rag_chat import retrieve_context, generate_answer, RAGState, embed_query
-from src.agents.persona_agents import PersonaManager
+from src.core.rag_chat import retrieve_context, generate_answer, embed_query
 from langchain_core.messages import HumanMessage
 
 async def self_verify():
@@ -26,7 +24,6 @@ async def self_verify():
     }
     
     print("\n--- Testing Retrieval (Vector + BM25 Integration) ---")
-    retrieval_input = {**state, "query_vec": None} # Placeholder
     # We call embed_query first as the graph would
     embedded_state = embed_query(state)
     state.update(embedded_state)

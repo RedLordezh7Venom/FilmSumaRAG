@@ -2,12 +2,18 @@
 
 import { useState, useEffect, useRef, use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ThumbsUp, ThumbsDown, Zap, ExternalLink, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  ThumbsUp,
+  ThumbsDown,
+  Zap,
+  X
+} from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
 
 
-// Mounts immediately but fades in after `delay` ms — for post-stream reveals
+// Mounts immediately but fades in after `delay` ms â€” for post-stream reveals
 function DelayedReveal({ children, delay = 1000 }: { children: React.ReactNode; delay?: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {

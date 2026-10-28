@@ -1,7 +1,7 @@
-import { Suspense, use } from "react"
+import { Suspense } from "react";
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, FileText, Info } from "lucide-react"
+import { ArrowLeft } from "lucide-react";
 import SummaryContent from "./summary-content"
 
 interface SummaryPageProps {

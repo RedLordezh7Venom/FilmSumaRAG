@@ -1,9 +1,7 @@
 import os
 import psutil
 import requests
-import json
 import time
-import threading
 from concurrent.futures import ThreadPoolExecutor
 
 # Metrics collection
@@ -38,9 +36,9 @@ def simulate_chat_session(movie: str, thread_id: str):
                 if line:
                     token_count += 1
             duration = time.time() - start_time
-            print(f"✅ [CHAT] Thread {thread_id} finished in {duration:.2f}s ({token_count} tokens)")
+            print(f"✅ [CHAT] Session finished in {duration:.2f}s ({token_count} tokens)")
     except Exception as e:
-        print(f"❌ [CHAT] Thread {thread_id} failed: {str(e)}")
+        print(f"❌ [CHAT] Session failed with error: {type(e).__name__}")
 
 def benchmark_peak_usage():
     print("\n" + "="*50)

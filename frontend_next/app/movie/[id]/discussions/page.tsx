@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
-import { MessageSquare, ArrowLeft, Send, User, Quote, ShieldAlert, Plus, MessageCircle } from "lucide-react"
+import { ArrowLeft, Quote } from "lucide-react";
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 

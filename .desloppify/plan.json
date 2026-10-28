@@ -1,0 +1,1763 @@
+{
+  "version": 8,
+  "created": "2026-10-28T13:55:15+00:00",
+  "updated": "2026-10-28T14:33:19+00:00",
+  "queue_order": [],
+  "deferred": [],
+  "skipped": {},
+  "active_cluster": null,
+  "overrides": {
+    "unused::frontend_next/app/deep-dive/[threadId]/page.tsx::ExternalLink:5": {
+      "issue_id": "unused::frontend_next/app/deep-dive/[threadId]/page.tsx::ExternalLink:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/discussions/page.tsx::useEffect:3": {
+      "issue_id": "unused::frontend_next/app/discussions/page.tsx::useEffect:3",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/discussions/page.tsx::Link:13": {
+      "issue_id": "unused::frontend_next/app/discussions/page.tsx::Link:13",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/layout.tsx::Metadata:1": {
+      "issue_id": "unused::frontend_next/app/layout.tsx::Metadata:1",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Sparkles:5": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Sparkles:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Zap:5": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Zap:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::AnimatePresence:6": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::AnimatePresence:6",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageSquare:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageSquare:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Send:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Send:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::User:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::User:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::ShieldAlert:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::ShieldAlert:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Plus:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Plus:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageCircle:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageCircle:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/page.tsx::AnimatePresence:4": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/page.tsx::AnimatePresence:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/summary-content.tsx::Loader2:5": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/summary-content.tsx::Loader2:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/movie/[id]/summary-content.tsx::Play:5": {
+      "issue_id": "unused::frontend_next/app/movie/[id]/summary-content.tsx::Play:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::Sparkles:4": {
+      "issue_id": "unused::frontend_next/app/page.tsx::Sparkles:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::BookOpen:4": {
+      "issue_id": "unused::frontend_next/app/page.tsx::BookOpen:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::Info:4": {
+      "issue_id": "unused::frontend_next/app/page.tsx::Info:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::Input:5": {
+      "issue_id": "unused::frontend_next/app/page.tsx::Input:5",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::Card:7": {
+      "issue_id": "unused::frontend_next/app/page.tsx::Card:7",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/page.tsx::CardContent:7": {
+      "issue_id": "unused::frontend_next/app/page.tsx::CardContent:7",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/research/page.tsx::Search:4": {
+      "issue_id": "unused::frontend_next/app/research/page.tsx::Search:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/research/page.tsx::ExternalLink:4": {
+      "issue_id": "unused::frontend_next/app/research/page.tsx::ExternalLink:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::use:1": {
+      "issue_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::use:1",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::FileText:4": {
+      "issue_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::FileText:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::Info:4": {
+      "issue_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::Info:4",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/app/summary/[movieId]/summary-content.tsx::useRef:3": {
+      "issue_id": "unused::frontend_next/app/summary/[movieId]/summary-content.tsx::useRef:3",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "unused::frontend_next/components/theme-provider.tsx::React:3": {
+      "issue_id": "unused::frontend_next/components/theme-provider.tsx::React:3",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/sidebar.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/sidebar.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/deep-dive/[threadId]/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/deep-dive/[threadId]/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/collection/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/collection/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/summary/[movieId]/summary-content.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/summary/[movieId]/summary-content.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/chart.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/chart.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/carousel.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/carousel.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/movie/[id]/discussions/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/movie/[id]/discussions/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/menubar.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/menubar.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/movie/[id]/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/movie/[id]/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/dropdown-menu.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/dropdown-menu.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/context-menu.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/context-menu.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/boards/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/boards/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/hooks/use-toast.ts": {
+      "issue_id": "test_coverage::frontend_next/hooks/use-toast.ts",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/use-toast.ts": {
+      "issue_id": "test_coverage::frontend_next/components/ui/use-toast.ts",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:05:07+00:00"
+    },
+    "test_coverage::frontend_next/app/browse/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/browse/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/form.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/form.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/deep-dives/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/deep-dives/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/select.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/select.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/research/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/research/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/movie/[id]/deep-dive-content.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/movie/[id]/deep-dive-content.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/command.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/command.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/discussions/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/discussions/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/alert-dialog.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/alert-dialog.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/sheet.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/sheet.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/toast.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/toast.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/sidebar.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/sidebar.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/navigation-menu.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/navigation-menu.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/dialog.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/dialog.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/drawer.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/drawer.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/table.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/table.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/pagination.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/pagination.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/breadcrumb.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/breadcrumb.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/login/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/login/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/summary/[movieId]/page.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/summary/[movieId]/page.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/card.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/card.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/effects/typewriter.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/effects/typewriter.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/input-otp.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/input-otp.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/calendar.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/calendar.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/toggle-group.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/toggle-group.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/alert.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/alert.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/accordion.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/accordion.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/button.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/button.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/tabs.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/tabs.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/auth-sync.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/auth-sync.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/avatar.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/avatar.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/app/movie/[id]/summary-content.tsx": {
+      "issue_id": "test_coverage::frontend_next/app/movie/[id]/summary-content.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/scroll-area.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/scroll-area.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/toggle.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/toggle.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/resizable.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/resizable.tsx",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::abstraction_fitness": {
+      "issue_id": "subjective::abstraction_fitness",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::ai_generated_debt": {
+      "issue_id": "subjective::ai_generated_debt",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::api_surface_coherence": {
+      "issue_id": "subjective::api_surface_coherence",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::authorization_consistency": {
+      "issue_id": "subjective::authorization_consistency",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::contract_coherence": {
+      "issue_id": "subjective::contract_coherence",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::convention_outlier": {
+      "issue_id": "subjective::convention_outlier",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::cross_module_architecture": {
+      "issue_id": "subjective::cross_module_architecture",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::dependency_health": {
+      "issue_id": "subjective::dependency_health",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::design_coherence": {
+      "issue_id": "subjective::design_coherence",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::error_consistency": {
+      "issue_id": "subjective::error_consistency",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::high_level_elegance": {
+      "issue_id": "subjective::high_level_elegance",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::incomplete_migration": {
+      "issue_id": "subjective::incomplete_migration",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::initialization_coupling": {
+      "issue_id": "subjective::initialization_coupling",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::logic_clarity": {
+      "issue_id": "subjective::logic_clarity",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::low_level_elegance": {
+      "issue_id": "subjective::low_level_elegance",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::mid_level_elegance": {
+      "issue_id": "subjective::mid_level_elegance",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::naming_quality": {
+      "issue_id": "subjective::naming_quality",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::package_organization": {
+      "issue_id": "subjective::package_organization",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::test_strategy": {
+      "issue_id": "subjective::test_strategy",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "subjective::type_safety": {
+      "issue_id": "subjective::type_safety",
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-10-28T14:07:33+00:00"
+    },
+    "test_coverage::frontend_next/components/ui/radio-group.tsx": {
+      "issue_id": "test_coverage::frontend_next/components/ui/radio-group.tsx",
+      "created_at": "2026-10-28T14:07:33+00:00",
+      "cluster": null,
+      "updated_at": "2026-10-28T14:08:46+00:00"
+    }
+  },
+  "clusters": {
+    "auto/test_coverage-untested_module": {
+      "name": "auto/test_coverage-untested_module",
+      "description": "Fix 50 test coverage issues",
+      "issue_ids": [],
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "updated_at": "2026-10-28T14:07:33+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage::untested_module",
+      "action": "review test coverage gaps",
+      "execution_status": "done",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/initial-review": {
+      "name": "auto/initial-review",
+      "description": "Initial review of 20 unscored subjective dimensions",
+      "issue_ids": [
+        "subjective::abstraction_fitness",
+        "subjective::ai_generated_debt",
+        "subjective::api_surface_coherence",
+        "subjective::authorization_consistency",
+        "subjective::contract_coherence",
+        "subjective::convention_outlier",
+        "subjective::cross_module_architecture",
+        "subjective::dependency_health",
+        "subjective::design_coherence",
+        "subjective::error_consistency",
+        "subjective::high_level_elegance",
+        "subjective::incomplete_migration",
+        "subjective::initialization_coupling",
+        "subjective::logic_clarity",
+        "subjective::low_level_elegance",
+        "subjective::mid_level_elegance",
+        "subjective::naming_quality",
+        "subjective::package_organization",
+        "subjective::test_strategy",
+        "subjective::type_safety"
+      ],
+      "created_at": "2026-10-28T13:55:15+00:00",
+      "updated_at": "2026-10-28T13:55:15+00:00",
+      "auto": true,
+      "cluster_key": "subjective::unscored",
+      "action": "desloppify review --prepare --dimensions abstraction_fitness,ai_generated_debt,api_surface_coherence,authorization_consistency,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,logic_clarity,low_level_elegance,mid_level_elegance,naming_quality,package_organization,test_strategy,type_safety",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "manual_fix",
+      "execution_policy": "planned_only"
+    }
+  },
+  "superseded": {
+    "test_coverage::frontend_next/app/boards/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/boards/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/browse/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/browse/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/collection/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/collection/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/deep-dive/[threadId]/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/deep-dive/[threadId]/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/deep-dives/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/deep-dives/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/discussions/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/discussions/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/login/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/login/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/movie/[id]/deep-dive-content.tsx": {
+      "original_id": "test_coverage::frontend_next/app/movie/[id]/deep-dive-content.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/movie/[id]/discussions/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/movie/[id]/discussions/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/movie/[id]/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/movie/[id]/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/movie/[id]/summary-content.tsx": {
+      "original_id": "test_coverage::frontend_next/app/movie/[id]/summary-content.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/research/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/research/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/summary/[movieId]/page.tsx": {
+      "original_id": "test_coverage::frontend_next/app/summary/[movieId]/page.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/app/summary/[movieId]/summary-content.tsx": {
+      "original_id": "test_coverage::frontend_next/app/summary/[movieId]/summary-content.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/auth-sync.tsx": {
+      "original_id": "test_coverage::frontend_next/components/auth-sync.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/effects/typewriter.tsx": {
+      "original_id": "test_coverage::frontend_next/components/effects/typewriter.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/sidebar.tsx": {
+      "original_id": "test_coverage::frontend_next/components/sidebar.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/accordion.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/accordion.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/alert-dialog.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/alert-dialog.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/alert.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/alert.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/avatar.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/avatar.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/breadcrumb.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/breadcrumb.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/button.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/button.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/calendar.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/calendar.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/card.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/card.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/carousel.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/carousel.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/chart.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/chart.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/command.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/command.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/context-menu.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/context-menu.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/dialog.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/dialog.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/drawer.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/drawer.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/dropdown-menu.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/dropdown-menu.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/form.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/form.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/input-otp.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/input-otp.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/menubar.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/menubar.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/navigation-menu.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/navigation-menu.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/pagination.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/pagination.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/resizable.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/resizable.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/scroll-area.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/scroll-area.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/select.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/select.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/sheet.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/sheet.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/sidebar.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/sidebar.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/table.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/table.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/tabs.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/tabs.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/toast.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/toast.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/toggle-group.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/toggle-group.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/toggle.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/toggle.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/use-toast.ts": {
+      "original_id": "test_coverage::frontend_next/components/ui/use-toast.ts",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/hooks/use-toast.ts": {
+      "original_id": "test_coverage::frontend_next/hooks/use-toast.ts",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/deep-dive/[threadId]/page.tsx::ExternalLink:5": {
+      "original_id": "unused::frontend_next/app/deep-dive/[threadId]/page.tsx::ExternalLink:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/discussions/page.tsx::Link:13": {
+      "original_id": "unused::frontend_next/app/discussions/page.tsx::Link:13",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/discussions/page.tsx::useEffect:3": {
+      "original_id": "unused::frontend_next/app/discussions/page.tsx::useEffect:3",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/layout.tsx::Metadata:1": {
+      "original_id": "unused::frontend_next/app/layout.tsx::Metadata:1",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::AnimatePresence:6": {
+      "original_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::AnimatePresence:6",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Sparkles:5": {
+      "original_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Sparkles:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Zap:5": {
+      "original_id": "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Zap:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageCircle:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageCircle:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageSquare:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageSquare:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Plus:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Plus:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Send:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Send:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::ShieldAlert:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::ShieldAlert:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/discussions/page.tsx::User:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/discussions/page.tsx::User:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/page.tsx::AnimatePresence:4": {
+      "original_id": "unused::frontend_next/app/movie/[id]/page.tsx::AnimatePresence:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/summary-content.tsx::Loader2:5": {
+      "original_id": "unused::frontend_next/app/movie/[id]/summary-content.tsx::Loader2:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/movie/[id]/summary-content.tsx::Play:5": {
+      "original_id": "unused::frontend_next/app/movie/[id]/summary-content.tsx::Play:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::BookOpen:4": {
+      "original_id": "unused::frontend_next/app/page.tsx::BookOpen:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::Card:7": {
+      "original_id": "unused::frontend_next/app/page.tsx::Card:7",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::CardContent:7": {
+      "original_id": "unused::frontend_next/app/page.tsx::CardContent:7",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::Info:4": {
+      "original_id": "unused::frontend_next/app/page.tsx::Info:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::Input:5": {
+      "original_id": "unused::frontend_next/app/page.tsx::Input:5",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/page.tsx::Sparkles:4": {
+      "original_id": "unused::frontend_next/app/page.tsx::Sparkles:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/research/page.tsx::ExternalLink:4": {
+      "original_id": "unused::frontend_next/app/research/page.tsx::ExternalLink:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/research/page.tsx::Search:4": {
+      "original_id": "unused::frontend_next/app/research/page.tsx::Search:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::FileText:4": {
+      "original_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::FileText:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::Info:4": {
+      "original_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::Info:4",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/summary/[movieId]/page.tsx::use:1": {
+      "original_id": "unused::frontend_next/app/summary/[movieId]/page.tsx::use:1",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/app/summary/[movieId]/summary-content.tsx::useRef:3": {
+      "original_id": "unused::frontend_next/app/summary/[movieId]/summary-content.tsx::useRef:3",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "unused::frontend_next/components/theme-provider.tsx::React:3": {
+      "original_id": "unused::frontend_next/components/theme-provider.tsx::React:3",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:05:07+00:00",
+      "remapped_to": null,
+      "candidates": []
+    },
+    "test_coverage::frontend_next/components/ui/radio-group.tsx": {
+      "original_id": "test_coverage::frontend_next/components/ui/radio-group.tsx",
+      "original_detector": "",
+      "original_file": "",
+      "original_summary": "",
+      "status": "superseded",
+      "superseded_at": "2026-10-28T14:08:46+00:00",
+      "remapped_to": null,
+      "candidates": []
+    }
+  },
+  "promoted_ids": [],
+  "plan_start_scores": {
+    "strict": 14.7,
+    "overall": 16.2,
+    "objective": 64.9,
+    "verified": 64.9
+  },
+  "refresh_state": {
+    "_subjective_migration_pruned": true,
+    "lifecycle_phase": "plan",
+    "postflight_scan_completed_at_scan_count": 1
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-10-28T13:55:15+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-10-28T13:55:15+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-10-28T13:55:15+00:00",
+      "action": "sync_lifecycle_phase",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "phase": "review_initial"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T13:55:15+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "cluster_done",
+      "issue_ids": [],
+      "cluster_name": "auto/unused",
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "reason": "cluster members no longer actionable in state"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "cluster_done",
+      "issue_ids": [],
+      "cluster_name": "auto/test_coverage-untested_module",
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "reason": "cluster members no longer actionable in state"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "reconcile",
+      "issue_ids": [
+        "test_coverage::frontend_next/app/boards/page.tsx",
+        "test_coverage::frontend_next/app/browse/page.tsx",
+        "test_coverage::frontend_next/app/collection/page.tsx",
+        "test_coverage::frontend_next/app/deep-dive/[threadId]/page.tsx",
+        "test_coverage::frontend_next/app/deep-dives/page.tsx",
+        "test_coverage::frontend_next/app/discussions/page.tsx",
+        "test_coverage::frontend_next/app/login/page.tsx",
+        "test_coverage::frontend_next/app/movie/[id]/deep-dive-content.tsx",
+        "test_coverage::frontend_next/app/movie/[id]/discussions/page.tsx",
+        "test_coverage::frontend_next/app/movie/[id]/page.tsx",
+        "test_coverage::frontend_next/app/movie/[id]/summary-content.tsx",
+        "test_coverage::frontend_next/app/page.tsx",
+        "test_coverage::frontend_next/app/research/page.tsx",
+        "test_coverage::frontend_next/app/summary/[movieId]/page.tsx",
+        "test_coverage::frontend_next/app/summary/[movieId]/summary-content.tsx",
+        "test_coverage::frontend_next/components/auth-sync.tsx",
+        "test_coverage::frontend_next/components/effects/typewriter.tsx",
+        "test_coverage::frontend_next/components/sidebar.tsx",
+        "test_coverage::frontend_next/components/ui/accordion.tsx",
+        "test_coverage::frontend_next/components/ui/alert-dialog.tsx",
+        "test_coverage::frontend_next/components/ui/alert.tsx",
+        "test_coverage::frontend_next/components/ui/avatar.tsx",
+        "test_coverage::frontend_next/components/ui/breadcrumb.tsx",
+        "test_coverage::frontend_next/components/ui/button.tsx",
+        "test_coverage::frontend_next/components/ui/calendar.tsx",
+        "test_coverage::frontend_next/components/ui/card.tsx",
+        "test_coverage::frontend_next/components/ui/carousel.tsx",
+        "test_coverage::frontend_next/components/ui/chart.tsx",
+        "test_coverage::frontend_next/components/ui/command.tsx",
+        "test_coverage::frontend_next/components/ui/context-menu.tsx",
+        "test_coverage::frontend_next/components/ui/dialog.tsx",
+        "test_coverage::frontend_next/components/ui/drawer.tsx",
+        "test_coverage::frontend_next/components/ui/dropdown-menu.tsx",
+        "test_coverage::frontend_next/components/ui/form.tsx",
+        "test_coverage::frontend_next/components/ui/input-otp.tsx",
+        "test_coverage::frontend_next/components/ui/menubar.tsx",
+        "test_coverage::frontend_next/components/ui/navigation-menu.tsx",
+        "test_coverage::frontend_next/components/ui/pagination.tsx",
+        "test_coverage::frontend_next/components/ui/resizable.tsx",
+        "test_coverage::frontend_next/components/ui/scroll-area.tsx",
+        "test_coverage::frontend_next/components/ui/select.tsx",
+        "test_coverage::frontend_next/components/ui/sheet.tsx",
+        "test_coverage::frontend_next/components/ui/sidebar.tsx",
+        "test_coverage::frontend_next/components/ui/table.tsx",
+        "test_coverage::frontend_next/components/ui/tabs.tsx",
+        "test_coverage::frontend_next/components/ui/toast.tsx",
+        "test_coverage::frontend_next/components/ui/toggle-group.tsx",
+        "test_coverage::frontend_next/components/ui/toggle.tsx",
+        "test_coverage::frontend_next/components/ui/use-toast.ts",
+        "test_coverage::frontend_next/hooks/use-toast.ts",
+        "unused::frontend_next/app/deep-dive/[threadId]/page.tsx::ExternalLink:5",
+        "unused::frontend_next/app/discussions/page.tsx::Link:13",
+        "unused::frontend_next/app/discussions/page.tsx::useEffect:3",
+        "unused::frontend_next/app/layout.tsx::Metadata:1",
+        "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::AnimatePresence:6",
+        "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Sparkles:5",
+        "unused::frontend_next/app/movie/[id]/deep-dive-content.tsx::Zap:5",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageCircle:4",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::MessageSquare:4",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Plus:4",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::Send:4",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::ShieldAlert:4",
+        "unused::frontend_next/app/movie/[id]/discussions/page.tsx::User:4",
+        "unused::frontend_next/app/movie/[id]/page.tsx::AnimatePresence:4",
+        "unused::frontend_next/app/movie/[id]/summary-content.tsx::Loader2:5",
+        "unused::frontend_next/app/movie/[id]/summary-content.tsx::Play:5",
+        "unused::frontend_next/app/page.tsx::BookOpen:4",
+        "unused::frontend_next/app/page.tsx::Card:7",
+        "unused::frontend_next/app/page.tsx::CardContent:7",
+        "unused::frontend_next/app/page.tsx::Info:4",
+        "unused::frontend_next/app/page.tsx::Input:5",
+        "unused::frontend_next/app/page.tsx::Sparkles:4",
+        "unused::frontend_next/app/research/page.tsx::ExternalLink:4",
+        "unused::frontend_next/app/research/page.tsx::Search:4",
+        "unused::frontend_next/app/summary/[movieId]/page.tsx::FileText:4",
+        "unused::frontend_next/app/summary/[movieId]/page.tsx::Info:4",
+        "unused::frontend_next/app/summary/[movieId]/page.tsx::use:1",
+        "unused::frontend_next/app/summary/[movieId]/summary-content.tsx::useRef:3",
+        "unused::frontend_next/components/theme-provider.tsx::React:3"
+      ],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "superseded_count": 79,
+        "pruned_count": 0,
+        "resurfaced_count": 0,
+        "clusters_completed_count": 2
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "clear_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:05:07+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 1
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:07:33+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:07:33+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:07:33+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:08:46+00:00",
+      "action": "cluster_done",
+      "issue_ids": [],
+      "cluster_name": "auto/test_coverage-untested_module",
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "reason": "cluster members no longer actionable in state"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:08:46+00:00",
+      "action": "reconcile",
+      "issue_ids": [
+        "test_coverage::frontend_next/components/ui/radio-group.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "superseded_count": 1,
+        "pruned_count": 0,
+        "resurfaced_count": 0,
+        "clusters_completed_count": 1
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:08:46+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:10:59+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:33:19+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    }
+  ],
+  "epic_triage_meta": {},
+  "commit_log": [],
+  "uncommitted_issues": [],
+  "commit_tracking_branch": null,
+  "scan_count_at_plan_start": 4,
+  "previous_plan_start_scores": {
+    "strict": 17.8,
+    "overall": 18.6,
+    "objective": 74.4,
+    "verified": 74.4
+  }
+}

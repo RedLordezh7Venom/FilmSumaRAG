@@ -1,0 +1,5577 @@
+{
+  "version": 3,
+  "created": "2026-10-28T14:00:12+00:00",
+  "last_scan": "2026-10-28T14:33:11+00:00",
+  "scan_count": 4,
+  "overall_score": 16.2,
+  "objective_score": 64.9,
+  "strict_score": 14.7,
+  "verified_strict_score": 64.9,
+  "stats": {
+    "total": 144,
+    "auto_resolved": 60,
+    "deferred": 0,
+    "false_positive": 0,
+    "fixed": 0,
+    "open": 84,
+    "triaged_out": 0,
+    "wontfix": 0,
+    "by_tier": {
+      "1": {
+        "auto_resolved": 48,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 0,
+        "triaged_out": 0,
+        "wontfix": 0
+      },
+      "2": {
+        "auto_resolved": 11,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 8,
+        "triaged_out": 0,
+        "wontfix": 0
+      },
+      "3": {
+        "auto_resolved": 1,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 56,
+        "triaged_out": 0,
+        "wontfix": 0
+      },
+      "4": {
+        "auto_resolved": 0,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 20,
+        "triaged_out": 0,
+        "wontfix": 0
+      }
+    }
+  },
+  "work_items": {
+    "unused::backend_fastapi/scripts/benchmark_rag.py::json:4": {
+      "id": "unused::backend_fastapi/scripts/benchmark_rag.py::json:4",
+      "detector": "unused",
+      "file": "backend_fastapi/scripts/benchmark_rag.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/scripts/benchmark_rag.py::threading:6": {
+      "id": "unused::backend_fastapi/scripts/benchmark_rag.py::threading:6",
+      "detector": "unused",
+      "file": "backend_fastapi/scripts/benchmark_rag.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: threading",
+      "detail": {
+        "line": 6,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.TimeoutException:8": {
+      "id": "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.TimeoutException:8",
+      "detector": "unused",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: selenium.common.exceptions.TimeoutException",
+      "detail": {
+        "line": 8,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.NoSuchElementException:8": {
+      "id": "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.NoSuchElementException:8",
+      "detector": "unused",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: selenium.common.exceptions.NoSuchElementException",
+      "detail": {
+        "line": 8,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.WebDriverException:8": {
+      "id": "unused::backend_fastapi/scripts/subwebscraper.py::selenium.common.exceptions.WebDriverException:8",
+      "detector": "unused",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: selenium.common.exceptions.WebDriverException",
+      "detail": {
+        "line": 8,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/persona_agents.py::typing.Dict:1": {
+      "id": "unused::backend_fastapi/src/agents/persona_agents.py::typing.Dict:1",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/persona_agents.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Dict",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/persona_agents.py::langchain_core.messages.HumanMessage:2": {
+      "id": "unused::backend_fastapi/src/agents/persona_agents.py::langchain_core.messages.HumanMessage:2",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/persona_agents.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: langchain_core.messages.HumanMessage",
+      "detail": {
+        "line": 2,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/summarizer.py::typing.List:1": {
+      "id": "unused::backend_fastapi/src/agents/summarizer.py::typing.List:1",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/summarizer.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.List",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/video_crawler.py::requests:2": {
+      "id": "unused::backend_fastapi/src/agents/video_crawler.py::requests:2",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: requests",
+      "detail": {
+        "line": 2,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/video_crawler.py::endpoint:54": {
+      "id": "unused::backend_fastapi/src/agents/video_crawler.py::endpoint:54",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: endpoint",
+      "detail": {
+        "line": 54,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/video_crawler.py::headers:55": {
+      "id": "unused::backend_fastapi/src/agents/video_crawler.py::headers:55",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: headers",
+      "detail": {
+        "line": 55,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/agents/video_crawler.py::payload:59": {
+      "id": "unused::backend_fastapi/src/agents/video_crawler.py::payload:59",
+      "detector": "unused",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: payload",
+      "detail": {
+        "line": 59,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/deep_dive.py::src.utils.logger.logger:65": {
+      "id": "unused::backend_fastapi/src/api/endpoints/deep_dive.py::src.utils.logger.logger:65",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/deep_dive.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.utils.logger.logger",
+      "detail": {
+        "line": 65,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/deep_dive.py::full_answer:195": {
+      "id": "unused::backend_fastapi/src/api/endpoints/deep_dive.py::full_answer:195",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/deep_dive.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: full_answer",
+      "detail": {
+        "line": 195,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/discussions.py::typing.Optional:4": {
+      "id": "unused::backend_fastapi/src/api/endpoints/discussions.py::typing.Optional:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/discussions.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/discussions.py::uuid:7": {
+      "id": "unused::backend_fastapi/src/api/endpoints/discussions.py::uuid:7",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/discussions.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: uuid",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::typing.Optional:9": {
+      "id": "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::typing.Optional:9",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/embeddings_generation.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::typing.Union:9": {
+      "id": "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::typing.Union:9",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/embeddings_generation.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Union",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::os:10": {
+      "id": "unused::backend_fastapi/src/api/endpoints/embeddings_generation.py::os:10",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/embeddings_generation.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 10,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/history.py::sqlalchemy.func:3": {
+      "id": "unused::backend_fastapi/src/api/endpoints/history.py::sqlalchemy.func:3",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/history.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: sqlalchemy.func",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/websocket_chat.py::fastapi.Depends:1": {
+      "id": "unused::backend_fastapi/src/api/endpoints/websocket_chat.py::fastapi.Depends:1",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: fastapi.Depends",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/api/endpoints/websocket_chat.py::sqlalchemy.orm.Session:5": {
+      "id": "unused::backend_fastapi/src/api/endpoints/websocket_chat.py::sqlalchemy.orm.Session:5",
+      "detector": "unused",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: sqlalchemy.orm.Session",
+      "detail": {
+        "line": 5,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/active_learning.py::typing.List:4": {
+      "id": "unused::backend_fastapi/src/core/active_learning.py::typing.List:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/active_learning.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.List",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/chroma_store.py::typing.Optional:4": {
+      "id": "unused::backend_fastapi/src/core/chroma_store.py::typing.Optional:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/chroma_store.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/embeddings.py::os:1": {
+      "id": "unused::backend_fastapi/src/core/embeddings.py::os:1",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/embeddings.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/embeddings.py::typing.TypedDict:3": {
+      "id": "unused::backend_fastapi/src/core/embeddings.py::typing.TypedDict:3",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/embeddings.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.TypedDict",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/embeddings.py::numpy:4": {
+      "id": "unused::backend_fastapi/src/core/embeddings.py::numpy:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/embeddings.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: numpy",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::numpy:1": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::numpy:1",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: numpy",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::typing.TypedDict:4": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::typing.TypedDict:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.TypedDict",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::typing.Annotated:4": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::typing.Annotated:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Annotated",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::typing.Sequence:4": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::typing.Sequence:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Sequence",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::typing.Optional:4": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::typing.Optional:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::typing.Any:4": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::typing.Any:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Any",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::langchain_core.messages.BaseMessage:7": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::langchain_core.messages.BaseMessage:7",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: langchain_core.messages.BaseMessage",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::re:13": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::re:13",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: re",
+      "detail": {
+        "line": 13,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::json:14": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::json:14",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 14,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.Feedback:53": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.Feedback:53",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.models.sql_models.Feedback",
+      "detail": {
+        "line": 53,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.ChatHistory:53": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.ChatHistory:53",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.models.sql_models.ChatHistory",
+      "detail": {
+        "line": 53,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.SummaryType:53": {
+      "id": "unused::backend_fastapi/src/core/rag_chat.py::src.models.sql_models.SummaryType:53",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.models.sql_models.SummaryType",
+      "detail": {
+        "line": 53,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/sub_to_summary.py::src.core.llm_model.generate_summary:2": {
+      "id": "unused::backend_fastapi/src/core/sub_to_summary.py::src.core.llm_model.generate_summary:2",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.core.llm_model.generate_summary",
+      "detail": {
+        "line": 2,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/sub_to_summary.py::asyncio:4": {
+      "id": "unused::backend_fastapi/src/core/sub_to_summary.py::asyncio:4",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: asyncio",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/vector_db.py::typing.Optional:3": {
+      "id": "unused::backend_fastapi/src/core/vector_db.py::typing.Optional:3",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/vector_db.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/core/vector_store_base.py::typing.Optional:2": {
+      "id": "unused::backend_fastapi/src/core/vector_store_base.py::typing.Optional:2",
+      "detector": "unused",
+      "file": "backend_fastapi/src/core/vector_store_base.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: typing.Optional",
+      "detail": {
+        "line": 2,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/main.py::time:12": {
+      "id": "unused::backend_fastapi/src/main.py::time:12",
+      "detector": "unused",
+      "file": "backend_fastapi/src/main.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: time",
+      "detail": {
+        "line": 12,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/main.py::src.models.sql_models:55": {
+      "id": "unused::backend_fastapi/src/main.py::src.models.sql_models:55",
+      "detector": "unused",
+      "file": "backend_fastapi/src/main.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.models.sql_models",
+      "detail": {
+        "line": 55,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/src/utils/subliminalsubsdl.py::io:5": {
+      "id": "unused::backend_fastapi/src/utils/subliminalsubsdl.py::io:5",
+      "detector": "unused",
+      "file": "backend_fastapi/src/utils/subliminalsubsdl.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: io",
+      "detail": {
+        "line": 5,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/integration_test.py::user_id:20": {
+      "id": "unused::backend_fastapi/tests/integration_test.py::user_id:20",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/integration_test.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: user_id",
+      "detail": {
+        "line": 20,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/integration_test.py::movie_id:27": {
+      "id": "unused::backend_fastapi/tests/integration_test.py::movie_id:27",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/integration_test.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: movie_id",
+      "detail": {
+        "line": 27,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/self_verify_deep.py::json:4": {
+      "id": "unused::backend_fastapi/tests/self_verify_deep.py::json:4",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/self_verify_deep.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/self_verify_deep.py::src.core.rag_chat.RAGState:9": {
+      "id": "unused::backend_fastapi/tests/self_verify_deep.py::src.core.rag_chat.RAGState:9",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/self_verify_deep.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.core.rag_chat.RAGState",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/self_verify_deep.py::src.agents.persona_agents.PersonaManager:10": {
+      "id": "unused::backend_fastapi/tests/self_verify_deep.py::src.agents.persona_agents.PersonaManager:10",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/self_verify_deep.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.agents.persona_agents.PersonaManager",
+      "detail": {
+        "line": 10,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/self_verify_deep.py::retrieval_input:29": {
+      "id": "unused::backend_fastapi/tests/self_verify_deep.py::retrieval_input:29",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/self_verify_deep.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: retrieval_input",
+      "detail": {
+        "line": 29,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/test_backend_full.py::json:4": {
+      "id": "unused::backend_fastapi/tests/test_backend_full.py::json:4",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/test_backend_full.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/test_backend_full.py::threading:5": {
+      "id": "unused::backend_fastapi/tests/test_backend_full.py::threading:5",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/test_backend_full.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: threading",
+      "detail": {
+        "line": 5,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/test_backend_full.py::src.models.schemas:14": {
+      "id": "unused::backend_fastapi/tests/test_backend_full.py::src.models.schemas:14",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/test_backend_full.py",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Unused imports: src.models.schemas",
+      "detail": {
+        "line": 14,
+        "category": "imports"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused::backend_fastapi/tests/verify_backend.py::movie_title:81": {
+      "id": "unused::backend_fastapi/tests/verify_backend.py::movie_title:81",
+      "detector": "unused",
+      "file": "backend_fastapi/tests/verify_backend.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused vars: movie_title",
+      "detail": {
+        "line": 81,
+        "category": "vars"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:00:13+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/scripts/benchmark_rag.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/scripts/benchmark_rag.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/scripts/benchmark_rag.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (79 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 79,
+        "importer_count": 0,
+        "loc_weight": 8.888194417315589
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/scripts/subwebscraper.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/scripts/subwebscraper.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (156 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 156,
+        "importer_count": 0,
+        "loc_weight": 12.489995996796797
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/embeddings.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/embeddings.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/embeddings.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (47 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 47,
+        "importer_count": 0,
+        "loc_weight": 6.855654600401044
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/feedback.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/feedback.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/feedback.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (50 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 50,
+        "importer_count": 0,
+        "loc_weight": 7.0710678118654755
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/agents/research_agent.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/agents/research_agent.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/agents/research_agent.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (37 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 37,
+        "importer_count": 0,
+        "loc_weight": 6.082762530298219
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/websocket_chat.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/websocket_chat.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (117 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 117,
+        "importer_count": 0,
+        "loc_weight": 10.816653826391969
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/db/database.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/db/database.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/db/database.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (31 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 31,
+        "importer_count": 0,
+        "loc_weight": 5.5677643628300215
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/scripts/subtitlepreprocess.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/scripts/subtitlepreprocess.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/scripts/subtitlepreprocess.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (88 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 88,
+        "importer_count": 0,
+        "loc_weight": 9.38083151964686
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/agents/persona_agents.py::untested_critical": {
+      "id": "test_coverage::backend_fastapi/src/agents/persona_agents.py::untested_critical",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/agents/persona_agents.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested critical module (88 LOC, 0 importers) \u2014 high blast radius",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 88,
+        "importer_count": 0,
+        "loc_weight": 9.38083151964686,
+        "complexity_score": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/sub_to_summary.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/sub_to_summary.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (75 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 75,
+        "importer_count": 0,
+        "loc_weight": 8.660254037844387
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/scripts/chunks.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/scripts/chunks.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/scripts/chunks.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (20 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 20,
+        "importer_count": 0,
+        "loc_weight": 4.47213595499958
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/utils/subliminalsubsdl.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/utils/subliminalsubsdl.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/utils/subliminalsubsdl.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (38 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 38,
+        "importer_count": 0,
+        "loc_weight": 6.164414002968976
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/discussions.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/discussions.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/discussions.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (90 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 90,
+        "importer_count": 0,
+        "loc_weight": 9.486832980505138
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/active_learning.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/active_learning.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/active_learning.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (52 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 52,
+        "importer_count": 0,
+        "loc_weight": 7.211102550927978
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/history.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/history.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/history.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (63 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 63,
+        "importer_count": 0,
+        "loc_weight": 7.937253933193772
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/movies.py::untested_critical": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/movies.py::untested_critical",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/movies.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested critical module (199 LOC, 0 importers) \u2014 high blast radius",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 199,
+        "importer_count": 0,
+        "loc_weight": 14.106735979665885,
+        "complexity_score": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/models/sql_models.py::untested_critical": {
+      "id": "test_coverage::backend_fastapi/src/models/sql_models.py::untested_critical",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/models/sql_models.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested critical module (158 LOC, 0 importers) \u2014 high blast radius",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 158,
+        "importer_count": 0,
+        "loc_weight": 12.569805089976535,
+        "complexity_score": 27
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/chroma_store.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/chroma_store.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/chroma_store.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (96 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 96,
+        "importer_count": 0,
+        "loc_weight": 9.797958971132712
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/agents/video_crawler.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/agents/video_crawler.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (55 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 55,
+        "importer_count": 0,
+        "loc_weight": 7.416198487095663
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/auth.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/auth.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/auth.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (35 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 35,
+        "importer_count": 0,
+        "loc_weight": 5.916079783099616
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/utils/logger.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/utils/logger.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/utils/logger.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (36 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 36,
+        "importer_count": 0,
+        "loc_weight": 6.0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/deep_dive.py::assertion_free::test_deep_dive.py": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/deep_dive.py::assertion_free::test_deep_dive.py",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/deep_dive.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Assertion-free test: test_deep_dive.py has 1 test functions but 0 assertions",
+      "detail": {
+        "kind": "assertion_free_test",
+        "test_file": "backend_fastapi/tests/test_deep_dive.py",
+        "test_functions": 1,
+        "loc_weight": 14.798648586948742
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/summary.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/summary.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (195 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 195,
+        "importer_count": 0,
+        "loc_weight": 13.96424004376894
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/rag_chat.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/rag_chat.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (227 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 227,
+        "importer_count": 0,
+        "loc_weight": 15.066519173319364
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/llm_model.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/llm_model.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/llm_model.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (137 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 137,
+        "importer_count": 0,
+        "loc_weight": 11.704699910719626
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/main.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/main.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/main.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (58 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 58,
+        "importer_count": 0,
+        "loc_weight": 7.615773105863909
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/api/endpoints/embeddings_generation.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/api/endpoints/embeddings_generation.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/api/endpoints/embeddings_generation.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (123 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 123,
+        "importer_count": 0,
+        "loc_weight": 11.090536506409418
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/vector_store_base.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/vector_store_base.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/vector_store_base.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (39 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 39,
+        "importer_count": 0,
+        "loc_weight": 6.244997998398398
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/agents/summarizer.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/agents/summarizer.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/agents/summarizer.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (68 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 68,
+        "importer_count": 0,
+        "loc_weight": 8.246211251235321
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/src/core/vector_db.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/src/core/vector_db.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/src/core/vector_db.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (39 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 39,
+        "importer_count": 0,
+        "loc_weight": 6.244997998398398
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::backend_fastapi/scripts/subliminsubs.py::untested_module": {
+      "id": "test_coverage::backend_fastapi/scripts/subliminsubs.py::untested_module",
+      "detector": "test_coverage",
+      "file": "backend_fastapi/scripts/subliminsubs.py",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (21 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 21,
+        "importer_count": 0,
+        "loc_weight": 4.58257569495584
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subtitlepreprocess.py::swallowed_error": {
+      "id": "smells::backend_fastapi/scripts/subtitlepreprocess.py::swallowed_error",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subtitlepreprocess.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "2x Catch block that only logs (swallowed error)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "high",
+        "count": 2,
+        "lines": [
+          81,
+          83
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subwebscraper.py::swallowed_error": {
+      "id": "smells::backend_fastapi/scripts/subwebscraper.py::swallowed_error",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "2x Catch block that only logs (swallowed error)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "high",
+        "count": 2,
+        "lines": [
+          128,
+          147
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/summary.py::swallowed_error": {
+      "id": "smells::backend_fastapi/src/api/endpoints/summary.py::swallowed_error",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "2x Catch block that only logs (swallowed error)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "high",
+        "count": 2,
+        "lines": [
+          131,
+          150
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::swallowed_error": {
+      "id": "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::swallowed_error",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "1x Catch block that only logs (swallowed error)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "high",
+        "count": 1,
+        "lines": [
+          111
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/summary.py::monster_function": {
+      "id": "smells::backend_fastapi/src/api/endpoints/summary.py::monster_function",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "1x Monster function (>150 LOC)",
+      "detail": {
+        "smell_id": "monster_function",
+        "severity": "high",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/active_learning.py::silent_except": {
+      "id": "smells::backend_fastapi/src/core/active_learning.py::silent_except",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/active_learning.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "1x Except handler silently suppresses error (pass/continue, no log)",
+      "detail": {
+        "smell_id": "silent_except",
+        "severity": "high",
+        "count": 1,
+        "lines": [
+          30
+        ]
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:10:58+00:00",
+      "resolved_at": "2026-10-28T14:33:11+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/chunks.py::annotation_quality": {
+      "id": "smells::backend_fastapi/scripts/chunks.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/chunks.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          1
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subliminsubs.py::annotation_quality": {
+      "id": "smells::backend_fastapi/scripts/subliminsubs.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subliminsubs.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          6
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subtitlepreprocess.py::annotation_quality": {
+      "id": "smells::backend_fastapi/scripts/subtitlepreprocess.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subtitlepreprocess.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          11,
+          59
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subwebscraper.py::annotation_quality": {
+      "id": "smells::backend_fastapi/scripts/subwebscraper.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          39,
+          106,
+          131
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/auth.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/auth.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/auth.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          9
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/discussions.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/discussions.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/discussions.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          15,
+          37,
+          76
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/history.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/history.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/history.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          18,
+          32,
+          51
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/movies.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/movies.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/movies.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "4x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 4,
+        "lines": [
+          28,
+          105,
+          147,
+          168
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/summary.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/summary.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          16,
+          65,
+          97
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          10
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/llm_model.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/core/llm_model.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/llm_model.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          86
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/rag_chat.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/core/rag_chat.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          46,
+          152
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/sub_to_summary.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/core/sub_to_summary.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          6,
+          27
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/utils/subliminalsubsdl.py::annotation_quality": {
+      "id": "smells::backend_fastapi/src/utils/subliminalsubsdl.py::annotation_quality",
+      "detector": "smells",
+      "file": "backend_fastapi/src/utils/subliminalsubsdl.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Loose type annotation \u2014 use specific types",
+      "detail": {
+        "smell_id": "annotation_quality",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          14,
+          29
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/movies.py::high_cyclomatic_complexity": {
+      "id": "smells::backend_fastapi/src/api/endpoints/movies.py::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/movies.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>12 decision points)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          28
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/summary.py::high_cyclomatic_complexity": {
+      "id": "smells::backend_fastapi/src/api/endpoints/summary.py::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>12 decision points)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::high_cyclomatic_complexity": {
+      "id": "smells::backend_fastapi/src/api/endpoints/websocket_chat.py::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/websocket_chat.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>12 decision points)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          10
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/rag_chat.py::high_cyclomatic_complexity": {
+      "id": "smells::backend_fastapi/src/core/rag_chat.py::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>12 decision points)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          46
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/scripts/subwebscraper.py::hardcoded_url": {
+      "id": "smells::backend_fastapi/scripts/subwebscraper.py::hardcoded_url",
+      "detector": "smells",
+      "file": "backend_fastapi/scripts/subwebscraper.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          43
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "script",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/agents/video_crawler.py::hardcoded_url": {
+      "id": "smells::backend_fastapi/src/agents/video_crawler.py::hardcoded_url",
+      "detector": "smells",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          49
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/llm_model.py::import_env_mutation": {
+      "id": "smells::backend_fastapi/src/core/llm_model.py::import_env_mutation",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/llm_model.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Environment loading at import time (boundary purity leak)",
+      "detail": {
+        "smell_id": "import_env_mutation",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          8
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/agents/video_crawler.py::deferred_import": {
+      "id": "smells::backend_fastapi/src/agents/video_crawler.py::deferred_import",
+      "detector": "smells",
+      "file": "backend_fastapi/src/agents/video_crawler.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Function-level import (possible circular import workaround)",
+      "detail": {
+        "smell_id": "deferred_import",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          37
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/api/endpoints/summary.py::deferred_import": {
+      "id": "smells::backend_fastapi/src/api/endpoints/summary.py::deferred_import",
+      "detector": "smells",
+      "file": "backend_fastapi/src/api/endpoints/summary.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "4x Function-level import (possible circular import workaround)",
+      "detail": {
+        "smell_id": "deferred_import",
+        "severity": "low",
+        "count": 4,
+        "lines": [
+          21,
+          66,
+          98,
+          190
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/rag_chat.py::deferred_import": {
+      "id": "smells::backend_fastapi/src/core/rag_chat.py::deferred_import",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Function-level import (possible circular import workaround)",
+      "detail": {
+        "smell_id": "deferred_import",
+        "severity": "low",
+        "count": 2,
+        "lines": [
+          58,
+          153
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/sub_to_summary.py::deferred_import": {
+      "id": "smells::backend_fastapi/src/core/sub_to_summary.py::deferred_import",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Function-level import (possible circular import workaround)",
+      "detail": {
+        "smell_id": "deferred_import",
+        "severity": "low",
+        "count": 2,
+        "lines": [
+          16,
+          33
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/main.py::deferred_import": {
+      "id": "smells::backend_fastapi/src/main.py::deferred_import",
+      "detector": "smells",
+      "file": "backend_fastapi/src/main.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Function-level import (possible circular import workaround)",
+      "detail": {
+        "smell_id": "deferred_import",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          53
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/chroma_store.py::debug_tag": {
+      "id": "smells::backend_fastapi/src/core/chroma_store.py::debug_tag",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/chroma_store.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Vestigial debug tag in log/print",
+      "detail": {
+        "smell_id": "debug_tag",
+        "severity": "low",
+        "count": 2,
+        "lines": [
+          28,
+          38
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::backend_fastapi/src/core/sub_to_summary.py::debug_tag": {
+      "id": "smells::backend_fastapi/src/core/sub_to_summary.py::debug_tag",
+      "detector": "smells",
+      "file": "backend_fastapi/src/core/sub_to_summary.py",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "4x Vestigial debug tag in log/print",
+      "detail": {
+        "smell_id": "debug_tag",
+        "severity": "low",
+        "count": 4,
+        "lines": [
+          7,
+          43,
+          68,
+          73
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "global_mutable_config::backend_fastapi/src/core/rag_chat.py::BM25_CACHE": {
+      "id": "global_mutable_config::backend_fastapi/src/core/rag_chat.py::BM25_CACHE",
+      "detector": "global_mutable_config",
+      "file": "backend_fastapi/src/core/rag_chat.py",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Module-level mutable 'BM25_CACHE' (line 22) modified from 1 site(s)",
+      "detail": {
+        "mutation_count": 1,
+        "mutation_lines": [
+          82
+        ]
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:10:58+00:00",
+      "resolved_at": "2026-10-28T14:33:11+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "security::backend_fastapi/scripts/benchmark_rag.py::security::log_sensitive::backend_fastapi/scripts/benchmark_rag.py::41": {
+      "id": "security::backend_fastapi/scripts/benchmark_rag.py::security::log_sensitive::backend_fastapi/scripts/benchmark_rag.py::41",
+      "detector": "security",
+      "file": "backend_fastapi/scripts/benchmark_rag.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Sensitive data may be logged",
+      "detail": {
+        "kind": "log_sensitive",
+        "severity": "medium",
+        "line": 41,
+        "content": "            print(f\"\u00e2\u0153\u2026 [CHAT] Thread {thread_id} finished in {duration:.2f}s ({token_count} tokens)\")",
+        "remediation": "Remove sensitive data from log statements"
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:08:45+00:00",
+      "resolved_at": "2026-10-28T14:10:58+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "zone": "script",
+      "lang": "python",
+      "suppressed": true,
+      "suppressed_at": "2026-10-28T14:12:18+00:00",
+      "suppression_pattern": "security::backend_fastapi/scripts/benchmark_rag.py::*"
+    },
+    "unused_enums::backend_fastapi/src/models/sql_models.py::JobStatus": {
+      "id": "unused_enums::backend_fastapi/src/models/sql_models.py::JobStatus",
+      "detector": "unused_enums",
+      "file": "backend_fastapi/src/models/sql_models.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused enum: JobStatus (4 members) \u2014 never imported externally",
+      "detail": {
+        "line": 7,
+        "member_count": 4
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:05:06+00:00",
+      "resolved_at": "2026-10-28T14:08:45+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "unused_enums::backend_fastapi/src/models/sql_models.py::EngagementType": {
+      "id": "unused_enums::backend_fastapi/src/models/sql_models.py::EngagementType",
+      "detector": "unused_enums",
+      "file": "backend_fastapi/src/models/sql_models.py",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Unused enum: EngagementType (3 members) \u2014 never imported externally",
+      "detail": {
+        "line": 13,
+        "member_count": 3
+      },
+      "status": "auto_resolved",
+      "note": "Auto-resolved: absent from latest detector output",
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:05:06+00:00",
+      "resolved_at": "2026-10-28T14:08:45+00:00",
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::abstraction_fitness": {
+      "id": "subjective_review::.::abstraction_fitness",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Abstraction fit \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "abstraction_fitness"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::ai_generated_debt": {
+      "id": "subjective_review::.::ai_generated_debt",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "AI generated debt \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "ai_generated_debt"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::api_surface_coherence": {
+      "id": "subjective_review::.::api_surface_coherence",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "API coherence \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "api_surface_coherence"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::authorization_consistency": {
+      "id": "subjective_review::.::authorization_consistency",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Auth consistency \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "authorization_consistency"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::contract_coherence": {
+      "id": "subjective_review::.::contract_coherence",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Contracts \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "contract_coherence"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::convention_outlier": {
+      "id": "subjective_review::.::convention_outlier",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Convention drift \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "convention_outlier"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::cross_module_architecture": {
+      "id": "subjective_review::.::cross_module_architecture",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Cross-module arch \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "cross_module_architecture"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::dependency_health": {
+      "id": "subjective_review::.::dependency_health",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Dep health \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "dependency_health"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::design_coherence": {
+      "id": "subjective_review::.::design_coherence",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Design coherence \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "design_coherence"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::error_consistency": {
+      "id": "subjective_review::.::error_consistency",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Error consistency \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "error_consistency"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::high_level_elegance": {
+      "id": "subjective_review::.::high_level_elegance",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "High elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "high_level_elegance"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::incomplete_migration": {
+      "id": "subjective_review::.::incomplete_migration",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Stale migration \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "incomplete_migration"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::initialization_coupling": {
+      "id": "subjective_review::.::initialization_coupling",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Init coupling \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "initialization_coupling"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::logic_clarity": {
+      "id": "subjective_review::.::logic_clarity",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Logic clarity \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "logic_clarity"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::low_level_elegance": {
+      "id": "subjective_review::.::low_level_elegance",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Low elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "low_level_elegance"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::mid_level_elegance": {
+      "id": "subjective_review::.::mid_level_elegance",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Mid elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "mid_level_elegance"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::naming_quality": {
+      "id": "subjective_review::.::naming_quality",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Naming quality \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "naming_quality"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::package_organization": {
+      "id": "subjective_review::.::package_organization",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Structure nav \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "package_organization"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::test_strategy": {
+      "id": "subjective_review::.::test_strategy",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Test strategy \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "test_strategy"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::type_safety": {
+      "id": "subjective_review::.::type_safety",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "Type safety \u2014 no assessment on record, run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unassessed",
+        "dimension": "type_safety"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:05:06+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "assessment_request",
+      "issue_kind": "assessment_request",
+      "origin": "synthetic_task",
+      "lang": "python",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "security::backend_fastapi/scripts/benchmark_rag.py::security::log_sensitive::backend_fastapi/scripts/benchmark_rag.py::39": {
+      "id": "security::backend_fastapi/scripts/benchmark_rag.py::security::log_sensitive::backend_fastapi/scripts/benchmark_rag.py::39",
+      "detector": "security",
+      "file": "backend_fastapi/scripts/benchmark_rag.py",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Sensitive data may be logged",
+      "detail": {
+        "kind": "log_sensitive",
+        "severity": "medium",
+        "line": 39,
+        "content": "            print(f\"\u00e2\u0153\u2026 [CHAT] Session finished in {duration:.2f}s ({token_count} tokens)\")",
+        "remediation": "Remove sensitive data from log statements"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-10-28T14:10:58+00:00",
+      "last_seen": "2026-10-28T14:33:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "zone": "script",
+      "lang": "python",
+      "suppressed": true,
+      "suppressed_at": "2026-10-28T14:33:11+00:00",
+      "suppression_pattern": "security::backend_fastapi/scripts/benchmark_rag.py::*"
+    }
+  },
+  "scan_coverage": {
+    "python": {
+      "status": "reduced",
+      "confidence": 0.6,
+      "detectors": {
+        "security": {
+          "detector": "security",
+          "status": "reduced",
+          "confidence": 0.6,
+          "summary": "bandit is not installed \u2014 Python-specific security checks will be skipped.",
+          "impact": "Python-specific security coverage is reduced; clean security output may miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns.",
+          "remediation": "Install Bandit: pip install bandit",
+          "tool": "bandit",
+          "reason": "missing_dependency"
+        }
+      },
+      "warnings": [
+        {
+          "detector": "security",
+          "status": "reduced",
+          "confidence": 0.6,
+          "summary": "bandit is not installed \u2014 Python-specific security checks will be skipped.",
+          "impact": "Python-specific security coverage is reduced; clean security output may miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns.",
+          "remediation": "Install Bandit: pip install bandit",
+          "tool": "bandit",
+          "reason": "missing_dependency"
+        }
+      ],
+      "updated_at": "2026-10-28T14:33:11+00:00"
+    }
+  },
+  "score_confidence": {
+    "status": "reduced",
+    "confidence": 0.6,
+    "detectors": [
+      {
+        "detector": "security",
+        "status": "reduced",
+        "confidence": 0.6,
+        "summary": "bandit is not installed \u2014 Python-specific security checks will be skipped.",
+        "impact": "Python-specific security coverage is reduced; clean security output may miss shell injection, unsafe deserialization, and risky SQL/subprocess patterns.",
+        "remediation": "Install Bandit: pip install bandit",
+        "tool": "bandit",
+        "reason": "missing_dependency"
+      }
+    ],
+    "dimensions": [
+      "Security"
+    ]
+  },
+  "scan_metadata": {
+    "source": "scan"
+  },
+  "subjective_integrity": {
+    "status": "pass",
+    "target_score": 85.0,
+    "matched_count": 0,
+    "matched_dimensions": [],
+    "reset_dimensions": []
+  },
+  "subjective_assessments": {},
+  "scan_history": [
+    {
+      "timestamp": "2026-10-28T14:05:06+00:00",
+      "lang": "python",
+      "strict_score": 14.6,
+      "verified_strict_score": 58.3,
+      "objective_score": 58.3,
+      "overall_score": 14.6,
+      "open": 145,
+      "diff_new": 145,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 145,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.6,
+        "detector_count": 1,
+        "dimension_count": 1
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 74.3,
+          "strict": 74.3
+        },
+        "Security": {
+          "score": 98.9,
+          "strict": 98.9
+        },
+        "File health": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Duplication": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:08:45+00:00",
+      "lang": "python",
+      "strict_score": 14.7,
+      "verified_strict_score": 58.7,
+      "objective_score": 58.7,
+      "overall_score": 14.7,
+      "open": 143,
+      "diff_new": 0,
+      "diff_resolved": 2,
+      "ignored": 0,
+      "raw_issues": 143,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.6,
+        "detector_count": 1,
+        "dimension_count": 1
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 74.9,
+          "strict": 74.9
+        },
+        "Security": {
+          "score": 99.0,
+          "strict": 99.0
+        },
+        "File health": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Duplication": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:10:58+00:00",
+      "lang": "python",
+      "strict_score": 14.6,
+      "verified_strict_score": 64.6,
+      "objective_score": 64.6,
+      "overall_score": 16.2,
+      "open": 87,
+      "diff_new": 1,
+      "diff_resolved": 57,
+      "ignored": 0,
+      "raw_issues": 87,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.6,
+        "detector_count": 1,
+        "dimension_count": 1
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 93.1,
+          "strict": 74.9
+        },
+        "Security": {
+          "score": 99.0,
+          "strict": 98.5
+        },
+        "File health": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Duplication": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:33:11+00:00",
+      "lang": "python",
+      "strict_score": 14.7,
+      "verified_strict_score": 64.9,
+      "objective_score": 64.9,
+      "overall_score": 16.2,
+      "open": 84,
+      "diff_new": 0,
+      "diff_resolved": 2,
+      "ignored": 1,
+      "raw_issues": 85,
+      "suppressed_pct": 1.2,
+      "ignore_patterns": 2,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.6,
+        "detector_count": 1,
+        "dimension_count": 1
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 93.6,
+          "strict": 74.9
+        },
+        "Security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "File health": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Duplication": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Test health": {
+          "score": 0.1,
+          "strict": 0.1
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    }
+  ],
+  "review_cache": {
+    "detectors": {
+      "boilerplate": {},
+      "security": {
+        "version": 1,
+        "fingerprint": "0d6f17ec5ad5b373b554ebe6abfc842baed1e0d7",
+        "entries": [],
+        "files_scanned": 0,
+        "coverage": null
+      },
+      "dupes": {
+        "version": 1,
+        "threshold": 0.9,
+        "functions": {
+          "backend_fastapi/scripts/chunks.py:split_text_into_chunks:1:12": {
+            "body_hash": "54a136be25aea6070fca6e3bddb016f0",
+            "loc": 12
+          },
+          "backend_fastapi/scripts/subliminsubs.py:download_subs:6:16": {
+            "body_hash": "bd7c8055b3aae4865288bf228949e0c9",
+            "loc": 11
+          },
+          "backend_fastapi/scripts/subtitlepreprocess.py:detect_encoding:4:9": {
+            "body_hash": "b46ce6d0be7a18b1ad8e6403312c5da3",
+            "loc": 6
+          },
+          "backend_fastapi/scripts/subtitlepreprocess.py:extract_text_from_srt:11:57": {
+            "body_hash": "6a6245faaeea8c7e8277f90c7d3665ee",
+            "loc": 47
+          },
+          "backend_fastapi/scripts/subtitlepreprocess.py:process:59:84": {
+            "body_hash": "8d418269ce78e4a96f2bf979f9032d54",
+            "loc": 26
+          },
+          "backend_fastapi/scripts/subwebscraper.py:__init__:14:37": {
+            "body_hash": "37ee5ebe76fbae15ef152f5c7cb1ec12",
+            "loc": 24
+          },
+          "backend_fastapi/scripts/subwebscraper.py:download_subtitles:39:104": {
+            "body_hash": "263a02fe5e4beda622fd5fccfb1abbae",
+            "loc": 66
+          },
+          "backend_fastapi/scripts/subwebscraper.py:cleanup:106:129": {
+            "body_hash": "6bccc5d5cf37c69689d8585f5ab1d464",
+            "loc": 24
+          },
+          "backend_fastapi/scripts/subwebscraper.py:main:131:153": {
+            "body_hash": "f5bff550ca7d986bf1aec1c9ecbfc063",
+            "loc": 23
+          },
+          "backend_fastapi/src/agents/persona_agents.py:get_persona_prompt:5:35": {
+            "body_hash": "8e4e0175808b9aecef0000cc31c7aace",
+            "loc": 31
+          },
+          "backend_fastapi/src/agents/persona_agents.py:get_system_message:72:79": {
+            "body_hash": "4f97353b6ba6694d6ec9b7f97963f3cb",
+            "loc": 8
+          },
+          "backend_fastapi/src/agents/persona_agents.py:refine_persona_prompt:82:88": {
+            "body_hash": "ef4d77b8770706bd5f204fded2c1c40d",
+            "loc": 7
+          },
+          "backend_fastapi/src/agents/research_agent.py:search_video_essays:8:23": {
+            "body_hash": "49f950cf17a785708c068e7baeed5512",
+            "loc": 16
+          },
+          "backend_fastapi/src/agents/research_agent.py:generate_research_summary:26:37": {
+            "body_hash": "0c347c32d4e8f8d484bbc538bd14aae3",
+            "loc": 12
+          },
+          "backend_fastapi/src/agents/summarizer.py:summarize_transcript:7:15": {
+            "body_hash": "54593e9f316cb3a3447b8b286cd4525b",
+            "loc": 9
+          },
+          "backend_fastapi/src/agents/summarizer.py:summarize_stream:53:59": {
+            "body_hash": "4fed8ae8635558f3caf36c5be4d8df07",
+            "loc": 7
+          },
+          "backend_fastapi/src/agents/video_crawler.py:find_video_essays:10:22": {
+            "body_hash": "20c2855f61137363f3999505c51b2818",
+            "loc": 13
+          },
+          "backend_fastapi/src/api/endpoints/auth.py:sync_user:9:28": {
+            "body_hash": "1a6b535f2cc752c224f82fc84c641db3",
+            "loc": 20
+          },
+          "backend_fastapi/src/api/endpoints/auth.py:get_user:31:35": {
+            "body_hash": "f775dbfec17f57a5ae8ed81d015448d6",
+            "loc": 5
+          },
+          "backend_fastapi/src/api/endpoints/discussions.py:list_active_boards:15:30": {
+            "body_hash": "089150038442cca577343a5e434288b8",
+            "loc": 16
+          },
+          "backend_fastapi/src/api/endpoints/discussions.py:create_post:37:72": {
+            "body_hash": "8ca74e0c133bfd13cafa7e8602317c2d",
+            "loc": 36
+          },
+          "backend_fastapi/src/api/endpoints/discussions.py:create_reply:76:90": {
+            "body_hash": "b77ae9f9ec2e95cb75744908f6a2c83a",
+            "loc": 15
+          },
+          "backend_fastapi/src/api/endpoints/history.py:get_user_chat_history:10:15": {
+            "body_hash": "c784477f9b3b9829e32341a65c97c412",
+            "loc": 6
+          },
+          "backend_fastapi/src/api/endpoints/history.py:get_all_threads:18:29": {
+            "body_hash": "ed32db4cc17098c4e87bc60597e1ae68",
+            "loc": 12
+          },
+          "backend_fastapi/src/api/endpoints/history.py:get_thread_history:32:48": {
+            "body_hash": "0395bcdae37c55bb8a255eccbcfa4f6d",
+            "loc": 17
+          },
+          "backend_fastapi/src/api/endpoints/history.py:save_chat_message:51:63": {
+            "body_hash": "3a2c1f29541f8ba4a59f52f45b8845e2",
+            "loc": 13
+          },
+          "backend_fastapi/src/api/endpoints/movies.py:get_collection:28:102": {
+            "body_hash": "864ad8e3cc2d991a293a711d84dd16d5",
+            "loc": 75
+          },
+          "backend_fastapi/src/api/endpoints/movies.py:engage_movie:105:144": {
+            "body_hash": "bad5ef33134d6febbc465b32a43c664a",
+            "loc": 40
+          },
+          "backend_fastapi/src/api/endpoints/movies.py:hide_movies:147:165": {
+            "body_hash": "7c3a95136bceca0080e1d4cc09dfc6d1",
+            "loc": 19
+          },
+          "backend_fastapi/src/api/endpoints/movies.py:delete_movie_data:168:190": {
+            "body_hash": "a27ab9ec7f4705355b082735b31782b5",
+            "loc": 23
+          },
+          "backend_fastapi/src/api/endpoints/summary.py:summarize_movie_endpoint:16:185": {
+            "body_hash": "bb41d418c91067624ad08dc6983d5bbe",
+            "loc": 170
+          },
+          "backend_fastapi/src/api/endpoints/summary.py:discovery_essays_endpoint:188:195": {
+            "body_hash": "b5a6265e6ea9ce425309eeadec4de8e1",
+            "loc": 8
+          },
+          "backend_fastapi/src/api/endpoints/websocket_chat.py:websocket_chat:10:117": {
+            "body_hash": "4735dc883d7d049e7d855b7acf158d17",
+            "loc": 108
+          },
+          "backend_fastapi/src/core/active_learning.py:get_discredited_chunks:6:34": {
+            "body_hash": "e4b6d4efddf0f6325b6150e9955f035a",
+            "loc": 29
+          },
+          "backend_fastapi/src/core/active_learning.py:apply_penalties:36:52": {
+            "body_hash": "0f97c66302843b774ed3aef5d60e4ad8",
+            "loc": 17
+          },
+          "backend_fastapi/src/core/chroma_store.py:__init__:8:15": {
+            "body_hash": "ec1e1c18b3340db5af35bd6ab7b0f116",
+            "loc": 8
+          },
+          "backend_fastapi/src/core/chroma_store.py:add_vectors:17:28": {
+            "body_hash": "ae98a61fba348d034d9e0b9f3b4abaed",
+            "loc": 12
+          },
+          "backend_fastapi/src/core/chroma_store.py:add_movie_summary_vector:30:38": {
+            "body_hash": "60a4cf1769ac87ef8e186aef8836fa55",
+            "loc": 9
+          },
+          "backend_fastapi/src/core/chroma_store.py:get_similar_movies:40:61": {
+            "body_hash": "c7075327fea05ff3e567d8859eb4cb36",
+            "loc": 22
+          },
+          "backend_fastapi/src/core/chroma_store.py:search:63:72": {
+            "body_hash": "b882a4fe897e399ba51557b8990fba5b",
+            "loc": 10
+          },
+          "backend_fastapi/src/core/chroma_store.py:has_movie:74:79": {
+            "body_hash": "92becc1399ba2766afe40da3f4222527",
+            "loc": 6
+          },
+          "backend_fastapi/src/core/chroma_store.py:get_movie_data:81:85": {
+            "body_hash": "26e6af4c9cab3bbf60646bea6d059319",
+            "loc": 5
+          },
+          "backend_fastapi/src/core/chroma_store.py:get_movie_documents:87:90": {
+            "body_hash": "4bc4ddf017015ab8b1acf7590de19a59",
+            "loc": 4
+          },
+          "backend_fastapi/src/core/chroma_store.py:delete_movie:92:96": {
+            "body_hash": "e44fbf68b1dd82cd20fda2aa423ffaa6",
+            "loc": 5
+          },
+          "backend_fastapi/src/core/embeddings.py:chunk_text:10:20": {
+            "body_hash": "f6c2208ea7a24d988cff8533b952b5f7",
+            "loc": 11
+          },
+          "backend_fastapi/src/core/embeddings.py:build_embeddings:22:47": {
+            "body_hash": "c460b663f4d7417d0e09ab5649ebf9a9",
+            "loc": 26
+          },
+          "backend_fastapi/src/core/llm_model.py:chunk_text_for_summary:24:40": {
+            "body_hash": "97ffb2b76e35925f54f194c52c98d230",
+            "loc": 17
+          },
+          "backend_fastapi/src/core/llm_model.py:prepare_chunks:42:50": {
+            "body_hash": "9041cd5a913e2c1b503c4b87669d19e3",
+            "loc": 9
+          },
+          "backend_fastapi/src/core/llm_model.py:should_continue_summarizing:52:56": {
+            "body_hash": "1e6227a9a1020134603a8e6479703a57",
+            "loc": 5
+          },
+          "backend_fastapi/src/core/llm_model.py:summarize_chunk:58:63": {
+            "body_hash": "fa278c843af0b49cb7422b8663339c84",
+            "loc": 6
+          },
+          "backend_fastapi/src/core/llm_model.py:combine_summaries:78:84": {
+            "body_hash": "6da45be498fa63c070c113fc27674b25",
+            "loc": 7
+          },
+          "backend_fastapi/src/core/llm_model.py:create_summary_graph:86:99": {
+            "body_hash": "7210f04815e0022d326068ef0b8a5729",
+            "loc": 14
+          },
+          "backend_fastapi/src/core/llm_model.py:generate_summary:101:116": {
+            "body_hash": "1b42a2da2da62f70dd197a214c6022b6",
+            "loc": 16
+          },
+          "backend_fastapi/src/core/llm_model.py:generate_summary_stream:118:124": {
+            "body_hash": "cc5985e03883fed2d267ec30737b2b18",
+            "loc": 7
+          },
+          "backend_fastapi/src/core/rag_chat.py:retrieve_context_node:46:149": {
+            "body_hash": "17344b6cfb6d1b8548534d94a5666ad9",
+            "loc": 104
+          },
+          "backend_fastapi/src/core/rag_chat.py:generate_answer_node:152:185": {
+            "body_hash": "224d3a18adb40ca6cde9d54cc2629414",
+            "loc": 34
+          },
+          "backend_fastapi/src/core/rag_chat.py:create_rag_graph:187:194": {
+            "body_hash": "cbc67c4c202e4907ad14b4f498a4bbfe",
+            "loc": 8
+          },
+          "backend_fastapi/src/core/rag_chat.py:answer_question_stream:196:227": {
+            "body_hash": "e839664d06332c5a05d247cd2a4968b5",
+            "loc": 32
+          },
+          "backend_fastapi/src/core/sub_to_summary.py:get_movie_summary:6:75": {
+            "body_hash": "2cd77965f95bc5bdaadc195ef62962b4",
+            "loc": 70
+          },
+          "backend_fastapi/src/db/database.py:get_db:26:31": {
+            "body_hash": "a78cf713a14c0270bb321c8be0d67e5f",
+            "loc": 6
+          },
+          "backend_fastapi/src/main.py:log_requests:25:33": {
+            "body_hash": "437c5b9e5858d4df70e983f88c82cea0",
+            "loc": 9
+          },
+          "backend_fastapi/src/main.py:startup_event:51:54": {
+            "body_hash": "a60abc6ab2d92c0bd6af60deb8e94370",
+            "loc": 4
+          },
+          "backend_fastapi/src/utils/subliminalsubsdl.py:clean_text:7:12": {
+            "body_hash": "d3343080365ccd41288c03c27990df0e",
+            "loc": 6
+          },
+          "backend_fastapi/src/utils/subliminalsubsdl.py:extract_text_from_bytes:14:27": {
+            "body_hash": "e4d27e22cbfa9c6ec73914009eac28a3",
+            "loc": 14
+          },
+          "backend_fastapi/src/utils/subliminalsubsdl.py:download_subs_lines:29:38": {
+            "body_hash": "5b1e8cdc47763e360d1750363413ea99",
+            "loc": 10
+          }
+        },
+        "near_pairs": []
+      }
+    }
+  },
+  "lang_capabilities": {
+    "python": {
+      "fixers": [],
+      "typecheck_cmd": ""
+    }
+  },
+  "zone_distribution": {
+    "production": 31,
+    "script": 6,
+    "test": 9
+  },
+  "tool_hash": "f62aad694b9e",
+  "scan_path": "backend_fastapi",
+  "scan_completeness": {
+    "python": "full"
+  },
+  "potentials": {
+    "python": {
+      "unused": 37,
+      "structural": 37,
+      "flat_dirs": 11,
+      "props": 0,
+      "responsibility_cohesion": 0,
+      "single_use": 0,
+      "cycles": 30,
+      "orphaned": 30,
+      "facade": 30,
+      "coupling": 0,
+      "uncalled_functions": 0,
+      "test_coverage": 276,
+      "smells": 37,
+      "global_mutable_config": 37,
+      "security": 37,
+      "private_imports": 34,
+      "dict_keys": 37,
+      "unused_enums": 37,
+      "subjective_review": 20,
+      "dupes": 65,
+      "stale_wontfix": 0
+    }
+  },
+  "codebase_metrics": {
+    "python": {
+      "total_files": 46,
+      "total_loc": 0,
+      "total_directories": 10
+    }
+  },
+  "dimension_scores": {
+    "Code quality": {
+      "score": 93.6,
+      "strict": 74.9,
+      "verified_strict_score": 93.6,
+      "checks": 253,
+      "failing": 33,
+      "tier": 3,
+      "detectors": {
+        "unused": {
+          "potential": 37,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "smells": {
+          "potential": 37,
+          "pass_rate": 0.5648648648648649,
+          "failing": 33,
+          "weighted_failures": 16.1
+        },
+        "orphaned": {
+          "potential": 30,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "flat_dirs": {
+          "potential": 11,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "facade": {
+          "potential": 30,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "dict_keys": {
+          "potential": 37,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "global_mutable_config": {
+          "potential": 37,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "private_imports": {
+          "potential": 34,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Security": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 67,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "cycles": {
+          "potential": 30,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "security": {
+          "potential": 37,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0,
+          "coverage_status": "reduced",
+          "coverage_confidence": 0.6,
+          "coverage_summary": "bandit is not installed \u2014 Python-specific security checks will be skipped."
+        }
+      },
+      "coverage_status": "reduced",
+      "coverage_confidence": 0.6,
+      "coverage_impacts": [
+        {
+          "detector": "security",
+          "status": "reduced",
+          "confidence": 0.6,
+          "summary": "bandit is not installed \u2014 Python-specific security checks will be skipped."
+        }
+      ]
+    },
+    "File health": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 37,
+      "failing": 0,
+      "tier": 3,
+      "detectors": {
+        "structural": {
+          "potential": 37,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Duplication": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 65,
+      "failing": 0,
+      "tier": 3,
+      "detectors": {
+        "dupes": {
+          "potential": 65,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Test health": {
+      "score": 0.1,
+      "strict": 0.1,
+      "verified_strict_score": 0.1,
+      "checks": 276,
+      "failing": 31,
+      "tier": 4,
+      "detectors": {
+        "test_coverage": {
+          "potential": 276,
+          "pass_rate": 0.0006096788890541917,
+          "failing": 31,
+          "weighted_failures": 275.83172862662104
+        }
+      }
+    },
+    "Abstraction fit": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "abstraction_fitness",
+          "configured_weight": 8.0,
+          "components": []
+        }
+      }
+    },
+    "AI generated debt": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "ai_generated_debt",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "API coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "api_surface_coherence",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Auth consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "authorization_consistency",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Contracts": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "contract_coherence",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Convention drift": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "convention_outlier",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Cross-module arch": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "cross_module_architecture",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Dep health": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "dependency_health",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Design coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "design_coherence",
+          "configured_weight": 10.0,
+          "components": []
+        }
+      }
+    },
+    "Error consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "error_consistency",
+          "configured_weight": 3.0,
+          "components": []
+        }
+      }
+    },
+    "High elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "high_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Stale migration": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "incomplete_migration",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Init coupling": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "initialization_coupling",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Logic clarity": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "logic_clarity",
+          "configured_weight": 6.0,
+          "components": []
+        }
+      }
+    },
+    "Low elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "low_level_elegance",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Mid elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "mid_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Naming quality": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "naming_quality",
+          "configured_weight": 2.0,
+          "components": []
+        }
+      }
+    },
+    "Structure nav": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "package_organization",
+          "configured_weight": 5.0,
+          "components": []
+        }
+      }
+    },
+    "Test strategy": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "test_strategy",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Type safety": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "type_safety",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    }
+  },
+  "reminder_history": {
+    "zone_classification": 3,
+    "report_scores": 3,
+    "feedback_nudge": 2,
+    "stagnant_nudge": 24,
+    "wontfix_growing": 1
+  },
+  "attestation_log": [
+    {
+      "timestamp": "2026-10-28T14:10:58+00:00",
+      "command": "suppress",
+      "pattern": "security::backend_fastapi/scripts/benchmark_rag.py::*",
+      "attestation": "I have actually sanitized the log statements in the test benchmark script to only output token counts and exception type and not gaming",
+      "affected": 2
+    }
+  ]
+}

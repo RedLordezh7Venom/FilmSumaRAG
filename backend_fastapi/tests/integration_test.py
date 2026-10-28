@@ -17,14 +17,14 @@ def test_backend():
     # 3. Test Feedback
     # (Assuming user_id=1 and movie_id=1 for now, or fetch dynamically)
     # Let's get the user ID first
-    user_id = resp.json().get('id')
+    resp.json().get('id')
     
     # Trigger a movie discovery
     requests.post(f"{base_url}/summarize", json=movie_data)
     
     # Get movie ID
     movies_resp = requests.get(f"{base_url}/movies/")
-    movie_id = movies_resp.json()[0]['id'] if movies_resp.json() else 1
+    movies_resp.json()[0]['id'] if movies_resp.json() else 1
     
     fb_data = {
         "clerk_id": "user_789",

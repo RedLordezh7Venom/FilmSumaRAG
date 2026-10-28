@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Youtube, ExternalLink, Play } from "lucide-react";
+import { Youtube, Play } from "lucide-react";
 
 interface VideoEssay {
   title: string;

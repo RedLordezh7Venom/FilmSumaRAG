@@ -1,10 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Search, Sparkles, BookOpen, Info, ArrowRight } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { debounce } from "lodash"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -146,7 +144,7 @@ export default function Home() {
                         >
                           <div className="text-left">
                             <div className="text-white font-serif italic text-lg leading-none">{s.title}</div>
-                            <div className="text-criterion opacity-40 mt-1">{s.release_date ? new Date(s.release_date).getFullYear() : '—'}</div>
+                            <div className="text-criterion opacity-40 mt-1">{s.release_date ? new Date(s.release_date).getFullYear() : 'â€”'}</div>
                           </div>
                           <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity text-white" />
                         </button>

@@ -1,7 +1,5 @@
-import os
 from sentence_transformers import SentenceTransformer
-from typing import TypedDict, List
-import numpy as np
+from typing import List
 from src.core import vector_db
 
 # Keep the global embedder instance

@@ -1,4 +1,4 @@
-from typing import List, AsyncIterator
+from typing import AsyncIterator
 from langchain_core.messages import HumanMessage, SystemMessage
 from src.core.llm_model import llm
 

@@ -2,7 +2,6 @@ from subliminal import download_best_subtitles, Video
 from babelfish import Language
 from pathlib import Path
 import pysubs2
-import io
 import re
   
 def clean_text(t: str) -> str:

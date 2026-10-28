@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict
+from typing import List, Dict
 import numpy as np
 
 class BaseVectorStore(ABC):

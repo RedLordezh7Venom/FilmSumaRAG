@@ -1,8 +1,7 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from src.core.rag_chat import answer_question_stream
 from src.db.database import get_db
 from src.models import sql_models
-from sqlalchemy.orm import Session
 import json
 
 router = APIRouter()

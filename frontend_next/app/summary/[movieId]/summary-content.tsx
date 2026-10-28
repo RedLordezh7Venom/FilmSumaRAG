@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import { ThumbsUp, ThumbsDown, Send } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
@@ -81,7 +81,7 @@ function FeedbackBar({ movieId }: { movieId: string }) {
         }),
       });
     } catch (e) {
-      // Silently fail — feedback is non-critical
+      // Silently fail â€” feedback is non-critical
     } finally {
       setSubmitted(true);
       setShowComment(false);
@@ -256,7 +256,7 @@ export default function SummaryContent({ movieId, length, movieTitle }: SummaryC
                 const data = JSON.parse(dataStr);
                 if (data.token) {
                   if (!firstTokenReceived) {
-                    // Phase 1 → Phase 2 handoff: kill the typewriter
+                    // Phase 1 â†’ Phase 2 handoff: kill the typewriter
                     firstTokenReceived = true;
                     if (isMounted) setIsWarmingUp(false);
                   }
@@ -341,7 +341,7 @@ export default function SummaryContent({ movieId, length, movieTitle }: SummaryC
             ),
             li: ({ children }) => (
               <li className="font-serif italic text-lg text-slate-400 flex gap-4 items-start">
-                <span className="text-white/20 text-criterion text-[9px] mt-2">▪</span>
+                <span className="text-white/20 text-criterion text-[9px] mt-2">â–ª</span>
                 <span>{children}</span>
               </li>
             ),

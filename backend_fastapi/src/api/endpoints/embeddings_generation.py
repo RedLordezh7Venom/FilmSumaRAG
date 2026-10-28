@@ -6,8 +6,6 @@ from src.core.embeddings import build_embeddings
 from src.core import vector_db
 from src.db.database import get_db
 from src.models.sql_models import Movie, JobStatus
-from typing import Optional, Union
-import os
 
 router = APIRouter()
 

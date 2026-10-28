@@ -1,6 +1,6 @@
 from src.core.chroma_store import ChromaVectorStore
 import numpy as np
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Union
 
 # Factory for the vector store implementation
 # For now, default to ChromaDB (8GB RAM optimization)

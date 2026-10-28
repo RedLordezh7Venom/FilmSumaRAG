@@ -62,7 +62,6 @@ async def deep_dive_chat(
                 logger.worker(f"Triggering background workers for {title}...")
                 def task_wrapper(m_name, t_id):
                     from src.db.database import SessionLocal
-                    from src.utils.logger import logger
                     db_task = SessionLocal()
                     try:
                         from src.api.endpoints.summary import generate_embeddings_task
@@ -187,12 +186,10 @@ async def deep_dive_chat(
                 logger.error(f"Embeddings missing: {e}")
                 err_msg = "⚠️ *This film hasn't been indexed yet. Please visit its summary page first to generate the archive.*"
                 yield f"data: {json.dumps({'token': err_msg})}\n\n"
-                full_answer = err_msg
             except Exception as e:
                 logger.error(f"Stream error in event_generator: {e}")
                 err_msg = f"⚠️ *An error occurred: {str(e)[:120]}*"
                 yield f"data: {json.dumps({'token': err_msg})}\n\n"
-                full_answer = err_msg
 
             # Finalize: Save the clean answer to DB
             answer_match = full_raw.split(ANSWER_MARKER)

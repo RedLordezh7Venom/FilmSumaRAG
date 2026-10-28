@@ -78,7 +78,7 @@ def test_chat_persistence():
         print("No movies found, skipping chat persistence test.")
         return
     movie_id = movies[0]['id']
-    movie_title = movies[0]['title']
+    movies[0]['title']
     
     thread_id = str(uuid.uuid4())
     print(f"Generated Thread ID: {thread_id}")

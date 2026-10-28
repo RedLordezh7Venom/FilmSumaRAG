@@ -1,8 +1,6 @@
 import asyncio
 import os
 import sys
-import json
-import threading
 from typing import List
 
 # Import our logic (add src to sys.path)
@@ -11,7 +9,7 @@ sys.path.append(os.path.join(os.getcwd(), "src"))
 from src.core.sub_to_summary import get_movie_summary
 from src.core.rag_chat import answer_question_stream
 from src.db.database import SessionLocal, Base, engine
-from src.models import sql_models, schemas
+from src.models import sql_models
 
 # Mock Subtitle Downloader
 import src.utils.subliminalsubsdl as sub_utils

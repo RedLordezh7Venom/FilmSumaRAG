@@ -1,10 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List, Optional
+from typing import List
 from src.db.database import get_db
 from src.models import sql_models, schemas
-import uuid
 import random
 
 router = APIRouter()

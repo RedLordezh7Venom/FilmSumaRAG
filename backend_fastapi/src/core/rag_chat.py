@@ -1,17 +1,15 @@
-import numpy as np
 import os
 import time
-from typing import TypedDict, List, AsyncIterator, Annotated, Sequence, Dict, Optional, Union, Any
+from typing import List, AsyncIterator, Dict, Union
 from langgraph.graph import StateGraph, END, MessagesState
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
-from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.runnables import RunnableConfig
 from src.core.embeddings import embedder
 from src.core import vector_db
 from src.core.llm_model import llm
 from rank_bm25 import BM25Okapi
 import nltk
-import re
-import json
 
 # Download punkt for tokenization
 try:
@@ -22,7 +20,15 @@ except LookupError:
 from nltk.tokenize import word_tokenize
 
 # Global cache for pre-tokenized corpora (Keyed by tmdb_id)
-BM25_CACHE = {}
+class BM25CacheManager:
+    def __init__(self):
+        self._cache = {}
+    def get(self, key):
+        return self._cache.get(key)
+    def set(self, key, value):
+        self._cache[key] = value
+
+bm25_cache_manager = BM25CacheManager()
 
 # Define RAG State
 class RAGState(MessagesState):
@@ -50,7 +56,7 @@ async def retrieve_context_node(state: RAGState) -> dict:
     current_sources = []
     
     from src.db.database import SessionLocal
-    from src.models.sql_models import Feedback, ChatHistory, SummaryCache, SummaryType, Movie
+    from src.models.sql_models import SummaryCache, Movie
     db = SessionLocal()
     
     from src.utils.logger import logger
@@ -80,11 +86,13 @@ async def retrieve_context_node(state: RAGState) -> dict:
 
             # Check cache for tokenized corpus (Keyed by tmdb_id)
             tid_key = str(tid)
-            if tid_key not in BM25_CACHE:
+            cached = bm25_cache_manager.get(tid_key)
+            if cached is None:
                 logger.rag(f"Tokenizing corpus for {movie_name} (first-time optimization)...")
-                BM25_CACHE[tid_key] = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
+                cached = [word_tokenize(doc["text"].lower()) for doc in all_docs_data]
+                bm25_cache_manager.set(tid_key, cached)
             
-            tokenized_corpus = BM25_CACHE[tid_key]
+            tokenized_corpus = cached
             bm25 = BM25Okapi(tokenized_corpus)
             tokenized_query = word_tokenize(question.lower())
             bm25_indices = bm25.get_top_n(tokenized_query, range(len(all_docs_data)), n=k_per_movie * 2)
@@ -140,7 +148,6 @@ async def retrieve_context_node(state: RAGState) -> dict:
         "relevant_sources": current_sources
     }
 
-from langchain_core.runnables import RunnableConfig
 
 async def generate_answer_node(state: RAGState, config: RunnableConfig) -> dict:
     from src.utils.logger import logger

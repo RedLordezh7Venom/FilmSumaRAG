@@ -9,7 +9,6 @@ from src.api.endpoints import auth
 from src.api.endpoints import history
 from src.api.endpoints import movies
 from src.api.endpoints import discussions
-import time
 
 app = FastAPI(title="FilmSumaRAG API", version="1.0.0")
 
@@ -52,7 +51,6 @@ async def root():
 def startup_event():
     # Create tables if they don't exist
     from src.db.database import Base, engine
-    from src.models import sql_models
     Base.metadata.create_all(bind=engine)
 
 if __name__ == "__main__":

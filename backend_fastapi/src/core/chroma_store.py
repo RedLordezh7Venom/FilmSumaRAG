@@ -1,7 +1,7 @@
 import chromadb
 import numpy as np
 import os
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Union
 from src.core.vector_store_base import BaseVectorStore
 
 class ChromaVectorStore(BaseVectorStore):

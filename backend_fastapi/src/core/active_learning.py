@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from src.models.sql_models import Feedback, ChatHistory
 import json
-from typing import Dict, List
+from typing import Dict
 
 def get_discredited_chunks(db: Session, movie_id: int) -> Dict[str, float]:
     """
@@ -27,7 +27,8 @@ def get_discredited_chunks(db: Session, movie_id: int) -> Dict[str, float]:
                     for cid in citation_ids:
                         # Aggressive penalty: -0.2 per downvote
                         penalties[cid] = penalties.get(cid, 0) + 0.2
-                except json.JSONDecodeError:
+                except json.JSONDecodeError as e:
+                    logger.warning(f"Failed to parse citations for chat {fb.chat_id}: {e}")
                     continue
                     
     return penalties
